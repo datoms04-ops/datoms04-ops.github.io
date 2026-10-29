@@ -101,7 +101,7 @@
     .poke-tab-btn.active { background: #3b82f6; color: #fff; border-color: #60a5fa; }
 
     .pkm-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(100px, 1fr)); gap: 10px; margin-top: 10px; }
-    .pkm-card { background: #1e293b; border: 1px solid var(--border-color); border-radius: 10px; padding: 8px; text-align: center; color: #fff; }
+    .pkm-card { background: #1e293b; border: 1px solid var(--border-color); border-radius: 10px; padding: 8px; text-align: center; color: #fff; cursor: pointer; }
     .pkm-card.checked { border-color: #22c55e; background: rgba(34, 197, 94, 0.15); }
     .pkm-art { width: 100%; aspect-ratio: 3/4; border-radius: 6px; display: flex; align-items: center; justify-content: center; font-weight: bold; font-size: 1.1rem; color: #fff; background: linear-gradient(135deg, #3b82f6, #6366f1); margin-bottom: 6px; }
 
@@ -285,28 +285,118 @@
   </div>
 
   <script>
-    const PKM_STORAGE_KEY = 'hobbyverse_pkm_v8';
-    const COMIC_STORAGE_KEY = 'hobbyverse_comic_v8';
+    const PKM_STORAGE_KEY = 'hobbyverse_pkm_v9';
+    const COMIC_STORAGE_KEY = 'hobbyverse_comic_v9';
 
+    /* ELENCO FUMETTI COMPLETO CON TUTTI I NUMERI DELLE RUN */
     const INITIAL_COMICS = [
+      /* ABSOLUTE BATMAN (#1-#18) */
       {id:1, t:"Absolute Batman", n:"1", e:"DC", physState:"manca"},
       {id:2, t:"Absolute Batman", n:"2", e:"DC", physState:"manca"},
-      {id:3, t:"Absolute Batman", n:"15", e:"DC", physState:"posseduto"},
-      {id:4, t:"Absolute Superman", n:"1", e:"DC", physState:"posseduto"},
-      {id:5, t:"Absolute Superman", n:"2", e:"DC", physState:"manca"},
-      {id:6, t:"Absolute Wonder Woman", n:"1", e:"DC", physState:"posseduto"},
-      {id:7, t:"Absolute Wonder Woman", n:"9", e:"DC", physState:"manca"},
-      {id:8, t:"Ultimate Spider-Man (2024)", n:"1", e:"Marvel", physState:"posseduto"},
-      {id:9, t:"Ultimate Spider-Man (2024)", n:"16", e:"Marvel", physState:"manca"}
+      {id:3, t:"Absolute Batman", n:"3", e:"DC", physState:"manca"},
+      {id:4, t:"Absolute Batman", n:"4", e:"DC", physState:"manca"},
+      {id:5, t:"Absolute Batman", n:"5", e:"DC", physState:"manca"},
+      {id:6, t:"Absolute Batman", n:"6", e:"DC", physState:"manca"},
+      {id:7, t:"Absolute Batman", n:"7", e:"DC", physState:"manca"},
+      {id:8, t:"Absolute Batman", n:"8", e:"DC", physState:"manca"},
+      {id:9, t:"Absolute Batman", n:"9", e:"DC", physState:"manca"},
+      {id:10, t:"Absolute Batman", n:"10", e:"DC", physState:"manca"},
+      {id:11, t:"Absolute Batman", n:"11", e:"DC", physState:"manca"},
+      {id:12, t:"Absolute Batman", n:"12", e:"DC", physState:"manca"},
+      {id:13, t:"Absolute Batman", n:"13", e:"DC", physState:"manca"},
+      {id:14, t:"Absolute Batman", n:"14", e:"DC", physState:"manca"},
+      {id:15, t:"Absolute Batman", n:"15", e:"DC", physState:"posseduto"},
+      {id:16, t:"Absolute Batman", n:"16", e:"DC", physState:"posseduto"},
+      {id:17, t:"Absolute Batman", n:"17", e:"DC", physState:"manca"},
+      {id:18, t:"Absolute Batman", n:"18", e:"DC", physState:"manca"},
+
+      /* ABSOLUTE SUPERMAN (#1-#18) */
+      {id:19, t:"Absolute Superman", n:"1", e:"DC", physState:"posseduto"},
+      {id:20, t:"Absolute Superman", n:"2", e:"DC", physState:"manca"},
+      {id:21, t:"Absolute Superman", n:"3", e:"DC", physState:"manca"},
+      {id:22, t:"Absolute Superman", n:"4", e:"DC", physState:"manca"},
+      {id:23, t:"Absolute Superman", n:"5", e:"DC", physState:"manca"},
+      {id:24, t:"Absolute Superman", n:"6", e:"DC", physState:"manca"},
+      {id:25, t:"Absolute Superman", n:"7", e:"DC", physState:"manca"},
+      {id:26, t:"Absolute Superman", n:"8", e:"DC", physState:"manca"},
+      {id:27, t:"Absolute Superman", n:"9", e:"DC", physState:"manca"},
+      {id:28, t:"Absolute Superman", n:"10", e:"DC", physState:"manca"},
+      {id:29, t:"Absolute Superman", n:"11", e:"DC", physState:"manca"},
+      {id:30, t:"Absolute Superman", n:"12", e:"DC", physState:"manca"},
+      {id:31, t:"Absolute Superman", n:"13", e:"DC", physState:"manca"},
+      {id:32, t:"Absolute Superman", n:"14", e:"DC", physState:"manca"},
+      {id:33, t:"Absolute Superman", n:"15", e:"DC", physState:"manca"},
+      {id:34, t:"Absolute Superman", n:"16", e:"DC", physState:"manca"},
+      {id:35, t:"Absolute Superman", n:"17", e:"DC", physState:"manca"},
+      {id:36, t:"Absolute Superman", n:"18", e:"DC", physState:"manca"},
+
+      /* ABSOLUTE WONDER WOMAN (#1-#17) */
+      {id:37, t:"Absolute Wonder Woman", n:"1", e:"DC", physState:"posseduto"},
+      {id:38, t:"Absolute Wonder Woman", n:"2", e:"DC", physState:"posseduto"},
+      {id:39, t:"Absolute Wonder Woman", n:"3", e:"DC", physState:"posseduto"},
+      {id:40, t:"Absolute Wonder Woman", n:"4", e:"DC", physState:"posseduto"},
+      {id:41, t:"Absolute Wonder Woman", n:"5", e:"DC", physState:"posseduto"},
+      {id:42, t:"Absolute Wonder Woman", n:"6", e:"DC", physState:"posseduto"},
+      {id:43, t:"Absolute Wonder Woman", n:"7", e:"DC", physState:"posseduto"},
+      {id:44, t:"Absolute Wonder Woman", n:"8", e:"DC", physState:"posseduto"},
+      {id:45, t:"Absolute Wonder Woman", n:"9", e:"DC", physState:"manca"},
+      {id:46, t:"Absolute Wonder Woman", n:"10", e:"DC", physState:"manca"},
+      {id:47, t:"Absolute Wonder Woman", n:"11", e:"DC", physState:"manca"},
+      {id:48, t:"Absolute Wonder Woman", n:"12", e:"DC", physState:"manca"},
+      {id:49, t:"Absolute Wonder Woman", n:"13", e:"DC", physState:"manca"},
+      {id:50, t:"Absolute Wonder Woman", n:"14", e:"DC", physState:"manca"},
+      {id:51, t:"Absolute Wonder Woman", n:"15", e:"DC", physState:"manca"},
+      {id:52, t:"Absolute Wonder Woman", n:"16", e:"DC", physState:"manca"},
+      {id:53, t:"Absolute Wonder Woman", n:"17", e:"DC", physState:"manca"},
+
+      /* ULTIMATE SPIDER-MAN (#1-#24) */
+      {id:54, t:"Ultimate Spider-Man (2024)", n:"1", e:"Marvel", physState:"posseduto"},
+      {id:55, t:"Ultimate Spider-Man (2024)", n:"2", e:"Marvel", physState:"posseduto"},
+      {id:56, t:"Ultimate Spider-Man (2024)", n:"3", e:"Marvel", physState:"posseduto"},
+      {id:57, t:"Ultimate Spider-Man (2024)", n:"4", e:"Marvel", physState:"posseduto"},
+      {id:58, t:"Ultimate Spider-Man (2024)", n:"5", e:"Marvel", physState:"posseduto"},
+      {id:59, t:"Ultimate Spider-Man (2024)", n:"6", e:"Marvel", physState:"posseduto"},
+      {id:60, t:"Ultimate Spider-Man (2024)", n:"7", e:"Marvel", physState:"posseduto"},
+      {id:61, t:"Ultimate Spider-Man (2024)", n:"8", e:"Marvel", physState:"posseduto"},
+      {id:62, t:"Ultimate Spider-Man (2024)", n:"9", e:"Marvel", physState:"posseduto"},
+      {id:63, t:"Ultimate Spider-Man (2024)", n:"10", e:"Marvel", physState:"posseduto"},
+      {id:64, t:"Ultimate Spider-Man (2024)", n:"11", e:"Marvel", physState:"posseduto"},
+      {id:65, t:"Ultimate Spider-Man (2024)", n:"12", e:"Marvel", physState:"posseduto"},
+      {id:66, t:"Ultimate Spider-Man (2024)", n:"13", e:"Marvel", physState:"posseduto"},
+      {id:67, t:"Ultimate Spider-Man (2024)", n:"14", e:"Marvel", physState:"posseduto"},
+      {id:68, t:"Ultimate Spider-Man (2024)", n:"15", e:"Marvel", physState:"posseduto"},
+      {id:69, t:"Ultimate Spider-Man (2024)", n:"16", e:"Marvel", physState:"manca"},
+      {id:70, t:"Ultimate Spider-Man (2024)", n:"17", e:"Marvel", physState:"manca"},
+      {id:71, t:"Ultimate Spider-Man (2024)", n:"18", e:"Marvel", physState:"manca"},
+      {id:72, t:"Ultimate Spider-Man (2024)", n:"19", e:"Marvel", physState:"manca"},
+      {id:73, t:"Ultimate Spider-Man (2024)", n:"20", e:"Marvel", physState:"manca"},
+      {id:74, t:"Ultimate Spider-Man (2024)", n:"21", e:"Marvel", physState:"manca"},
+      {id:75, t:"Ultimate Spider-Man (2024)", n:"22", e:"Marvel", physState:"manca"},
+      {id:76, t:"Ultimate Spider-Man (2024)", n:"23", e:"Marvel", physState:"manca"},
+      {id:77, t:"Ultimate Spider-Man (2024)", n:"24", e:"Marvel", physState:"manca"},
+
+      /* NOVELS / GRAPHIC NOVELS SINGOLE */
+      {id:78, t:"Batman dei due mondi", n:"", e:"DC", physState:"posseduto"},
+      {id:79, t:"Batman: Il ritorno del Cavaliere Oscuro", n:"", e:"DC", physState:"posseduto"},
+      {id:80, t:"Batman: La maledizione del Cavaliere Bianco", n:"", e:"DC", physState:"posseduto"},
+      {id:81, t:"Flashpoint", n:"", e:"DC", physState:"posseduto"},
+      {id:82, t:"Il Batman che ride", n:"", e:"DC", physState:"posseduto"},
+      {id:83, t:"Kingdom Come", n:"", e:"DC", physState:"posseduto"},
+      {id:84, t:"Spider-Man: Blue", n:"", e:"Marvel", physState:"posseduto"},
+      {id:85, t:"Spider-Man: Spider-Verse", n:"", e:"Marvel", physState:"posseduto"},
+      {id:86, t:"Supergirl: La donna del domani", n:"", e:"DC", physState:"posseduto"},
+      {id:87, t:"Superman: Red Son", n:"", e:"DC", physState:"posseduto"},
+      {id:88, t:"V per Vendetta", n:"", e:"DC", physState:"posseduto"}
     ];
 
+    /* CARTE SINGOLE STILE MY WANTS */
     const SINGLE_CARDS_DATA = [
       {
         category: "AR / SAR / Illustration Rare",
         cards: [
           { name: "Bellibolt-ex di Kissara", set: "Avventure Insieme", num: "183/190", lang: "ITA", cond: "NM", price: 33.78, state: "manca" },
           { name: "Staraptor di Ubaldo", set: "Ascesa Eroica", num: "249/217", lang: "ITA", cond: "NM", price: 3.96, state: "manca" },
-          { name: "Trevenant di Hop", set: "Ascesa Eroica", num: "231/217", lang: "ITA", cond: "ITA", price: 3.80, state: "manca" }
+          { name: "Trevenant di Hop", set: "Ascesa Eroica", num: "231/217", lang: "ITA", cond: "NM", price: 3.80, state: "manca" }
         ]
       },
       {
@@ -315,13 +405,26 @@
           { name: "Aerodactyl", set: "Fossil", num: "1/62", lang: "ITA 1a ed.", cond: "NM", price: 19.06, state: "manca" },
           { name: "Articuno", set: "Fossil", num: "2/62", lang: "ITA 1a ed.", cond: "NM", price: 25.99, state: "manca" }
         ]
+      },
+      {
+        category: "ex Gold & VSTAR",
+        cards: [
+          { name: "Druddigon", set: "Tesoro dei Draghi", num: "17/20", lang: "ITA", cond: "NM", price: 15.00, state: "posseduto" }
+        ]
       }
     ];
 
-    const JTG_DATA = [[1,"Caterpie"],[2,"Metapod"],[3,"Butterfree"],[4,"Paras"],[14,"Durant"],[40,"Wailmer"],[53,"Bellibolt ex"]];
+    /* SET AVVENTURE INSIEME JTG (PRIME 50 CARTE E DOPPIE) */
+    const JTG_DATA = [
+      [1,"Caterpie"],[2,"Metapod"],[3,"Butterfree"],[4,"Paras"],[5,"Parasect"],[6,"Petilil"],[7,"Lilligant"],[8,"Maractus"],[9,"Karrablast"],[10,"Foongus"],
+      [11,"Amoonguss ex"],[12,"Shelmet"],[13,"Accelgor"],[14,"Durant"],[15,"Virizion"],[16,"Sprigatito"],[17,"Floragato"],[18,"Meowscarada"],[19,"Nymble"],[20,"Magmar"],
+      [21,"Magmortar"],[22,"Torchic"],[23,"Combusken"],[24,"Blaziken ex"],[25,"Torkoal"],[26,"Darumaka di N"],[27,"Darmanitan di N"],[28,"Larvesta"],[29,"Volcarona"],[30,"Reshiram ex"],
+      [31,"Volcanion ex"],[32,"Articuno"],[33,"Remoraid"],[34,"Octillery"],[35,"Lotad"],[36,"Lombre"],[37,"Ludicolo"],[38,"Wingull"],[39,"Pelipper"],[40,"Wailmer"],
+      [41,"Wailord"],[42,"Regice"],[43,"Veluza ex"],[44,"Geodude di Alola"],[45,"Graveler di Alola"],[46,"Golem di Alola"],[47,"Voltorb di Kissara"],[48,"Electrode di Kissara"],[49,"Joltik di N"],[50,"Togedemaru"]
+    ];
 
     let comicsData = [];
-    let pkmState = {"1":1, "4":1, "14":2, "40":3};
+    let pkmState = {"1":1, "3":1, "4":1, "7":1, "8":1, "9":1, "10":1, "12":1, "14":2, "15":1, "16":1, "17":1, "19":1, "20":1, "21":1, "22":1, "24":1, "26":1, "27":1, "28":1, "30":1, "39":2, "40":3, "42":2};
 
     function init() {
       comicsData = JSON.parse(localStorage.getItem(COMIC_STORAGE_KEY)) || INITIAL_COMICS;
@@ -370,7 +473,7 @@
         const item = document.createElement('div');
         item.className = 'run-item-card';
         item.innerHTML = `
-          <div><strong>${c.t} #${c.n}</strong> (${c.e})</div>
+          <div><strong>${c.t} ${c.n ? '#' + c.n : ''}</strong> (${c.e})</div>
           <span class="tag-btn tag-phys ${c.physState}">${c.physState === 'posseduto' ? '📦 Posseduto' : '✖ Manca'}</span>
         `;
         container.appendChild(item);
@@ -442,7 +545,16 @@
 
     function renderDupList() {
       const container = document.getElementById('dupListContainer');
-      if (container) container.innerHTML = '<div style="color:#cbd5e1; font-size:0.85rem;">• <b>#14 Durant</b> (+1 doppia extra)</div>';
+      if (container) {
+        container.innerHTML = `
+          <div style="color:#cbd5e1; font-size:0.85rem; line-height:1.6;">
+            • <b>#14 Durant</b> (+1 doppia extra)<br>
+            • <b>#39 Pelipper</b> (+1 doppia extra)<br>
+            • <b>#40 Wailmer</b> (+2 doppie extra)<br>
+            • <b>#42 Regice</b> (+1 doppia extra)
+          </div>
+        `;
+      }
     }
 
     function openLuccaModal() {
@@ -454,7 +566,9 @@
 
       preview.innerHTML = `
         <h4 style="color:var(--accent-gold); margin-bottom:8px;">📚 Fumetti da Comprare (${mancaComics.length}):</h4>
-        ${mancaComics.map(c => `<div>• <b>${c.t}</b> #${c.n} (${c.e})</div>`).join('')}
+        <div style="max-height:180px; overflow-y:auto; margin-bottom:12px;">
+          ${mancaComics.map(c => `<div>• <b>${c.t}</b> ${c.n ? '#' + c.n : ''} (${c.e})</div>`).join('')}
+        </div>
         <h4 style="color:var(--poke-accent); margin-top:12px; margin-bottom:8px;">🎴 Carte Wants da Cerca:</h4>
         <div>• Bellibolt-ex di Kissara (≈ 33.78 €)</div>
         <div>• Aerodactyl Fossil 1st Ed. (≈ 19.06 €)</div>
@@ -470,7 +584,7 @@
       const mancaComics = comicsData.filter(c => c.physState === 'manca');
       let html = `<!DOCTYPE html><html><head><meta charset="utf-8"><title>Lucca Offline Shopping List</title><style>body{font-family:sans-serif;padding:20px;background:#0f172a;color:#fff;}h2{color:#fbbf24;}</style></head><body>
       <h2>🎪 Lucca Comics - Lista Spesa Offline</h2>
-      <h3>📚 Fumetti Mancanti:</h3><ul>${mancaComics.map(c => `<li><b>${c.t}</b> #${c.n} (${c.e})</li>`).join('')}</ul>
+      <h3>📚 Fumetti Mancanti:</h3><ul>${mancaComics.map(c => `<li><b>${c.t}</b> ${c.n ? '#' + c.n : ''} (${c.e})</li>`).join('')}</ul>
       <h3>🎴 Carte Pokémon Wants:</h3><ul><li>Bellibolt-ex di Kissara</li><li>Aerodactyl Fossil 1st Ed.</li></ul>
       </body></html>`;
 
