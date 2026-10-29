@@ -199,6 +199,7 @@
         <button class="term-tab active" id="term-tab-all" onclick="filterComics('all')">🌐 Tutti</button>
         <button class="term-tab" id="term-tab-dc" onclick="filterComics('dc')">🌌 DC</button>
         <button class="term-tab" id="term-tab-marvel" onclick="filterComics('marvel')">🚀 Marvel</button>
+        <button class="term-tab" id="term-tab-manga" onclick="filterComics('manga')">🌸 Manga</button>
         <button class="term-tab" id="term-tab-manca" onclick="filterComics('manca')">⚠️ Da Comprare</button>
       </div>
 
@@ -285,10 +286,10 @@
   </div>
 
   <script>
-    const PKM_STORAGE_KEY = 'hobbyverse_pkm_v9';
-    const COMIC_STORAGE_KEY = 'hobbyverse_comic_v9';
+    const PKM_STORAGE_KEY = 'hobbyverse_pkm_v10';
+    const COMIC_STORAGE_KEY = 'hobbyverse_comic_v10';
 
-    /* ELENCO FUMETTI COMPLETO CON TUTTI I NUMERI DELLE RUN */
+    /* ELENCO FUMETTI INTEGRATO PER LUCCA */
     const INITIAL_COMICS = [
       /* ABSOLUTE BATMAN (#1-#18) */
       {id:1, t:"Absolute Batman", n:"1", e:"DC", physState:"manca"},
@@ -349,44 +350,44 @@
       {id:52, t:"Absolute Wonder Woman", n:"16", e:"DC", physState:"manca"},
       {id:53, t:"Absolute Wonder Woman", n:"17", e:"DC", physState:"manca"},
 
-      /* ULTIMATE SPIDER-MAN (#1-#24) */
-      {id:54, t:"Ultimate Spider-Man (2024)", n:"1", e:"Marvel", physState:"posseduto"},
-      {id:55, t:"Ultimate Spider-Man (2024)", n:"2", e:"Marvel", physState:"posseduto"},
-      {id:56, t:"Ultimate Spider-Man (2024)", n:"3", e:"Marvel", physState:"posseduto"},
-      {id:57, t:"Ultimate Spider-Man (2024)", n:"4", e:"Marvel", physState:"posseduto"},
-      {id:58, t:"Ultimate Spider-Man (2024)", n:"5", e:"Marvel", physState:"posseduto"},
-      {id:59, t:"Ultimate Spider-Man (2024)", n:"6", e:"Marvel", physState:"posseduto"},
-      {id:60, t:"Ultimate Spider-Man (2024)", n:"7", e:"Marvel", physState:"posseduto"},
-      {id:61, t:"Ultimate Spider-Man (2024)", n:"8", e:"Marvel", physState:"posseduto"},
-      {id:62, t:"Ultimate Spider-Man (2024)", n:"9", e:"Marvel", physState:"posseduto"},
-      {id:63, t:"Ultimate Spider-Man (2024)", n:"10", e:"Marvel", physState:"posseduto"},
-      {id:64, t:"Ultimate Spider-Man (2024)", n:"11", e:"Marvel", physState:"posseduto"},
-      {id:65, t:"Ultimate Spider-Man (2024)", n:"12", e:"Marvel", physState:"posseduto"},
-      {id:66, t:"Ultimate Spider-Man (2024)", n:"13", e:"Marvel", physState:"posseduto"},
-      {id:67, t:"Ultimate Spider-Man (2024)", n:"14", e:"Marvel", physState:"posseduto"},
-      {id:68, t:"Ultimate Spider-Man (2024)", n:"15", e:"Marvel", physState:"posseduto"},
-      {id:69, t:"Ultimate Spider-Man (2024)", n:"16", e:"Marvel", physState:"manca"},
-      {id:70, t:"Ultimate Spider-Man (2024)", n:"17", e:"Marvel", physState:"manca"},
-      {id:71, t:"Ultimate Spider-Man (2024)", n:"18", e:"Marvel", physState:"manca"},
-      {id:72, t:"Ultimate Spider-Man (2024)", n:"19", e:"Marvel", physState:"manca"},
-      {id:73, t:"Ultimate Spider-Man (2024)", n:"20", e:"Marvel", physState:"manca"},
-      {id:74, t:"Ultimate Spider-Man (2024)", n:"21", e:"Marvel", physState:"manca"},
-      {id:75, t:"Ultimate Spider-Man (2024)", n:"22", e:"Marvel", physState:"manca"},
-      {id:76, t:"Ultimate Spider-Man (2024)", n:"23", e:"Marvel", physState:"manca"},
-      {id:77, t:"Ultimate Spider-Man (2024)", n:"24", e:"Marvel", physState:"manca"},
+      /* ABSOLUTE MARTIAN MANHUNTER & GREEN ARROW */
+      {id:54, t:"Absolute Martian Manhunter", n:"1", e:"DC", physState:"manca"},
+      {id:55, t:"Absolute Martian Manhunter", n:"2", e:"DC", physState:"manca"},
+      {id:56, t:"Absolute Green Arrow", n:"1", e:"DC", physState:"manca"},
 
-      /* NOVELS / GRAPHIC NOVELS SINGOLE */
-      {id:78, t:"Batman dei due mondi", n:"", e:"DC", physState:"posseduto"},
-      {id:79, t:"Batman: Il ritorno del Cavaliere Oscuro", n:"", e:"DC", physState:"posseduto"},
-      {id:80, t:"Batman: La maledizione del Cavaliere Bianco", n:"", e:"DC", physState:"posseduto"},
-      {id:81, t:"Flashpoint", n:"", e:"DC", physState:"posseduto"},
-      {id:82, t:"Il Batman che ride", n:"", e:"DC", physState:"posseduto"},
-      {id:83, t:"Kingdom Come", n:"", e:"DC", physState:"posseduto"},
-      {id:84, t:"Spider-Man: Blue", n:"", e:"Marvel", physState:"posseduto"},
-      {id:85, t:"Spider-Man: Spider-Verse", n:"", e:"Marvel", physState:"posseduto"},
-      {id:86, t:"Supergirl: La donna del domani", n:"", e:"DC", physState:"posseduto"},
-      {id:87, t:"Superman: Red Son", n:"", e:"DC", physState:"posseduto"},
-      {id:88, t:"V per Vendetta", n:"", e:"DC", physState:"posseduto"}
+      /* ULTIMATE SPIDER-MAN (#1-#24) & MIDNIGHT SPIDER-MAN */
+      {id:57, t:"Ultimate Spider-Man (2024)", n:"1", e:"Marvel", physState:"posseduto"},
+      {id:58, t:"Ultimate Spider-Man (2024)", n:"2", e:"Marvel", physState:"posseduto"},
+      {id:59, t:"Ultimate Spider-Man (2024)", n:"15", e:"Marvel", physState:"posseduto"},
+      {id:60, t:"Ultimate Spider-Man (2024)", n:"16", e:"Marvel", physState:"manca"},
+      {id:61, t:"Ultimate Spider-Man (2024)", n:"17", e:"Marvel", physState:"manca"},
+      {id:62, t:"Ultimate Spider-Man (2024)", n:"18", e:"Marvel", physState:"manca"},
+      {id:63, t:"Midnight Spider-Man", n:"1", e:"Marvel", physState:"manca"},
+
+      /* GRAPHIC NOVELS DC & MARVEL DA COMPRARE */
+      {id:64, t:"All-Star Superman", n:"", e:"DC", physState:"manca"},
+      {id:65, t:"Batman: Anno Uno", n:"", e:"DC", physState:"manca"},
+      {id:66, t:"Batman: Il Cavaliere Bianco", n:"", e:"DC", physState:"manca"},
+      {id:67, t:"Batman: Hush", n:"", e:"DC", physState:"manca"},
+      {id:68, t:"Batman: Il Cavaliere Oscuro colpisce ancora", n:"", e:"DC", physState:"manca"},
+      {id:69, t:"La Morte di Superman", n:"", e:"DC", physState:"manca"},
+      {id:70, t:"Superman: Su nel cielo", n:"", e:"DC", physState:"manca"},
+
+      /* MANGA DA COMPRARE */
+      {id:71, t:"Death Note", n:"3", e:"Manga", physState:"manca"},
+      {id:72, t:"Death Note", n:"5", e:"Manga", physState:"manca"},
+      {id:73, t:"Slam Dunk", n:"2", e:"Manga", physState:"manca"},
+      {id:74, t:"Slam Dunk", n:"3", e:"Manga", physState:"manca"},
+      {id:75, t:"Slam Dunk", n:"4", e:"Manga", physState:"manca"},
+      {id:76, t:"Slam Dunk", n:"5", e:"Manga", physState:"manca"},
+
+      /* NOVELS POSSEDUTE */
+      {id:77, t:"Batman dei due mondi", n:"", e:"DC", physState:"posseduto"},
+      {id:78, t:"Batman: Il ritorno del Cavaliere Oscuro", n:"", e:"DC", physState:"posseduto"},
+      {id:79, t:"Flashpoint", n:"", e:"DC", physState:"posseduto"},
+      {id:80, t:"Kingdom Come", n:"", e:"DC", physState:"posseduto"},
+      {id:81, t:"Superman: Red Son", n:"", e:"DC", physState:"posseduto"},
+      {id:82, t:"V per Vendetta", n:"", e:"DC", physState:"posseduto"}
     ];
 
     /* CARTE SINGOLE STILE MY WANTS */
@@ -414,7 +415,7 @@
       }
     ];
 
-    /* SET AVVENTURE INSIEME JTG (PRIME 50 CARTE E DOPPIE) */
+    /* SET AVVENTURE INSIEME JTG */
     const JTG_DATA = [
       [1,"Caterpie"],[2,"Metapod"],[3,"Butterfree"],[4,"Paras"],[5,"Parasect"],[6,"Petilil"],[7,"Lilligant"],[8,"Maractus"],[9,"Karrablast"],[10,"Foongus"],
       [11,"Amoonguss ex"],[12,"Shelmet"],[13,"Accelgor"],[14,"Durant"],[15,"Virizion"],[16,"Sprigatito"],[17,"Floragato"],[18,"Meowscarada"],[19,"Nymble"],[20,"Magmar"],
@@ -465,6 +466,7 @@
       const filtered = comicsData.filter(c => {
         if(filter === 'dc') return c.e === 'DC';
         if(filter === 'marvel') return c.e === 'Marvel';
+        if(filter === 'manga') return c.e === 'Manga';
         if(filter === 'manca') return c.physState === 'manca';
         return true;
       });
@@ -565,8 +567,8 @@
       const mancaComics = comicsData.filter(c => c.physState === 'manca');
 
       preview.innerHTML = `
-        <h4 style="color:var(--accent-gold); margin-bottom:8px;">📚 Fumetti da Comprare (${mancaComics.length}):</h4>
-        <div style="max-height:180px; overflow-y:auto; margin-bottom:12px;">
+        <h4 style="color:var(--accent-gold); margin-bottom:8px;">📚 Fumetti & Manga da Comprare (${mancaComics.length}):</h4>
+        <div style="max-height:220px; overflow-y:auto; margin-bottom:12px;">
           ${mancaComics.map(c => `<div>• <b>${c.t}</b> ${c.n ? '#' + c.n : ''} (${c.e})</div>`).join('')}
         </div>
         <h4 style="color:var(--poke-accent); margin-top:12px; margin-bottom:8px;">🎴 Carte Wants da Cerca:</h4>
@@ -584,7 +586,7 @@
       const mancaComics = comicsData.filter(c => c.physState === 'manca');
       let html = `<!DOCTYPE html><html><head><meta charset="utf-8"><title>Lucca Offline Shopping List</title><style>body{font-family:sans-serif;padding:20px;background:#0f172a;color:#fff;}h2{color:#fbbf24;}</style></head><body>
       <h2>🎪 Lucca Comics - Lista Spesa Offline</h2>
-      <h3>📚 Fumetti Mancanti:</h3><ul>${mancaComics.map(c => `<li><b>${c.t}</b> ${c.n ? '#' + c.n : ''} (${c.e})</li>`).join('')}</ul>
+      <h3>📚 Fumetti e Manga Mancanti:</h3><ul>${mancaComics.map(c => `<li><b>${c.t}</b> ${c.n ? '#' + c.n : ''} (${c.e})</li>`).join('')}</ul>
       <h3>🎴 Carte Pokémon Wants:</h3><ul><li>Bellibolt-ex di Kissara</li><li>Aerodactyl Fossil 1st Ed.</li></ul>
       </body></html>`;
 
