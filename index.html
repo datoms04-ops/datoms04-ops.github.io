@@ -216,7 +216,7 @@
       <div class="poke-nav-tabs">
         <button class="poke-tab-btn active" id="pkm-tab-jtg" onclick="switchPokeTab('jtg')">🐾 Avventure Insieme (190)</button>
         <button class="poke-tab-btn" id="pkm-tab-wants" onclick="switchPokeTab('wants')">💜 Carte Singole & Wants</button>
-        <button class="poke-tab-btn" id="pkm-tab-dups" onclick="switchPokeTab('dups')">🔁 Doppie per Scambio</button>
+        <button class="poke-tab-btn" id="pkm-tab-dups" onclick="switchPokeTab('dups')">🔁 Doppie per Scambio/Vendita</button>
       </div>
 
       <!-- SEZIONE 1: SET JTG -->
@@ -241,9 +241,9 @@
         <div id="accordionContainer"></div>
       </div>
 
-      <!-- SEZIONE 3: DOPPIE -->
+      <!-- SEZIONE 3: DOPPIE & VALORI PER LUCCA -->
       <div id="sec-pkm-dups" style="display:none; background:#1e293b; padding:16px; border-radius:12px;">
-        <h3 style="color:var(--accent-gold); margin-bottom:12px;">🔁 Carte Doppie Disponibili per Scambio</h3>
+        <h3 style="color:var(--accent-gold); margin-bottom:12px;">🔁 Carte Disponibili per Scambio / Vendita</h3>
         <div id="dupListContainer"></div>
       </div>
     </div>
@@ -286,8 +286,8 @@
   </div>
 
   <script>
-    const PKM_STORAGE_KEY = 'hobbyverse_pkm_v10';
-    const COMIC_STORAGE_KEY = 'hobbyverse_comic_v10';
+    const PKM_STORAGE_KEY = 'hobbyverse_pkm_v11';
+    const COMIC_STORAGE_KEY = 'hobbyverse_comic_v11';
 
     /* ELENCO FUMETTI INTEGRATO PER LUCCA */
     const INITIAL_COMICS = [
@@ -419,9 +419,7 @@
     const JTG_DATA = [
       [1,"Caterpie"],[2,"Metapod"],[3,"Butterfree"],[4,"Paras"],[5,"Parasect"],[6,"Petilil"],[7,"Lilligant"],[8,"Maractus"],[9,"Karrablast"],[10,"Foongus"],
       [11,"Amoonguss ex"],[12,"Shelmet"],[13,"Accelgor"],[14,"Durant"],[15,"Virizion"],[16,"Sprigatito"],[17,"Floragato"],[18,"Meowscarada"],[19,"Nymble"],[20,"Magmar"],
-      [21,"Magmortar"],[22,"Torchic"],[23,"Combusken"],[24,"Blaziken ex"],[25,"Torkoal"],[26,"Darumaka di N"],[27,"Darmanitan di N"],[28,"Larvesta"],[29,"Volcarona"],[30,"Reshiram ex"],
-      [31,"Volcanion ex"],[32,"Articuno"],[33,"Remoraid"],[34,"Octillery"],[35,"Lotad"],[36,"Lombre"],[37,"Ludicolo"],[38,"Wingull"],[39,"Pelipper"],[40,"Wailmer"],
-      [41,"Wailord"],[42,"Regice"],[43,"Veluza ex"],[44,"Geodude di Alola"],[45,"Graveler di Alola"],[46,"Golem di Alola"],[47,"Voltorb di Kissara"],[48,"Electrode di Kissara"],[49,"Joltik di N"],[50,"Togedemaru"]
+      [21,"Magmortar"],[22,"Torchic"],[23,"Combusken"],[24,"Blaziken ex"],[25,"Torkoal"],[26,"Darumaka di N"],[27,"Darmanitan di N"],[28,"Larvesta"],[29,"Volcarona"],[30,"Reshiram ex"]
     ];
 
     let comicsData = [];
@@ -549,11 +547,18 @@
       const container = document.getElementById('dupListContainer');
       if (container) {
         container.innerHTML = `
-          <div style="color:#cbd5e1; font-size:0.85rem; line-height:1.6;">
-            • <b>#14 Durant</b> (+1 doppia extra)<br>
-            • <b>#39 Pelipper</b> (+1 doppia extra)<br>
-            • <b>#40 Wailmer</b> (+2 doppie extra)<br>
-            • <b>#42 Regice</b> (+1 doppia extra)
+          <div style="color:#cbd5e1; font-size:0.85rem; line-height:1.8;">
+            <div style="margin-bottom:8px;">🔥 <b>Charizard ex</b> (SVP 074 Teracristal) — <i>Valore: ≈ 4 - 6 €</i></div>
+            <div style="margin-bottom:8px;">🐸 <b>Tympole</b> (BLK 103/086 Illustration Rare) — <i>Valore: ≈ 3,50 - 5 €</i></div>
+            <div style="margin-bottom:8px;">⚙️ <b>Genesect ex</b> (BLK 161/086 Full Art) — <i>Valore: ≈ 2,50 - 4 €</i></div>
+            <div style="margin-bottom:8px;">❄️ <b>Snover</b> (MEG 140/132 Illustration Rare) — <i>Valore: ≈ 2 - 3,50 €</i></div>
+            <hr style="border-color:rgba(255,255,255,0.1); margin:10px 0;">
+            <div style="opacity:0.8;">
+              • <b>#14 Durant</b> (+1 doppia extra)<br>
+              • <b>#39 Pelipper</b> (+1 doppia extra)<br>
+              • <b>#40 Wailmer</b> (+2 doppie extra)<br>
+              • <b>#42 Regice</b> (+1 doppia extra)
+            </div>
           </div>
         `;
       }
@@ -568,12 +573,14 @@
 
       preview.innerHTML = `
         <h4 style="color:var(--accent-gold); margin-bottom:8px;">📚 Fumetti & Manga da Comprare (${mancaComics.length}):</h4>
-        <div style="max-height:220px; overflow-y:auto; margin-bottom:12px;">
+        <div style="max-height:200px; overflow-y:auto; margin-bottom:12px;">
           ${mancaComics.map(c => `<div>• <b>${c.t}</b> ${c.n ? '#' + c.n : ''} (${c.e})</div>`).join('')}
         </div>
-        <h4 style="color:var(--poke-accent); margin-top:12px; margin-bottom:8px;">🎴 Carte Wants da Cerca:</h4>
-        <div>• Bellibolt-ex di Kissara (≈ 33.78 €)</div>
-        <div>• Aerodactyl Fossil 1st Ed. (≈ 19.06 €)</div>
+        <h4 style="color:var(--poke-accent); margin-top:12px; margin-bottom:8px;">🎴 Carte Pokémon da Scambiare / Vendere:</h4>
+        <div>• Charizard ex SVP 074 (≈ 5 €)</div>
+        <div>• Tympole AR BLK 103 (≈ 4 €)</div>
+        <div>• Genesect ex FA BLK 161 (≈ 3 €)</div>
+        <div>• Snover AR MEG 140 (≈ 2,50 €)</div>
       `;
     }
 
@@ -587,7 +594,13 @@
       let html = `<!DOCTYPE html><html><head><meta charset="utf-8"><title>Lucca Offline Shopping List</title><style>body{font-family:sans-serif;padding:20px;background:#0f172a;color:#fff;}h2{color:#fbbf24;}</style></head><body>
       <h2>🎪 Lucca Comics - Lista Spesa Offline</h2>
       <h3>📚 Fumetti e Manga Mancanti:</h3><ul>${mancaComics.map(c => `<li><b>${c.t}</b> ${c.n ? '#' + c.n : ''} (${c.e})</li>`).join('')}</ul>
-      <h3>🎴 Carte Pokémon Wants:</h3><ul><li>Bellibolt-ex di Kissara</li><li>Aerodactyl Fossil 1st Ed.</li></ul>
+      <h3>🎴 Carte Pokémon Doppie / Da Scambio:</h3>
+      <ul>
+        <li>Charizard ex (SVP 074) - ≈ 5 €</li>
+        <li>Tympole AR (BLK 103) - ≈ 4 €</li>
+        <li>Genesect ex Full Art (BLK 161) - ≈ 3 €</li>
+        <li>Snover AR (MEG 140) - ≈ 2,50 €</li>
+      </ul>
       </body></html>`;
 
       const blob = new Blob([html], { type: 'text/html' });
