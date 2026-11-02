@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Hobbyverse 3.6 - Lucca Fix</title>
+  <title>Hobbyverse 3.9 - Full Alignment</title>
 
   <link rel="manifest" href="manifest.json">
   <meta name="theme-color" content="#0d0e12">
@@ -76,14 +76,19 @@
       background: var(--card-bg); border: 1px solid var(--card-border);
       border-radius: 14px; padding: 14px; margin: 0 16px 12px 16px;
     }
-    .run-header-row { display: flex; justify-content: space-between; align-items: center; cursor: pointer; }
-    .run-title { font-weight: 800; font-size: 0.98rem; color: #fff; }
+    .run-header-row { display: flex; justify-content: space-between; align-items: center; }
+    .run-title { font-weight: 800; font-size: 0.98rem; color: #fff; display: flex; align-items: center; gap: 6px; }
     .run-meta { font-size: 0.75rem; color: var(--text-muted); margin-top: 2px; }
     
+    .btn-icon-edit {
+      cursor: pointer; opacity: 0.7; font-size: 0.85rem; padding: 2px 4px; border-radius: 4px;
+      background: rgba(255,255,255,0.05); transition: opacity 0.2s;
+    }
+
     .toggle-arrow {
       background: rgba(255,255,255,0.06); border: 1px solid var(--card-border);
       width: 28px; height: 28px; border-radius: 50%; display: flex; align-items: center; justify-content: center;
-      font-size: 0.75rem; color: var(--accent-gold); transition: transform 0.2s;
+      font-size: 0.75rem; color: var(--accent-gold); transition: transform 0.2s; cursor: pointer;
     }
     .toggle-arrow.open { transform: rotate(180deg); }
 
@@ -92,6 +97,7 @@
 
     .progress-bar-bg { width: 100%; height: 5px; background: #262933; border-radius: 3px; overflow: hidden; margin-bottom: 12px; }
     .progress-bar-fill { height: 100%; background: var(--accent-green); }
+    .progress-bar-fill.digital { background: var(--accent-blue); }
 
     /* TASSELLI NUMERATI */
     .numbers-grid { display: flex; flex-wrap: wrap; gap: 6px; }
@@ -101,13 +107,23 @@
       border: 1px solid var(--card-border); background: #1e212b; color: #94a3b8;
     }
     .num-tile.owned { background: rgba(34, 197, 94, 0.2); border-color: var(--accent-green); color: #4ade80; }
+    .num-tile.read { background: rgba(59, 130, 246, 0.2); border-color: var(--accent-blue); color: #60a5fa; }
     
-    /* BOLLINO LUCCA 60 DA IMMAGINE CARICATA */
+    /* BOLLINO LUCCA 60 DA logo lucca.png */
     .num-tile .lucca-badge {
       position: absolute; top: -3px; right: -3px; width: 14px; height: 14px;
-      background-image: url('img/loco lucca.png'); background-size: cover; background-position: center;
+      background-image: url('img/logo lucca.png'); background-size: cover; background-position: center;
       border-radius: 50%; border: 1px solid rgba(255,255,255,0.2);
     }
+
+    /* DIGITAL TABS */
+    .digital-tabs { display: flex; gap: 8px; padding: 0 16px 14px 16px; overflow-x: auto; }
+    .d-tab {
+      background: var(--card-bg); border: 1px solid var(--card-border);
+      color: var(--text-muted); padding: 6px 14px; border-radius: 20px; font-size: 0.75rem;
+      font-weight: 700; white-space: nowrap; cursor: pointer;
+    }
+    .d-tab.active { background: var(--accent-blue); color: #fff; border-color: var(--accent-blue); }
 
     /* EXPENSE CARD */
     .expense-card {
@@ -137,6 +153,16 @@
       background-size: cover; background-position: center;
     }
 
+    .edit-input-field {
+      width: 100%; padding: 8px; background: #12141a; border: 1px solid var(--card-border);
+      border-radius: 6px; color: #fff; font-size: 0.85rem; margin-top: 4px; margin-bottom: 10px;
+    }
+
+    .btn-save-modal {
+      width: 100%; padding: 10px; border-radius: 8px; font-weight: bold; border: none;
+      background: var(--accent-gold); color: #000; cursor: pointer; margin-top: 10px;
+    }
+
     /* BOTTOM NAV */
     .bottom-nav {
       position: fixed; bottom: 0; left: 0; right: 0; height: 60px;
@@ -153,7 +179,7 @@
   <!-- HEADER -->
   <div class="top-bar">
     <div class="top-title" id="mainHeaderTitle">📖 Collezione Cartacea</div>
-    <div style="font-size:0.8rem; color:var(--accent-gold); font-weight:bold;">V3.6</div>
+    <div style="font-size:0.8rem; color:var(--accent-gold); font-weight:bold;">V3.9</div>
   </div>
 
   <!-- STATS BAR -->
@@ -161,7 +187,7 @@
     <div class="stat-box"><div class="stat-num" id="st-val1">48</div><div class="stat-label" id="st-lbl1">posseduti</div></div>
     <div class="stat-box"><div class="stat-num" id="st-val2">1</div><div class="stat-label" id="st-lbl2">in arrivo</div></div>
     <div class="stat-box"><div class="stat-num" id="st-val3">70</div><div class="stat-label" id="st-lbl3">da prendere</div></div>
-    <div class="stat-box"><div class="stat-num" style="color:var(--accent-gold);" id="st-val4">203,23 €</div><div class="stat-label" id="st-lbl4">spesi</div></div>
+    <div class="stat-box"><div class="stat-num" style="color:var(--accent-gold);" id="st-val4">186,23 €</div><div class="stat-label" id="st-lbl4">spesi</div></div>
   </div>
 
   <!-- SWITCHER SEZIONI -->
@@ -197,8 +223,14 @@
   </div>
 
   <!-- VISTA 2: DIGITALE -->
-  <div id="viewDigital" style="display:none; padding:20px; text-align:center; color:var(--text-muted);">
-    📱 Sezione Letture Online attiva
+  <div id="viewDigital" style="display:none;">
+    <div class="digital-tabs">
+      <div class="d-tab active" id="tab-reading" onclick="filterDigitalCategory('reading')">📖 In Lettura (13)</div>
+      <div class="d-tab" id="tab-later" onclick="filterDigitalCategory('later')">⏳ Da Leggere (22)</div>
+      <div class="d-tab" id="tab-finished" onclick="filterDigitalCategory('finished')">✅ Finiti (22)</div>
+      <div class="d-tab" id="tab-fav" onclick="filterDigitalCategory('favorites')">⭐ Preferiti (1)</div>
+    </div>
+    <div id="digitalRunsContainer"></div>
   </div>
 
   <!-- VISTA 3: SPESE -->
@@ -216,10 +248,10 @@
         <div>
           <div style="font-weight:bold; font-size:0.88rem;">L'Uomo Ragno #139 (Corno 1975)</div>
           <div style="font-size:0.72rem; color:#e11d48; font-weight:bold; display:flex; align-items:center; gap:4px;">
-            <img src="img/loco lucca.png" style="height:14px; border-radius:50%;"> Lucca C&G 60 • 28/08/1975
+            <img src="img/logo lucca.png" style="height:14px; border-radius:50%;"> Lucca C&G 60 • 28/08/1975
           </div>
         </div>
-        <div style="font-weight:bold; color:var(--accent-gold);">22,00 €</div>
+        <div style="font-weight:bold; color:var(--accent-gold);" id="price-item-corno">5,00 €</div>
       </div>
       <div class="expense-item">
         <div>
@@ -232,7 +264,7 @@
         <div>
           <div style="font-weight:bold; font-size:0.88rem;">Absolute Batman #15-#18</div>
           <div style="font-size:0.72rem; color:#e11d48; font-weight:bold; display:flex; align-items:center; gap:4px;">
-            <img src="img/loco lucca.png" style="height:14px; border-radius:50%;"> Lucca C&G 60
+            <img src="img/logo lucca.png" style="height:14px; border-radius:50%;"> Lucca C&G 60
           </div>
         </div>
         <div style="font-weight:bold; color:var(--accent-gold);">18,00 €</div>
@@ -249,6 +281,16 @@
       </div>
       <div class="cover-box" id="m-cover"></div>
       <div id="m-status-text" style="text-align:center; font-size:0.85rem; margin-bottom:12px;"></div>
+
+      <div style="background:#0d0e12; padding:12px; border-radius:10px; border:1px solid var(--card-border);">
+        <label style="font-size:0.72rem; color:var(--text-muted);">✏️ Prezzo Pagato (€):</label>
+        <input type="number" id="editPriceInput" class="edit-input-field" value="5.00" step="0.5">
+
+        <label style="font-size:0.72rem; color:var(--text-muted);">🎪 Luogo d'Acquisto / Note:</label>
+        <input type="text" id="editNotesInput" class="edit-input-field" value="Lucca C&G 60">
+      </div>
+
+      <button class="btn-save-modal" onclick="saveItemChanges()">💾 Salva Modifiche</button>
     </div>
   </div>
 
@@ -262,21 +304,41 @@
   <script>
     const PHYSICAL_RUNS = [
       { 
-        id: "spidey-corno", title: "L'Uomo Ragno (Editoriale Corno 1975)", publisher: "Marvel", total: 200, owned: [139], luccaItems: [139], authors: "Stan Lee / John Romita Sr.", customCovers: { 139: "img/uomo ragno 139-editoriale corno.png" }
+        id: "spidey-corno", title: "L'Uomo Ragno (Editoriale Corno 1975)", publisher: "Marvel", total: 200, owned: [139], luccaItems: [139], authors: "Stan Lee / John Romita Sr.", customCovers: { 139: "img/uomo ragno 139-editoriale corno.png" }, prices: { 139: 5.00 }
       },
       { 
-        id: "spidey-panini-1990", title: "L'Uomo Ragno (Panini 1990)", publisher: "Marvel", total: 100, owned: [52], luccaItems: [], authors: "Todd McFarlane", customCovers: { 52: "img/uomo ragno 52- panini.png" }
+        id: "spidey-panini-1990", title: "L'Uomo Ragno (Panini 1990)", publisher: "Marvel", total: 100, owned: [52], luccaItems: [], authors: "Todd McFarlane", customCovers: { 52: "img/uomo ragno 52- panini.png" }, prices: { 52: 6.00 }
       },
-      { id: "abs-batman", title: "Absolute Batman", publisher: "DC", total: 18, owned: [1,2,3,15,16,17,18], luccaItems: [1,2,3,17,18], authors: "Scott Snyder" },
-      { id: "abs-sup", title: "Absolute Superman", publisher: "DC", total: 18, owned: [1], luccaItems: [], authors: "Jason Aaron" },
-      { id: "abs-ww", title: "Absolute Wonder Woman", publisher: "DC", total: 17, owned: [1,2,3,4,5,6,7,8], luccaItems: [], authors: "Kelly Thompson" },
-      { id: "pk-mito", title: "Paperinik - Il Mito", publisher: "PK", total: 20, owned: [1,2,3,4,5,8,9,10,13,16], luccaItems: [], authors: "Gazzetta dello Sport" }
+      { id: "abs-batman", title: "Absolute Batman", publisher: "DC", total: 18, owned: [1,2,3,15,16,17,18], luccaItems: [1,2,3,17,18], authors: "Scott Snyder", prices: {} },
+      { id: "abs-sup", title: "Absolute Superman", publisher: "DC", total: 18, owned: [1], luccaItems: [], authors: "Jason Aaron", prices: {} },
+      { id: "abs-ww", title: "Absolute Wonder Woman", publisher: "DC", total: 17, owned: [1,2,3,4,5,6,7,8], luccaItems: [], authors: "Kelly Thompson", prices: {} },
+      { id: "pk-mito", title: "Paperinik - Il Mito", publisher: "PK", total: 20, owned: [1,2,3,4,5,8,9,10,13,16], luccaItems: [], authors: "Gazzetta dello Sport", prices: {} }
+    ];
+
+    const DIGITAL_RUNS = [
+      { id: "dig-abs-batman", title: "Absolute Batman (2024-)", publisher: "DC", category: "reading", total: 24, read: [1,2,3,4,5], authors: "Scott Snyder" },
+      { id: "dig-abs-sup", title: "Absolute Superman (2024-)", publisher: "DC", category: "reading", total: 24, read: [1,2], authors: "Jason Aaron" },
+      { id: "dig-abs-ww", title: "Absolute Wonder Woman (2024-)", publisher: "DC", category: "reading", total: 25, read: [1,2,3], authors: "Kelly Thompson" },
+      { id: "dig-poison-ivy", title: "Poison Ivy (2022-)", publisher: "DC", category: "reading", total: 49, read: [1,2,3,4,5,6], authors: "G. Willow Wilson" },
+      { id: "dig-black-cat", title: "Black Cat (2025-)", publisher: "Marvel", category: "reading", total: 12, read: [1], authors: "Marvel Comics" },
+      { id: "dig-zatanna", title: "Zatanna (2026-)", publisher: "DC", category: "reading", total: 6, read: [1], authors: "DC Comics" },
+      { id: "dig-spidey-2025", title: "The Amazing Spider-Man (2025-)", publisher: "Marvel", category: "reading", total: 24, read: [1,2], authors: "Marvel Comics" },
+      { id: "dig-abs-catwoman", title: "Absolute Catwoman (2026-)", publisher: "DC", category: "reading", total: 12, read: [1], authors: "DC Comics" },
+      { id: "dig-ff-2025", title: "Fantastic Four (2025-)", publisher: "Marvel", category: "reading", total: 18, read: [1,2,3], authors: "Marvel Comics" },
+      { id: "dig-spidey-versity", title: "Spider-Versity (2026-)", publisher: "Marvel", category: "reading", total: 5, read: [1], authors: "Marvel Comics" },
+      { id: "dig-ww-2023", title: "Wonder Woman (2023-)", publisher: "DC", category: "reading", total: 20, read: [1,2,3,4], authors: "Tom King" },
+      { id: "dig-batman-2025", title: "Batman (2025-)", publisher: "DC", category: "reading", total: 15, read: [1], authors: "DC Comics" },
+      { id: "dig-abs-ga", title: "Absolute Green Arrow (2026-)", publisher: "DC", category: "reading", total: 12, read: [1], authors: "DC Comics" },
+      { id: "dig-invincible", title: "Invincible (2003)", publisher: "Altro", category: "favorites", total: 144, read: Array.from({length: 144}, (_, i) => i + 1), authors: "Robert Kirkman" }
     ];
 
     const MODES = ['physical', 'digital', 'expenses'];
     let currentMainMode = 'physical';
     let currentPublisherFilter = 'ALL';
+    let currentDigitalCategory = 'reading';
     let chartInstance = null;
+    let activeRunId = null;
+    let activeNum = null;
 
     /* TOUCH GESTURES */
     let touchStartX = 0;
@@ -315,6 +377,7 @@
       document.getElementById('navExpenses').classList.toggle('active', mode === 'expenses');
 
       if (mode === 'physical') renderPhysicalRuns();
+      if (mode === 'digital') renderDigitalRuns();
       if (mode === 'expenses') initPieChart();
     }
 
@@ -333,16 +396,19 @@
         for (let i = 1; i <= run.total; i++) {
           const isOwned = run.owned.includes(i);
           const isLucca = run.luccaItems.includes(i);
-          tilesHtml += `<div class="num-tile ${isOwned ? 'owned' : ''}" onclick="openItemModal('${run.id}', ${i})">${i}${isLucca ? '<div class="lucca-badge"></div>' : ''}</div>`;
+          tilesHtml += `<div class="num-tile ${isOwned ? 'owned' : ''}" onclick="openItemModal('${run.id}', ${i}, 'physical')">${i}${isLucca ? '<div class="lucca-badge"></div>' : ''}</div>`;
         }
 
         card.innerHTML = `
-          <div class="run-header-row" onclick="toggleAccordion('${run.id}')">
+          <div class="run-header-row">
             <div>
-              <div class="run-title">${run.title}</div>
+              <div class="run-title">
+                ${run.title} 
+                <span class="btn-icon-edit" onclick="editRunTitle('${run.id}')">✏️</span>
+              </div>
               <div class="run-meta">${run.publisher} • ${run.authors}</div>
             </div>
-            <div class="toggle-arrow" id="arrow-${run.id}">▼</div>
+            <div class="toggle-arrow" id="arrow-${run.id}" onclick="toggleAccordion('${run.id}')">▼</div>
           </div>
           <div class="run-body" id="body-${run.id}">
             <div style="display:flex; justify-content:space-between; font-size:0.75rem; color:#cbd5e1; margin-bottom:4px; margin-top:8px;">
@@ -356,6 +422,61 @@
       });
     }
 
+    function renderDigitalRuns() {
+      const container = document.getElementById('digitalRunsContainer');
+      container.innerHTML = '';
+      const filtered = DIGITAL_RUNS.filter(r => r.category === currentDigitalCategory && (currentPublisherFilter === 'ALL' || r.publisher === currentPublisherFilter));
+
+      if(filtered.length === 0) {
+        container.innerHTML = `<div style="text-align:center; padding:30px; color:var(--text-muted); font-size:0.85rem;">Nessuna lettura trovata in questa categoria.</div>`;
+        return;
+      }
+
+      filtered.forEach(run => {
+        const readCount = run.read.length;
+        const pct = Math.round((readCount / run.total) * 100);
+        const card = document.createElement('div');
+        card.className = 'run-card';
+
+        let tilesHtml = '';
+        for (let i = 1; i <= run.total; i++) {
+          const isRead = run.read.includes(i);
+          tilesHtml += `<div class="num-tile ${isRead ? 'read' : ''}" onclick="openItemModal('${run.id}', ${i}, 'digital')">${i}</div>`;
+        }
+
+        card.innerHTML = `
+          <div class="run-header-row">
+            <div>
+              <div class="run-title">${run.title}</div>
+              <div class="run-meta">${run.publisher} • ${run.authors}</div>
+            </div>
+            <div style="display:flex; align-items:center; gap:8px;">
+              <button style="background:rgba(59,130,246,0.2); border:1px solid #3b82f6; color:#60a5fa; padding:4px 8px; border-radius:6px; font-weight:bold; font-size:0.72rem; cursor:pointer;" onclick="quickStepDigital('${run.id}')">+1 Ch</button>
+              <div class="toggle-arrow" id="arrow-${run.id}" onclick="toggleAccordion('${run.id}')">▼</div>
+            </div>
+          </div>
+          <div class="run-body" id="body-${run.id}">
+            <div style="display:flex; justify-content:space-between; font-size:0.75rem; color:#cbd5e1; margin-bottom:4px; margin-top:8px;">
+              <span>Letto <b>${readCount}</b> su <b>${run.total}</b></span><span>${pct}%</span>
+            </div>
+            <div class="progress-bar-bg"><div class="progress-bar-fill digital" style="width: ${pct}%;"></div></div>
+            <div class="numbers-grid">${tilesHtml}</div>
+          </div>
+        `;
+        container.appendChild(card);
+      });
+    }
+
+    function quickStepDigital(runId) {
+      const run = DIGITAL_RUNS.find(r => r.id === runId);
+      if(run) {
+        for(let i = 1; i <= run.total; i++) {
+          if(!run.read.includes(i)) { run.read.push(i); break; }
+        }
+        renderDigitalRuns();
+      }
+    }
+
     function toggleAccordion(runId) {
       const body = document.getElementById('body-' + runId);
       const arrow = document.getElementById('arrow-' + runId);
@@ -363,6 +484,14 @@
 
       body.classList.toggle('open', !isOpen);
       arrow.classList.toggle('open', !isOpen);
+    }
+
+    function filterDigitalCategory(cat) {
+      currentDigitalCategory = cat;
+      document.querySelectorAll('.d-tab').forEach(t => t.classList.remove('active'));
+      const activeTab = document.getElementById('tab-' + cat);
+      if (activeTab) activeTab.classList.add('active');
+      renderDigitalRuns();
     }
 
     function initPieChart() {
@@ -374,7 +503,7 @@
         data: {
           labels: ['DC Comics', 'Marvel (Panini)', 'Ed. Corno (1975)', 'PK Disney'],
           datasets: [{
-            data: [117.07, 64.16, 22.00, 15.00],
+            data: [117.07, 64.16, 5.00, 15.00],
             backgroundColor: ['#3b82f6', '#ef4444', '#fbbf24', '#a855f7'],
             borderWidth: 0
           }]
@@ -389,10 +518,10 @@
       });
     }
 
-    function openItemModal(runId, num) {
-      const run = PHYSICAL_RUNS.find(r => r.id === runId);
-      const isOwned = run.owned.includes(num);
-      const isLucca = run.luccaItems.includes(num);
+    function openItemModal(runId, num, mode) {
+      activeRunId = runId;
+      activeNum = num;
+      const run = (mode === 'physical') ? PHYSICAL_RUNS.find(r => r.id === runId) : DIGITAL_RUNS.find(r => r.id === runId);
 
       document.getElementById('m-title').innerText = `${run.title} #${num}`;
       const coverBox = document.getElementById('m-cover');
@@ -402,18 +531,18 @@
         coverBox.innerText = '';
       } else {
         coverBox.style.backgroundImage = 'none';
-        coverBox.innerText = '📖';
+        coverBox.innerText = (mode === 'physical') ? '📖' : '📱';
       }
-
-      document.getElementById('m-status-text').innerHTML = isOwned 
-        ? `<span style="color:var(--accent-green); font-weight:bold;">🟢 In Collezione</span> ${isLucca ? '• <img src="img/loco lucca.png" style="height:14px; vertical-align:middle; border-radius:50%;"> Lucca60' : ''}`
-        : `<span style="color:var(--accent-red); font-weight:bold;">🔴 Ti Manca</span>`;
 
       document.getElementById('itemModal').style.display = 'block';
     }
 
     function closeModal() { document.getElementById('itemModal').style.display = 'none'; }
-    function filterPublisher(pub) { currentPublisherFilter = (currentPublisherFilter === pub) ? 'ALL' : pub; renderPhysicalRuns(); }
+    function filterPublisher(pub) { 
+      currentPublisherFilter = (currentPublisherFilter === pub) ? 'ALL' : pub; 
+      if (currentMainMode === 'physical') renderPhysicalRuns();
+      if (currentMainMode === 'digital') renderDigitalRuns();
+    }
 
     renderPhysicalRuns();
   </script>
