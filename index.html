@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Hobbyverse 3.3 - Chart & Accordion</title>
+  <title>Hobbyverse 3.4 - Prova Generale</title>
 
   <link rel="manifest" href="manifest.json">
   <meta name="theme-color" content="#0d0e12">
@@ -21,6 +21,7 @@
       --accent-green: #22c55e;
       --accent-red: #ef4444;
       --accent-blue: #3b82f6;
+      --accent-pk: #a855f7; /* Viola Elettrico PK */
       --manga-pink: #ec4899;
       --text-muted: #94a3b8;
     }
@@ -70,7 +71,7 @@
     .pub-img { height: 34px; max-width: 95%; object-fit: contain; }
     .pub-text { font-weight: 800; font-size: 0.8rem; }
 
-    /* RUN CARD ACCORDION (TENDINA) */
+    /* RUN CARD ACCORDION */
     .run-card {
       background: var(--card-bg); border: 1px solid var(--card-border);
       border-radius: 14px; padding: 14px; margin: 0 16px 12px 16px;
@@ -101,10 +102,11 @@
     }
     .num-tile.owned { background: rgba(34, 197, 94, 0.2); border-color: var(--accent-green); color: #4ade80; }
     
-    /* BOLLINO ROSSO LUCCA 60 */
-    .num-tile .lucca-dot {
-      position: absolute; top: 2px; right: 2px; width: 7px; height: 7px;
-      background: #e11d48; border-radius: 50%; box-shadow: 0 0 5px #e11d48;
+    /* ICONA LUCCA 60 SUI TASSELLI */
+    .num-tile .lucca-badge-icon {
+      position: absolute; top: -3px; right: -3px; width: 13px; height: 13px;
+      background-image: url('img/lucca60.png'); background-size: cover; background-position: center;
+      border-radius: 50%;
     }
 
     /* EXPENSE CARD */
@@ -151,7 +153,7 @@
   <!-- HEADER -->
   <div class="top-bar">
     <div class="top-title" id="mainHeaderTitle">📖 Collezione Cartacea</div>
-    <div style="font-size:0.8rem; color:var(--accent-gold); font-weight:bold;">V3.3</div>
+    <div style="font-size:0.8rem; color:var(--accent-gold); font-weight:bold;">V3.4</div>
   </div>
 
   <!-- STATS BAR -->
@@ -171,7 +173,6 @@
 
   <!-- VISTA 1: CARTACEO -->
   <div id="viewPhysical">
-    <!-- EDITORI (CORRETTO "ALTRO") -->
     <div class="publishers-grid">
       <div class="publisher-card" id="btn-pub-DC" onclick="filterPublisher('DC')">
         <img src="img/dc.png" class="pub-img" alt="DC" onerror="this.style.display='none'; this.nextElementSibling.style.display='block';">
@@ -186,7 +187,7 @@
       </div>
       <div class="publisher-card" id="btn-pub-PK" onclick="filterPublisher('PK')">
         <img src="img/pk.png" class="pub-img" alt="PK" onerror="this.style.display='none'; this.nextElementSibling.style.display='block';">
-        <span class="pub-text" style="display:none; color:#facc15;">PK</span>
+        <span class="pub-text" style="display:none; color:var(--accent-pk);">PK</span>
       </div>
       <div class="publisher-card" id="btn-pub-Altro" onclick="filterPublisher('Altro')">
         <span class="pub-text" style="color:var(--text-muted);">📚 ALTRO</span>
@@ -196,11 +197,11 @@
   </div>
 
   <!-- VISTA 2: DIGITALE -->
-  <div id="viewDigital" style="display:none;">
-    <div id="digitalRunsContainer"></div>
+  <div id="viewDigital" style="display:none; padding:20px; text-align:center; color:var(--text-muted);">
+    📱 Sezione Letture Online attiva
   </div>
 
-  <!-- VISTA 3: SPESE CON GRAFICO A TORTA INTERATTIVO -->
+  <!-- VISTA 3: SPESE -->
   <div id="viewExpenses" style="display:none;">
     <div class="expense-card">
       <div style="font-weight:800; font-size:1rem; margin-bottom:10px; color:var(--accent-gold);">📊 Grafico Spesa per Editore</div>
@@ -214,7 +215,9 @@
       <div class="expense-item">
         <div>
           <div style="font-weight:bold; font-size:0.88rem;">L'Uomo Ragno #139 (Corno 1975)</div>
-          <div style="font-size:0.72rem; color:#e11d48; font-weight:bold;">Lucca C&G 60 🔴 • 28/08/1975</div>
+          <div style="font-size:0.72rem; color:#e11d48; font-weight:bold; display:flex; align-items:center; gap:4px;">
+            <img src="img/lucca60.png" style="height:12px;"> Lucca C&G 60 • 28/08/1975
+          </div>
         </div>
         <div style="font-weight:bold; color:var(--accent-gold);">22,00 €</div>
       </div>
@@ -228,7 +231,9 @@
       <div class="expense-item">
         <div>
           <div style="font-weight:bold; font-size:0.88rem;">Absolute Batman #15-#18</div>
-          <div style="font-size:0.72rem; color:#e11d48; font-weight:bold;">Lucca C&G 60 🔴</div>
+          <div style="font-size:0.72rem; color:#e11d48; font-weight:bold; display:flex; align-items:center; gap:4px;">
+            <img src="img/lucca60.png" style="height:12px;"> Lucca C&G 60
+          </div>
         </div>
         <div style="font-weight:bold; color:var(--accent-gold);">18,00 €</div>
       </div>
@@ -305,7 +310,7 @@
         for (let i = 1; i <= run.total; i++) {
           const isOwned = run.owned.includes(i);
           const isLucca = run.luccaItems.includes(i);
-          tilesHtml += `<div class="num-tile ${isOwned ? 'owned' : ''}" onclick="openItemModal('${run.id}', ${i})">${i}${isLucca ? '<div class="lucca-dot"></div>' : ''}</div>`;
+          tilesHtml += `<div class="num-tile ${isOwned ? 'owned' : ''}" onclick="openItemModal('${run.id}', ${i})">${i}${isLucca ? '<div class="lucca-badge-icon"></div>' : ''}</div>`;
         }
 
         card.innerHTML = `
@@ -347,7 +352,7 @@
           labels: ['DC Comics', 'Marvel (Panini)', 'Ed. Corno (1975)', 'PK Disney'],
           datasets: [{
             data: [117.07, 64.16, 22.00, 15.00],
-            backgroundColor: ['#3b82f6', '#ef4444', '#fbbf24', '#facc15'],
+            backgroundColor: ['#3b82f6', '#ef4444', '#fbbf24', '#a855f7'], /* Viola Elettrico per PK */
             borderWidth: 0
           }]
         },
@@ -378,7 +383,7 @@
       }
 
       document.getElementById('m-status-text').innerHTML = isOwned 
-        ? `<span style="color:var(--accent-green); font-weight:bold;">🟢 In Collezione</span> ${isLucca ? '• Lucca60 🔴' : ''}`
+        ? `<span style="color:var(--accent-green); font-weight:bold;">🟢 In Collezione</span> ${isLucca ? '• <img src="img/lucca60.png" style="height:14px; vertical-align:middle;"> Lucca60' : ''}`
         : `<span style="color:var(--accent-red); font-weight:bold;">🔴 Ti Manca</span>`;
 
       document.getElementById('itemModal').style.display = 'block';
