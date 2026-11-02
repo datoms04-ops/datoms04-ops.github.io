@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Checklist Fumetti V2.6</title>
+  <title>Checklist Fumetti V2.7</title>
 
   <link rel="manifest" href="manifest.json">
   <meta name="theme-color" content="#0d0e12">
@@ -17,6 +17,7 @@
       --accent-gold: #fbbf24;
       --accent-green: #22c55e;
       --accent-red: #ef4444;
+      --manga-pink: #ec4899;
       --text-muted: #94a3b8;
     }
 
@@ -41,19 +42,27 @@
     .stat-num { font-weight: 800; font-size: 1.1rem; color: #fff; }
     .stat-label { font-size: 0.68rem; color: var(--text-muted); margin-top: 2px; }
 
-    /* GRIGLIA LOGHI UFFICIALI (CARTELLA IMG/) */
+    /* BANNER LOGHI / CATEGORIE EDITORI (5 BANNER) */
     .publishers-grid {
-      display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; padding: 14px 16px;
+      display: grid; grid-template-columns: repeat(5, 1fr); gap: 6px; padding: 14px 12px;
     }
     .publisher-card {
-      background: var(--card-bg); border: 1px solid var(--card-border); border-radius: 12px;
-      padding: 10px 4px; text-align: center; cursor: pointer; display: flex; flex-direction: column; align-items: center; justify-content: center;
-      transition: transform 0.15s, border-color 0.15s;
+      background: var(--card-bg); border: 1px solid var(--card-border); border-radius: 10px;
+      padding: 8px 2px; text-align: center; cursor: pointer; display: flex; flex-direction: column; align-items: center; justify-content: center;
+      transition: all 0.2s ease; min-height: 44px;
     }
-    .publisher-card:active { transform: scale(0.96); border-color: var(--accent-gold); }
-    .pub-img { height: 28px; max-width: 100%; object-fit: contain; }
+    .publisher-card:active, .publisher-card.active { border-color: var(--accent-gold); background: rgba(251, 191, 36, 0.1); }
+    .pub-img { height: 22px; max-width: 90%; object-fit: contain; mix-blend-mode: screen; }
+    .pub-text { font-weight: 800; font-size: 0.72rem; }
 
-    /* RUN CARD */
+    /* CHIP TASTO MOSTRA TUTTI */
+    .reset-filter-btn {
+      margin: 0 16px 12px 16px; padding: 6px 12px; background: rgba(255,255,255,0.05);
+      border: 1px solid var(--card-border); border-radius: 20px; font-size: 0.75rem;
+      color: var(--text-muted); text-align: center; cursor: pointer; display: none;
+    }
+
+    /* RUN CARD FUMETTI */
     .run-card {
       background: var(--card-bg); border: 1px solid var(--card-border);
       border-radius: 14px; padding: 14px; margin: 0 16px 14px 16px;
@@ -86,12 +95,6 @@
       background: #16181e; border: 1px solid var(--card-border);
       border-radius: 20px; max-width: 440px; margin: 30px auto 0 auto; padding: 20px;
     }
-    .cover-container { text-align: center; margin-bottom: 14px; }
-    .cover-img {
-      width: 140px; height: 210px; border-radius: 10px; object-fit: cover;
-      box-shadow: 0 8px 24px rgba(0,0,0,0.6); background: #262933;
-      display: inline-flex; align-items: center; justify-content: center; font-size: 3rem;
-    }
 
     .btn-buy {
       width: 100%; padding: 12px; border-radius: 10px; font-weight: bold; border: none;
@@ -118,7 +121,7 @@
   <!-- HEADER -->
   <div class="top-bar">
     <div class="top-title">📚 Checklist Fumetti</div>
-    <div style="font-size:0.8rem; color:var(--accent-gold); font-weight:bold;">V2.6</div>
+    <div style="font-size:0.8rem; color:var(--accent-gold); font-weight:bold;">V2.7</div>
   </div>
 
   <!-- STATS HEADER -->
@@ -129,23 +132,38 @@
     <div class="stat-box"><div class="stat-num" style="color:var(--accent-gold);" id="st-spent">181,23 €</div><div class="stat-label">spesi</div></div>
   </div>
 
-  <!-- GRIGLIA LOGHI UFFICIALI DA IMG/ -->
+  <!-- GRIGLIA EDITORI FUMETTI (DC, MARVEL, MANGA, PK, ALTO) -->
   <div class="publishers-grid">
-    <div class="publisher-card" onclick="filterPub('Marvel')">
-      <img src="img/marvel.png" class="pub-img" alt="Marvel">
+    <div class="publisher-card" id="btn-pub-DC" onclick="filterPublisher('DC')">
+      <img src="img/dc.png" class="pub-img" alt="DC" onerror="this.style.display='none'; this.nextElementSibling.style.display='block';">
+      <span class="pub-text" style="display:none; color:#3b82f6;">DC</span>
     </div>
-    <div class="publisher-card" onclick="filterPub('DC')">
-      <img src="img/dc.png" class="pub-img" alt="DC">
+
+    <div class="publisher-card" id="btn-pub-Marvel" onclick="filterPublisher('Marvel')">
+      <img src="img/marvel.png" class="pub-img" alt="Marvel" onerror="this.style.display='none'; this.nextElementSibling.style.display='block';">
+      <span class="pub-text" style="display:none; color:#ef4444;">MARVEL</span>
     </div>
-    <div class="publisher-card" onclick="filterPub('PK')">
-      <img src="img/pk.png" class="pub-img" alt="PK">
+
+    <div class="publisher-card" id="btn-pub-Manga" onclick="filterPublisher('Manga')">
+      <span class="pub-text" style="color:var(--manga-pink);">🌸 MANGA</span>
     </div>
-    <div class="publisher-card" onclick="filterPub('Pokemon')">
-      <img src="img/pokemon.png" class="pub-img" alt="Pokémon">
+
+    <div class="publisher-card" id="btn-pub-PK" onclick="filterPublisher('PK')">
+      <img src="img/pk.png" class="pub-img" alt="PK" onerror="this.style.display='none'; this.nextElementSibling.style.display='block';">
+      <span class="pub-text" style="display:none; color:#facc15;">PK</span>
+    </div>
+
+    <div class="publisher-card" id="btn-pub-Altro" onclick="filterPublisher('Altro')">
+      <span class="pub-text" style="color:var(--text-muted);">📚 ALTO</span>
     </div>
   </div>
 
-  <!-- RUNS CONTAINER -->
+  <!-- PULSANTE RESET FILTRO -->
+  <div class="reset-filter-btn" id="resetFilterBtn" onclick="filterPublisher('ALL')">
+    ✖ Mostra tutti i fumetti
+  </div>
+
+  <!-- CONTAINER RUN -->
   <div id="runsContainer"></div>
 
   <!-- SCHEDA POPUP DETTAGLI ALBO -->
@@ -156,8 +174,8 @@
         <span style="cursor:pointer; font-size:1.2rem; color:#94a3b8;" onclick="closeModal()">✖</span>
       </div>
 
-      <div class="cover-container">
-        <div class="cover-img" id="m-cover">📖</div>
+      <div style="text-align:center; margin-bottom:14px;">
+        <div style="width:130px; height:190px; border-radius:10px; background:#262933; margin:0 auto; display:flex; align-items:center; justify-content:center; font-size:3rem;" id="m-cover">📖</div>
       </div>
 
       <div id="m-status-text" style="text-align:center; font-size:0.9rem; margin-bottom:12px;"></div>
@@ -179,9 +197,9 @@
 
   <!-- BOTTOM NAV -->
   <div class="bottom-nav">
-    <div class="nav-btn active"><span>📚 Collezione</span></div>
-    <div class="nav-btn" onclick="alert('Digitali attiva!')"><span>📱 Online</span></div>
-    <div class="nav-btn" onclick="alert('Spese attive!')"><span>€ Spese</span></div>
+    <div class="nav-btn active"><span>📚 Fumetti</span></div>
+    <div class="nav-btn" onclick="alert('Digitali in attivazione!')"><span>📱 Online</span></div>
+    <div class="nav-btn" onclick="alert('Spese in attivazione!')"><span>€ Spese</span></div>
   </div>
 
   <script>
@@ -190,9 +208,13 @@
       { id: "abs-sup", title: "Absolute Superman", publisher: "DC", total: 18, owned: [1], luccaItems: [], authors: "Jason Aaron" },
       { id: "abs-ww", title: "Absolute Wonder Woman", publisher: "DC", total: 17, owned: [1,2,3,4,5,6,7,8], luccaItems: [], authors: "Kelly Thompson" },
       { id: "ult-spidey", title: "Ultimate Spider-Man (2024)", publisher: "Marvel", total: 24, owned: [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15], luccaItems: [], authors: "Jonathan Hickman" },
+      { id: "death-note", title: "Death Note", publisher: "Manga", total: 13, owned: [1,2,4,7,12,13], luccaItems: [], authors: "Ohba / Obata" },
+      { id: "slam-dunk", title: "Slam Dunk", publisher: "Manga", total: 20, owned: [], luccaItems: [], authors: "Takehiko Inoue" },
+      { id: "pk-mito", title: "Paperinik - Il Mito", publisher: "PK", total: 20, owned: [1,2,3,4,5,8,9,10,13,16], luccaItems: [], authors: "Gazzetta dello Sport" },
       { id: "spawn", title: "Spawn", publisher: "Altro", total: 12, owned: [9,12], luccaItems: [9,12], authors: "Todd McFarlane" }
     ];
 
+    let currentPublisherFilter = 'ALL';
     let activeRun = null;
     let activeNum = null;
 
@@ -200,7 +222,17 @@
       const container = document.getElementById('runsContainer');
       container.innerHTML = '';
 
-      RUNS_DATA.forEach(run => {
+      const filteredRuns = RUNS_DATA.filter(run => {
+        if (currentPublisherFilter === 'ALL') return true;
+        return run.publisher === currentPublisherFilter;
+      });
+
+      if (filteredRuns.length === 0) {
+        container.innerHTML = `<div style="text-align:center; padding:30px; color:#94a3b8; font-size:0.85rem;">Nessuna serie trovata per questo editore.</div>`;
+        return;
+      }
+
+      filteredRuns.forEach(run => {
         const ownedCount = run.owned.length;
         const pct = Math.round((ownedCount / run.total) * 100);
 
@@ -231,6 +263,27 @@
         `;
         container.appendChild(card);
       });
+    }
+
+    function filterPublisher(pub) {
+      if (currentPublisherFilter === pub) {
+        currentPublisherFilter = 'ALL';
+      } else {
+        currentPublisherFilter = pub;
+      }
+
+      document.querySelectorAll('.publisher-card').forEach(c => c.classList.remove('active'));
+      const resetBtn = document.getElementById('resetFilterBtn');
+
+      if (currentPublisherFilter !== 'ALL') {
+        const activeBtn = document.getElementById('btn-pub-' + currentPublisherFilter);
+        if (activeBtn) activeBtn.classList.add('active');
+        resetBtn.style.display = 'block';
+      } else {
+        resetBtn.style.display = 'none';
+      }
+
+      renderRuns();
     }
 
     function openItemModal(runId, num) {
