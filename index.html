@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <title>Hobbyverse 5.0 - App Experience</title>
+  <title>Hobbyverse 5.1 - Smart Forms & Fixes</title>
 
   <link rel="manifest" href="manifest.json">
   <meta name="theme-color" content="#0d0e12">
@@ -175,7 +175,7 @@
       background-size: cover; background-position: center;
     }
 
-    .edit-input-field {
+    .edit-input-field, .edit-select-field {
       width: 100%; padding: 10px; background: #12141a; border: 1px solid var(--card-border);
       border-radius: 8px; color: #fff; font-size: 0.88rem; margin-top: 4px; margin-bottom: 12px;
     }
@@ -201,13 +201,13 @@
   <!-- HEADER NATIVO -->
   <div class="app-header">
     <div class="app-title">📖 Hobbyverse</div>
-    <div class="version-badge">V5.0 App</div>
+    <div class="version-badge">V5.1 Smart</div>
   </div>
 
   <!-- DASHBOARD STRISCIA COMPATTA -->
   <div class="hero-stats-bar">
-    <span>Posseduti: <b id="st-val1">104</b></span>
-    <span>Mancanti: <b id="st-val3">88</b></span>
+    <span>Posseduti: <b id="st-val1">96</b></span>
+    <span>Mancanti: <b id="st-val3">105</b></span>
     <span>Spesa: <b style="color:var(--accent-gold);" id="st-val4">248,55 €</b></span>
   </div>
 
@@ -250,7 +250,7 @@
       <div class="expense-header-title">🛒 Spese per Canale</div>
       <div class="channel-row"><b>Vinted / Mercatini:</b> 113,33 € <span style="font-size:0.73rem; color:var(--text-muted);">(18 fumetti)</span></div>
       <div class="channel-row"><b>Fumetteria:</b> 67,90 € <span style="font-size:0.73rem; color:var(--text-muted);">(19 fumetti)</span></div>
-      <div class="channel-row"><b>Lucca C&G 60 🔴:</b> 51,06 € <span style="font-size:0.73rem; color:var(--text-muted);">(14 albi)</span></div>
+      <div class="channel-row"><b>Lucca C&G 60 🔴:</b> 51,06 € <span style="font-size:0.73rem; color:var(--text-muted);">(14 albi, compresi PKEDA #2 Celoni & #3)</span></div>
       <div class="channel-row"><b>Regali:</b> 0,00 € <span style="font-size:0.73rem; color:var(--text-muted);">(8 fumetti a costo 0 €)</span></div>
     </div>
 
@@ -272,35 +272,59 @@
       </div>
       <div class="expense-item">
         <div>
-          <div style="font-weight:bold; font-size:0.88rem;">Ultimate Spider-Man (2024) #1</div>
-          <div style="font-size:0.72rem; color:var(--text-muted);">🛍️ Vinted • pagato 2,52 €</div>
+          <div style="font-weight:bold; font-size:0.88rem;">PKEDA #2 (Variant Celoni)</div>
+          <div style="font-size:0.72rem; color:var(--text-muted);">🎪 Lucca C&G 60</div>
         </div>
-        <div class="saving-badge">-2,48 €</div>
+        <div class="saving-badge">Lucca 60</div>
       </div>
     </div>
   </div>
 
-  <!-- FLOATING ACTION BUTTON FOR ADDING COMICS -->
+  <!-- FLOATING ACTION BUTTON -->
   <div class="fab-add" onclick="openAddModal()">➕</div>
 
-  <!-- BOTTOM SHEET MODAL DETTAGLIO & ADD -->
+  <!-- BOTTOM SHEET MODAL SMART -->
   <div class="modal-overlay" id="itemModal">
     <div class="bottom-sheet">
       <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:12px;">
-        <h3 id="m-title" style="font-size:1.05rem; color:#fff;">Dettaglio Volume</h3>
+        <h3 id="m-title" style="font-size:1.05rem; color:#fff;">Gestisci Acquisto</h3>
         <span style="cursor:pointer; font-size:1.4rem; color:#94a3b8;" onclick="closeModal()">✖</span>
       </div>
       <div class="cover-box" id="m-cover"></div>
       
       <div style="background:#0d0e12; padding:12px; border-radius:12px; border:1px solid var(--card-border);">
-        <label style="font-size:0.72rem; color:var(--text-muted);">✏️ Prezzo Pagato (€):</label>
-        <input type="number" id="editPriceInput" class="edit-input-field" value="5.00" step="0.1">
+        <label style="font-size:0.72rem; color:var(--text-muted);">🎪 Luogo / Canale d'Acquisto:</label>
+        <select id="sourceTypeSelect" class="edit-select-field" onchange="toggleSourceFields()">
+          <option value="fumetteria">🏪 Fumetteria</option>
+          <option value="vinted">🛍️ Vinted / Mercatino Online</option>
+          <option value="lucca">🎪 Lucca C&G / Fiera</option>
+          <option value="regalo">🎁 Regalo (Costo 0 €)</option>
+          <option value="gia_posseduto">📜 Già Posseduto (Storico)</option>
+        </select>
 
-        <label style="font-size:0.72rem; color:var(--accent-gold);">🇮🇹 Converti da Lire (L.):</label>
+        <!-- CAMPO PREZZO UNICO -->
+        <div id="singlePriceGroup">
+          <label style="font-size:0.72rem; color:var(--text-muted);">✏️ Prezzo Pagato (€):</label>
+          <input type="number" id="editPriceInput" class="edit-input-field" value="5.00" step="0.01">
+        </div>
+
+        <!-- CAMPI SCORPORATI VINTED -->
+        <div id="vintedGroup" style="display:none; background:#16181e; padding:8px; border-radius:8px; border:1px solid var(--card-border); margin-bottom:10px;">
+          <label style="font-size:0.7rem; color:var(--accent-gold);">Prezzo Oggetto (€):</label>
+          <input type="number" id="vintedObj" class="edit-input-field" placeholder="Es. 5.50" oninput="calcVintedTotal()">
+
+          <label style="font-size:0.7rem; color:var(--accent-gold);">Spedizione (€):</label>
+          <input type="number" id="vintedShip" class="edit-input-field" placeholder="Es. 2.29" oninput="calcVintedTotal()">
+
+          <label style="font-size:0.7rem; color:var(--accent-gold);">Commissioni (€):</label>
+          <input type="number" id="vintedFee" class="edit-input-field" placeholder="Es. 0.98" oninput="calcVintedTotal()">
+        </div>
+
+        <label style="font-size:0.72rem; color:var(--accent-gold);">🇮🇹 Converti da Prezzo in Lire (L.):</label>
         <input type="number" id="editLireInput" class="edit-input-field" placeholder="Es. 4000" oninput="convertLireToEuro()">
 
-        <label style="font-size:0.72rem; color:var(--text-muted);">🎪 Luogo d'Acquisto / Note:</label>
-        <input type="text" id="editNotesInput" class="edit-input-field" value="Lucca C&G 60">
+        <label style="font-size:0.72rem; color:var(--text-muted);">📝 Note Aggiuntive / Edizione:</label>
+        <input type="text" id="editNotesInput" class="edit-input-field" placeholder="Es. Variant Cover Fabio Celoni">
       </div>
 
       <button class="btn-save-modal" onclick="saveItemChanges()">💾 Salva Modifiche</button>
@@ -318,7 +342,7 @@
     const PHYSICAL_RUNS = [
       { id: "spidey-corno", title: "L'Uomo Ragno (Editoriale Corno 1975)", publisher: "Marvel", total: 200, owned: [139], luccaItems: [139], authors: "Stan Lee / John Romita Sr.", customCovers: { 139: "img/uomo ragno 139-editoriale corno.png" }, prices: { 139: 5.00 } },
       { id: "spidey-panini-1990", title: "L'Uomo Ragno (Panini 1990)", publisher: "Marvel", total: 100, owned: [41, 52, 53], luccaItems: [41, 52, 53], authors: "Todd McFarlane / Michelinie", customCovers: { 41: "img/uomo ragno 41- panini.png", 52: "img/uomo ragno 52- panini.png", 53: "img/uomo ragno 53- panini.png" }, prices: { 41: 5.00, 52: 6.00, 53: 5.00 } },
-      { id: "ult-spidey-2024", title: "Ultimate Spider-Man (2024)", publisher: "Marvel", total: 15, owned: [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15], luccaItems: [], authors: "Jonathan Hickman / Checchetto", prices: {1: 2.52, 2: 2.50, 3: 3.00, 4: 3.00, 5: 3.00, 6: 3.00, 7: 3.00, 8: 3.00, 9: 3.00, 10: 3.00, 11: 3.00, 12: 3.00, 13: 3.00, 14: 4.00, 15: 4.00} },
+      { id: "ult-spidey-2024", title: "Ultimate Spider-Man (2024)", publisher: "Marvel", total: 24, owned: [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15], luccaItems: [], authors: "Jonathan Hickman / Checchetto", prices: {1: 2.52, 2: 2.50, 3: 3.00, 4: 3.00, 5: 3.00, 6: 3.00, 7: 3.00, 8: 3.00, 9: 3.00, 10: 3.00, 11: 3.00, 12: 3.00, 13: 3.00, 14: 4.00, 15: 4.00} },
       { id: "spidey-blue", title: "Spider-Man: Blue", publisher: "Marvel", total: 1, owned: [1], luccaItems: [], authors: "Jeph Loeb / Tim Sale", prices: { 1: 8.24 } },
       { id: "spidey-verse", title: "Spider-Man: Spider-Verse", publisher: "Marvel", total: 1, owned: [1], luccaItems: [], authors: "Dan Slott / Coipel", prices: { 1: 9.90 } },
       { id: "x-men-2000", title: "Gli Incredibili X-Men #2", publisher: "Marvel", total: 1, owned: [1], luccaItems: [], authors: "Marvel Comics", prices: { 1: 0.00 } },
@@ -337,11 +361,12 @@
       { id: "superman-red-son", title: "Superman: Red Son", publisher: "DC", total: 1, owned: [1], luccaItems: [], authors: "Mark Millar", prices: { 1: 7.57 } },
       { id: "jsa-classified", title: "JSA Classified", publisher: "DC", total: 7, owned: [2, 4, 5, 6, 7], luccaItems: [], authors: "DC Comics", prices: {2:0, 4:0, 5:0, 6:0, 7:0} },
       { id: "v-vendetta", title: "V per Vendetta", publisher: "DC", total: 1, owned: [1], luccaItems: [], authors: "Alan Moore / David Lloyd", prices: { 1: 7.56 } },
+      { id: "pkeda", title: "PKEDA (Paperinik Elite)", publisher: "PK", total: 10, owned: [2, 3], luccaItems: [2, 3], authors: "Disney / Celoni", prices: {} },
       { id: "pk2", title: "PK2 - Ducklair (2001)", publisher: "PK", total: 18, owned: [1,2,3], luccaItems: [], authors: "Faraci / Artibani", prices: { 1: 2.06, 2: 2.06, 3: 2.06 } },
-      { id: "pkna", title: "PKNA / PKEDA (Paperinik)", publisher: "PK", total: 50, owned: [1,2,3,4,5], luccaItems: [1,2,3,4,5], authors: "Disney Italia", prices: {} },
+      { id: "pkna", title: "PKNA (Paperinik New Adventures)", publisher: "PK", total: 50, owned: [], luccaItems: [], authors: "Disney Italia", prices: {} },
       { id: "pk-mito", title: "Paperinik - Il Mito", publisher: "PK", total: 20, owned: [1,2,3,4,5,8,9,10,13,16], luccaItems: [], authors: "Gazzetta dello Sport", prices: {} },
       { id: "death-note", title: "Death Note", publisher: "Manga", total: 13, owned: [1,2,4,7,12,13], luccaItems: [], authors: "Ohba / Obata", prices: {} },
-      { id: "slam-dunk", title: "Slam Dunk", publisher: "Manga", total: 31, owned: [1,2,3,4,5], luccaItems: [], authors: "Takehiko Inoue", prices: {} }
+      { id: "slam-dunk", title: "Slam Dunk", publisher: "Manga", total: 31, owned: [], luccaItems: [], authors: "Takehiko Inoue", prices: {} }
     ];
 
     const DIGITAL_RUNS = [
@@ -361,17 +386,24 @@
     let chartInstance = null;
     let activeRunId = null;
     let activeNum = null;
+    let isSwiping = false;
 
-    /* TOUCH SWIPE */
+    /* TOUCH SWIPE CON DEBOUNCE ANTI-BUG */
     let touchStartX = 0, touchStartY = 0, touchEndX = 0, touchEndY = 0;
     document.addEventListener('touchstart', e => { touchStartX = e.changedTouches[0].screenX; touchStartY = e.changedTouches[0].screenY; }, false);
     document.addEventListener('touchend', e => { touchEndX = e.changedTouches[0].screenX; touchEndY = e.changedTouches[0].screenY; handleSwipe(); }, false);
 
     function handleSwipe() {
+      if(isSwiping) return;
       const diffX = touchEndX - touchStartX;
       const diffY = touchEndY - touchStartY;
-      if (Math.abs(diffY) > Math.abs(diffX) * 0.8) return;
-      if (Math.abs(diffX) > 90) {
+      
+      if (Math.abs(diffY) > Math.abs(diffX) * 0.7) return;
+
+      if (Math.abs(diffX) > 130) {
+        isSwiping = true;
+        setTimeout(() => { isSwiping = false; }, 300);
+
         if (currentMainMode === 'digital') {
           const catIdx = DIG_CATS.indexOf(currentDigitalCategory);
           if (diffX < 0 && catIdx < DIG_CATS.length - 1) filterDigitalCategory(DIG_CATS[catIdx + 1]);
@@ -401,6 +433,31 @@
       if (mode === 'physical') renderPhysicalRuns();
       if (mode === 'digital') renderDigitalRuns();
       if (mode === 'expenses') initPieChart();
+    }
+
+    function toggleSourceFields() {
+      const src = document.getElementById('sourceTypeSelect').value;
+      const vintedGrp = document.getElementById('vintedGroup');
+      const singlePriceGrp = document.getElementById('singlePriceGroup');
+
+      if(src === 'vinted') {
+        vintedGrp.style.display = 'block';
+        singlePriceGrp.style.display = 'none';
+      } else if (src === 'regalo') {
+        vintedGrp.style.display = 'none';
+        singlePriceGrp.style.display = 'block';
+        document.getElementById('editPriceInput').value = '0.00';
+      } else {
+        vintedGrp.style.display = 'none';
+        singlePriceGrp.style.display = 'block';
+      }
+    }
+
+    function calcVintedTotal() {
+      const obj = parseFloat(document.getElementById('vintedObj').value) || 0;
+      const ship = parseFloat(document.getElementById('vintedShip').value) || 0;
+      const fee = parseFloat(document.getElementById('vintedFee').value) || 0;
+      document.getElementById('editPriceInput').value = (obj + ship + fee).toFixed(2);
     }
 
     function filterPublisher(pub, el) {
@@ -499,6 +556,20 @@
       arrow.classList.toggle('open', !isOpen);
     }
 
+    /* FETCH AUTOMATICO COPERTINA DA API */
+    function fetchAutoCover(runTitle, volNum) {
+      const query = encodeURIComponent(`${runTitle} ${volNum}`);
+      fetch(`https://openlibrary.org/search.json?q=${query}&limit=1`)
+        .then(res => res.json())
+        .then(data => {
+          if(data.docs && data.docs[0] && data.docs[0].cover_i) {
+            const coverUrl = `https://covers.openlibrary.org/b/id/${data.docs[0].cover_i}-M.jpg`;
+            document.getElementById('m-cover').style.backgroundImage = `url('${coverUrl}')`;
+            document.getElementById('m-cover').innerText = '';
+          }
+        }).catch(err => console.log('API Cover Fallback'));
+    }
+
     function convertLireToEuro() {
       const lireVal = parseFloat(document.getElementById('editLireInput').value);
       if (!isNaN(lireVal) && lireVal > 0) {
@@ -546,13 +617,14 @@
       } else {
         coverBox.style.backgroundImage = 'none';
         coverBox.innerText = (mode === 'physical') ? '📖' : '📱';
+        fetchAutoCover(run.title, num);
       }
 
       document.getElementById('itemModal').classList.add('open');
     }
 
     function openAddModal() {
-      document.getElementById('m-title').innerText = "➕ Aggiungi Acquisto";
+      document.getElementById('m-title').innerText = "➕ Aggiungi Nuovo Acquisto";
       document.getElementById('m-cover').innerText = "🛍️";
       document.getElementById('itemModal').classList.add('open');
     }
