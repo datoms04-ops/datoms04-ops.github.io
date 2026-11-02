@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Hobbyverse 3.9 - Full Alignment</title>
+  <title>Hobbyverse 4.0 - Ultra Performance</title>
 
   <link rel="manifest" href="manifest.json">
   <meta name="theme-color" content="#0d0e12">
@@ -76,7 +76,7 @@
       background: var(--card-bg); border: 1px solid var(--card-border);
       border-radius: 14px; padding: 14px; margin: 0 16px 12px 16px;
     }
-    .run-header-row { display: flex; justify-content: space-between; align-items: center; }
+    .run-header-row { display: flex; justify-content: space-between; align-items: center; cursor: pointer; }
     .run-title { font-weight: 800; font-size: 0.98rem; color: #fff; display: flex; align-items: center; gap: 6px; }
     .run-meta { font-size: 0.75rem; color: var(--text-muted); margin-top: 2px; }
     
@@ -88,7 +88,7 @@
     .toggle-arrow {
       background: rgba(255,255,255,0.06); border: 1px solid var(--card-border);
       width: 28px; height: 28px; border-radius: 50%; display: flex; align-items: center; justify-content: center;
-      font-size: 0.75rem; color: var(--accent-gold); transition: transform 0.2s; cursor: pointer;
+      font-size: 0.75rem; color: var(--accent-gold); transition: transform 0.2s;
     }
     .toggle-arrow.open { transform: rotate(180deg); }
 
@@ -109,7 +109,6 @@
     .num-tile.owned { background: rgba(34, 197, 94, 0.2); border-color: var(--accent-green); color: #4ade80; }
     .num-tile.read { background: rgba(59, 130, 246, 0.2); border-color: var(--accent-blue); color: #60a5fa; }
     
-    /* BOLLINO LUCCA 60 DA logo lucca.png */
     .num-tile .lucca-badge {
       position: absolute; top: -3px; right: -3px; width: 14px; height: 14px;
       background-image: url('img/logo lucca.png'); background-size: cover; background-position: center;
@@ -179,7 +178,7 @@
   <!-- HEADER -->
   <div class="top-bar">
     <div class="top-title" id="mainHeaderTitle">📖 Collezione Cartacea</div>
-    <div style="font-size:0.8rem; color:var(--accent-gold); font-weight:bold;">V3.9</div>
+    <div style="font-size:0.8rem; color:var(--accent-gold); font-weight:bold;">V4.0</div>
   </div>
 
   <!-- STATS BAR -->
@@ -224,7 +223,7 @@
 
   <!-- VISTA 2: DIGITALE -->
   <div id="viewDigital" style="display:none;">
-    <div class="digital-tabs">
+    <div class="digital-tabs" id="digitalTabsContainer">
       <div class="d-tab active" id="tab-reading" onclick="filterDigitalCategory('reading')">📖 In Lettura (13)</div>
       <div class="d-tab" id="tab-later" onclick="filterDigitalCategory('later')">⏳ Da Leggere (22)</div>
       <div class="d-tab" id="tab-finished" onclick="filterDigitalCategory('finished')">✅ Finiti (22)</div>
@@ -333,6 +332,8 @@
     ];
 
     const MODES = ['physical', 'digital', 'expenses'];
+    const DIG_CATS = ['reading', 'later', 'finished', 'favorites'];
+
     let currentMainMode = 'physical';
     let currentPublisherFilter = 'ALL';
     let currentDigitalCategory = 'reading';
@@ -340,19 +341,45 @@
     let activeRunId = null;
     let activeNum = null;
 
-    /* TOUCH GESTURES */
+    /* TOUCH GESTURES SWIPE (TARATURA SENSIBILITA' & ANGOLO) */
     let touchStartX = 0;
+    let touchStartY = 0;
     let touchEndX = 0;
+    let touchEndY = 0;
 
-    document.addEventListener('touchstart', e => { touchStartX = e.changedTouches[0].screenX; }, false);
+    document.addEventListener('touchstart', e => {
+      touchStartX = e.changedTouches[0].screenX;
+      touchStartY = e.changedTouches[0].screenY;
+    }, false);
+
     document.addEventListener('touchend', e => {
       touchEndX = e.changedTouches[0].screenX;
+      touchEndY = e.changedTouches[0].screenY;
       handleSwipe();
     }, false);
 
     function handleSwipe() {
       const diffX = touchEndX - touchStartX;
-      if (Math.abs(diffX) > 50) {
+      const diffY = touchEndY - touchStartY;
+
+      // Filtro Angolo: se lo scorrimento verticale è marcato, ignora lo swipe
+      if (Math.abs(diffY) > Math.abs(diffX) * 0.8) return;
+
+      // Soglia di attivazione calibrata a 90px (anti-trigger accidentale)
+      if (Math.abs(diffX) > 90) {
+        if (currentMainMode === 'digital') {
+          // Swipe nelle sub-categorie digitali
+          const catIdx = DIG_CATS.indexOf(currentDigitalCategory);
+          if (diffX < 0 && catIdx < DIG_CATS.length - 1) {
+            filterDigitalCategory(DIG_CATS[catIdx + 1]);
+            return;
+          } else if (diffX > 0 && catIdx > 0) {
+            filterDigitalCategory(DIG_CATS[catIdx - 1]);
+            return;
+          }
+        }
+
+        // Swipe tra i tab principali
         const currIdx = MODES.indexOf(currentMainMode);
         if (diffX < 0 && currIdx < MODES.length - 1) {
           switchMainMode(MODES[currIdx + 1]);
@@ -392,30 +419,20 @@
         const card = document.createElement('div');
         card.className = 'run-card';
 
-        let tilesHtml = '';
-        for (let i = 1; i <= run.total; i++) {
-          const isOwned = run.owned.includes(i);
-          const isLucca = run.luccaItems.includes(i);
-          tilesHtml += `<div class="num-tile ${isOwned ? 'owned' : ''}" onclick="openItemModal('${run.id}', ${i}, 'physical')">${i}${isLucca ? '<div class="lucca-badge"></div>' : ''}</div>`;
-        }
-
         card.innerHTML = `
-          <div class="run-header-row">
+          <div class="run-header-row" onclick="toggleAccordion('${run.id}', 'physical')">
             <div>
-              <div class="run-title">
-                ${run.title} 
-                <span class="btn-icon-edit" onclick="editRunTitle('${run.id}')">✏️</span>
-              </div>
+              <div class="run-title">${run.title}</div>
               <div class="run-meta">${run.publisher} • ${run.authors}</div>
             </div>
-            <div class="toggle-arrow" id="arrow-${run.id}" onclick="toggleAccordion('${run.id}')">▼</div>
+            <div class="toggle-arrow" id="arrow-${run.id}">▼</div>
           </div>
           <div class="run-body" id="body-${run.id}">
             <div style="display:flex; justify-content:space-between; font-size:0.75rem; color:#cbd5e1; margin-bottom:4px; margin-top:8px;">
               <span>Posseduti <b>${ownedCount}</b> su <b>${run.total}</b></span><span>${pct}%</span>
             </div>
             <div class="progress-bar-bg"><div class="progress-bar-fill" style="width: ${pct}%;"></div></div>
-            <div class="numbers-grid">${tilesHtml}</div>
+            <div class="numbers-grid" id="grid-${run.id}"></div>
           </div>
         `;
         container.appendChild(card);
@@ -438,21 +455,15 @@
         const card = document.createElement('div');
         card.className = 'run-card';
 
-        let tilesHtml = '';
-        for (let i = 1; i <= run.total; i++) {
-          const isRead = run.read.includes(i);
-          tilesHtml += `<div class="num-tile ${isRead ? 'read' : ''}" onclick="openItemModal('${run.id}', ${i}, 'digital')">${i}</div>`;
-        }
-
         card.innerHTML = `
-          <div class="run-header-row">
+          <div class="run-header-row" onclick="toggleAccordion('${run.id}', 'digital')">
             <div>
               <div class="run-title">${run.title}</div>
               <div class="run-meta">${run.publisher} • ${run.authors}</div>
             </div>
             <div style="display:flex; align-items:center; gap:8px;">
-              <button style="background:rgba(59,130,246,0.2); border:1px solid #3b82f6; color:#60a5fa; padding:4px 8px; border-radius:6px; font-weight:bold; font-size:0.72rem; cursor:pointer;" onclick="quickStepDigital('${run.id}')">+1 Ch</button>
-              <div class="toggle-arrow" id="arrow-${run.id}" onclick="toggleAccordion('${run.id}')">▼</div>
+              <button style="background:rgba(59,130,246,0.2); border:1px solid #3b82f6; color:#60a5fa; padding:4px 8px; border-radius:6px; font-weight:bold; font-size:0.72rem; cursor:pointer;" onclick="event.stopPropagation(); quickStepDigital('${run.id}')">+1 Ch</button>
+              <div class="toggle-arrow" id="arrow-${run.id}">▼</div>
             </div>
           </div>
           <div class="run-body" id="body-${run.id}">
@@ -460,11 +471,38 @@
               <span>Letto <b>${readCount}</b> su <b>${run.total}</b></span><span>${pct}%</span>
             </div>
             <div class="progress-bar-bg"><div class="progress-bar-fill digital" style="width: ${pct}%;"></div></div>
-            <div class="numbers-grid">${tilesHtml}</div>
+            <div class="numbers-grid" id="grid-${run.id}"></div>
           </div>
         `;
         container.appendChild(card);
       });
+    }
+
+    /* LAZY RENDERING TASSELLI ALL'APERTURA DELLA TENDINA */
+    function toggleAccordion(runId, mode) {
+      const body = document.getElementById('body-' + runId);
+      const arrow = document.getElementById('arrow-' + runId);
+      const grid = document.getElementById('grid-' + runId);
+      const isOpen = body.classList.contains('open');
+
+      if (!isOpen && grid.children.length === 0) {
+        const run = (mode === 'physical') ? PHYSICAL_RUNS.find(r => r.id === runId) : DIGITAL_RUNS.find(r => r.id === runId);
+        let tilesHtml = '';
+        for (let i = 1; i <= run.total; i++) {
+          if (mode === 'physical') {
+            const isOwned = run.owned.includes(i);
+            const isLucca = run.luccaItems.includes(i);
+            tilesHtml += `<div class="num-tile ${isOwned ? 'owned' : ''}" onclick="openItemModal('${run.id}', ${i}, 'physical')">${i}${isLucca ? '<div class="lucca-badge"></div>' : ''}</div>`;
+          } else {
+            const isRead = run.read.includes(i);
+            tilesHtml += `<div class="num-tile ${isRead ? 'read' : ''}" onclick="openItemModal('${run.id}', ${i}, 'digital')">${i}</div>`;
+          }
+        }
+        grid.innerHTML = tilesHtml;
+      }
+
+      body.classList.toggle('open', !isOpen);
+      arrow.classList.toggle('open', !isOpen);
     }
 
     function quickStepDigital(runId) {
@@ -475,15 +513,6 @@
         }
         renderDigitalRuns();
       }
-    }
-
-    function toggleAccordion(runId) {
-      const body = document.getElementById('body-' + runId);
-      const arrow = document.getElementById('arrow-' + runId);
-      const isOpen = body.classList.contains('open');
-
-      body.classList.toggle('open', !isOpen);
-      arrow.classList.toggle('open', !isOpen);
     }
 
     function filterDigitalCategory(cat) {
