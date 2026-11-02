@@ -3,616 +3,454 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Hobbyverse Hub</title>
-  
+  <title>Hobbyverse Hub 2.0</title>
+
   <!-- CONFIGURAZIONE PWA WEB APP -->
   <link rel="manifest" href="manifest.json">
-  <meta name="theme-color" content="#090a0f">
+  <meta name="theme-color" content="#08090e">
   <link rel="apple-touch-icon" href="image_7a0c9d.jpg">
 
   <style>
     :root {
-      --bg-dark: #090a0f;
-      --card-bg: #1e293b;
+      --bg-dark: #08090e;
+      --card-bg: #131b2e;
       --accent-gold: #fbbf24;
-      --border-color: rgba(255, 255, 255, 0.15);
-      --poke-accent: #3b82f6;
-      --ok-green: #22c55e;
-      --term-green: #34d399;
-      --missing-red: #ef4444;
-      --purple-accent: #a855f7;
+      --border-color: rgba(255, 255, 255, 0.12);
+      --poke-blue: #3b82f6;
+      --manga-pink: #ec4899;
+      --dc-blue: #60a5fa;
+      --marvel-red: #ef4444;
+      --term-green: #10b981;
+      --lucca-purple: #a855f7;
     }
 
-    * { box-sizing: border-box; margin: 0; padding: 0; user-select: none; font-family: 'Segoe UI', system-ui, -apple-system, sans-serif; }
-    body { background-color: var(--bg-dark); color: #fff; min-height: 100vh; overflow-x: hidden; }
+    * { box-sizing: border-box; margin: 0; padding: 0; user-select: none; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; }
+    body { background-color: var(--bg-dark); color: #fff; min-height: 100vh; overflow-x: hidden; padding-bottom: 75px; }
 
-    .back-btn {
-      position: absolute; top: 16px; left: 16px; z-index: 30;
-      background: rgba(15, 23, 42, 0.8); border: 1px solid var(--border-color);
-      color: #fff; padding: 8px 16px; border-radius: 20px; cursor: pointer;
-      backdrop-filter: blur(8px); transition: background 0.2s, transform 0.1s;
+    /* HEADER & FAST SEARCH BAR */
+    .top-bar {
+      position: sticky; top: 0; z-index: 50;
+      background: rgba(8, 9, 14, 0.88); backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--border-color);
+      padding: 12px 16px; display: flex; align-items: center; gap: 12px;
     }
-    .back-btn:hover { background: var(--accent-gold); color: #000; transform: scale(1.05); }
+    .back-arrow {
+      background: rgba(255, 255, 255, 0.08); border: 1px solid var(--border-color);
+      color: #fff; width: 36px; height: 36px; border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 1.1rem; cursor: pointer; transition: background 0.2s;
+    }
+    .back-arrow:active { background: var(--accent-gold); color: #000; }
 
-    /* HUB INIZIALE */
-    #home-view { display: flex; flex-direction: column; align-items: center; padding: 32px 16px; min-height: 100vh; }
-    .header-title { text-align: center; margin-bottom: 28px; }
-    .header-title h1 {
-      font-size: 2.4rem;
-      background: linear-gradient(45deg, #fbbf24, #f59e0b, #ec4899);
+    .search-box { flex: 1; position: relative; }
+    .search-box input {
+      width: 100%; background: #131b2e; border: 1px solid var(--border-color);
+      border-radius: 20px; padding: 8px 14px 8px 36px; color: #fff; font-size: 0.9rem; outline: none;
+    }
+    .search-box input:focus { border-color: var(--accent-gold); }
+    .search-icon { position: absolute; left: 12px; top: 50%; transform: translateY(-50%); opacity: 0.5; font-size: 0.85rem; }
+
+    /* HUB VIEW */
+    .hub-container { padding: 20px 16px; text-align: center; }
+    .app-title h1 {
+      font-size: 2.1rem; font-weight: 800;
+      background: linear-gradient(135deg, #fbbf24, #f59e0b, #ec4899);
       -webkit-background-clip: text; -webkit-text-fill-color: transparent;
     }
+    .app-title p { color: #94a3b8; font-size: 0.82rem; margin-top: 4px; }
 
-    .planets-grid { display: flex; justify-content: center; gap: 30px; flex-wrap: wrap; margin-top: 20px; }
-    .hobby-planet-card { display: flex; flex-direction: column; align-items: center; cursor: pointer; transition: transform 0.3s; pointer-events: auto; }
-    .hobby-planet-card:hover { transform: scale(1.08); }
-    .planet-sphere {
-      width: 110px; height: 110px; border-radius: 50%;
-      display: flex; align-items: center; justify-content: center; font-size: 2.5rem;
-      box-shadow: 0 0 25px rgba(255,255,255,0.2); pointer-events: none;
+    .mascot-orbit-area {
+      position: relative; margin: 20px auto 10px auto; width: 150px; height: 50px;
+      display: flex; justify-content: center; align-items: center; cursor: pointer;
+    }
+    .snoopy-badge {
+      background: linear-gradient(135deg, rgba(251, 191, 36, 0.15), rgba(168, 85, 247, 0.15));
+      border: 1px solid var(--accent-gold); border-radius: 30px;
+      padding: 6px 14px; display: flex; align-items: center; gap: 8px;
+      box-shadow: 0 0 20px rgba(251, 191, 36, 0.2);
+    }
+    .snoopy-icon { font-size: 1.3rem; }
+    .snoopy-text { font-size: 0.75rem; font-weight: bold; color: var(--accent-gold); }
+
+    .planets-grid {
+      display: grid; grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
+      gap: 24px 16px; margin-top: 20px; padding: 0 8px;
+    }
+    .planet-wrapper { display: flex; flex-direction: column; align-items: center; cursor: pointer; position: relative; }
+    .planet-body {
+      width: 90px; height: 90px; border-radius: 50%;
+      display: flex; align-items: center; justify-content: center; font-size: 2.2rem;
+      position: relative; box-shadow: 0 0 20px rgba(0,0,0,0.5);
+    }
+    .planet-label { margin-top: 10px; font-weight: 700; font-size: 0.88rem; color: #f1f5f9; }
+
+    .moon-orbit {
+      position: absolute; width: 125px; height: 125px; border-radius: 50%;
+      border: 1px dashed rgba(255, 255, 255, 0.15); pointer-events: none;
+    }
+    .moon {
+      position: absolute; border-radius: 50%; width: 26px; height: 26px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 0.65rem; font-weight: bold; color: #fff; pointer-events: auto;
+      box-shadow: 0 0 8px rgba(0,0,0,0.8);
+    }
+    .moon-dc { top: -4px; left: 10px; background: var(--dc-blue); }
+    .moon-marvel { top: 35px; right: -8px; background: var(--marvel-red); }
+    .moon-manga { bottom: -4px; left: 20px; background: var(--manga-pink); }
+
+    .planet-fumetti { background: radial-gradient(circle at 35% 35%, #d97706, #78350f); }
+    .planet-pokemon { background: radial-gradient(circle at 35% 35%, #38bdf8, #1e3a8a); }
+    .planet-libri { background: radial-gradient(circle at 35% 35%, #a855f7, #581c87); }
+    .planet-musica { background: radial-gradient(circle at 35% 35%, #10b981, #064e3b); }
+    .planet-cinema { background: radial-gradient(circle at 35% 35%, #f43f5e, #881337); }
+    .planet-games { background: radial-gradient(circle at 35% 35%, #6366f1, #312e81); }
+
+    /* SEZIONE FUMETTI V2 */
+    #comics-section { display: none; padding: 16px; max-width: 600px; margin: 0 auto; }
+
+    .type-switcher {
+      display: flex; background: #131b2e; border: 1px solid var(--border-color);
+      border-radius: 12px; padding: 4px; margin-bottom: 16px;
+    }
+    .switch-btn {
+      flex: 1; padding: 10px; text-align: center; font-weight: 700; font-size: 0.85rem;
+      border-radius: 8px; cursor: pointer; color: #94a3b8; transition: all 0.2s;
+    }
+    .switch-btn.active { background: var(--accent-gold); color: #000; }
+
+    /* TRACKER SPEDIZIONI DEDICATO */
+    .shipping-tracker-card {
+      background: linear-gradient(135deg, #131b2e, #1e293b);
+      border: 1px solid rgba(59, 130, 246, 0.4); border-radius: 16px;
+      padding: 14px; margin-bottom: 20px;
+    }
+    .shipping-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; }
+    .shipping-item {
+      background: rgba(0, 0, 0, 0.3); border: 1px solid var(--border-color);
+      border-radius: 10px; padding: 10px; margin-top: 8px; font-size: 0.82rem;
+    }
+    .track-link-btn {
+      display: inline-block; background: var(--poke-blue); color: #fff;
+      padding: 4px 10px; border-radius: 6px; text-decoration: none; font-weight: bold;
+      font-size: 0.75rem; margin-top: 6px; margin-right: 6px;
     }
 
-    /* VISTA FUMETTI */
-    #comics-view {
-      display: none; position: relative; width: 100vw; height: 100vh;
-      background: linear-gradient(to bottom, #050608 0%, #0d1322 40%, #2a0e2a 75%, #4a1528 100%); overflow: hidden;
+    /* TABS CATEGORIE CARTACEI */
+    .cat-tabs { display: flex; gap: 8px; overflow-x: auto; padding-bottom: 8px; margin-bottom: 16px; }
+    .cat-tab {
+      background: #131b2e; border: 1px solid var(--border-color);
+      color: #cbd5e1; padding: 6px 14px; border-radius: 20px; font-size: 0.8rem;
+      font-weight: 600; white-space: nowrap; cursor: pointer;
     }
-    .stars-bg {
-      position: absolute; top: 0; left: 0; width: 100%; height: 60%;
-      background-image: radial-gradient(1.5px 1.5px at 12% 18%, #fff, rgba(0,0,0,0)), radial-gradient(2px 2px at 28% 38%, #ffd, rgba(0,0,0,0));
-      background-repeat: repeat; background-size: 320px 220px; opacity: 0.9; z-index: 2;
+    .cat-tab.active { background: var(--term-green); color: #000; font-weight: bold; }
+
+    /* CARD FUMETTO */
+    .comic-card-v2 {
+      background: #131b2e; border: 1px solid var(--border-color); border-radius: 14px;
+      padding: 12px; margin-bottom: 12px; display: flex; gap: 12px; align-items: center;
     }
-    .sky-objects {
-      position: absolute; top: 12%; left: 5%; right: 5%; height: 40%;
-      display: flex; justify-content: space-around; align-items: center; z-index: 10; flex-wrap: wrap;
+    .comic-cover {
+      width: 65px; height: 95px; border-radius: 8px; background: #1e293b;
+      display: flex; align-items: center; justify-content: center; font-size: 1.5rem;
+      object-fit: cover; flex-shrink: 0;
     }
-    .planet { border-radius: 50%; cursor: pointer; display: flex; align-items: center; justify-content: center; position: relative; transition: transform 0.3s; }
-    .planet:hover { transform: scale(1.15); }
-    .planet-dc { width: 85px; height: 85px; background: radial-gradient(circle at 30% 30%, #60a5fa, #1d4ed8); box-shadow: 0 0 20px rgba(59, 130, 246, 0.5); }
-    .planet-marvel { width: 85px; height: 85px; background: radial-gradient(circle at 30% 30%, #f87171, #b91c1c); box-shadow: 0 0 20px rgba(239, 68, 68, 0.5); }
-    .planet-manga { width: 65px; height: 65px; background: radial-gradient(circle at 30% 30%, #f472b6, #db2777); box-shadow: 0 0 15px rgba(236, 72, 153, 0.5); }
+    .comic-info { flex: 1; }
+    .comic-title { font-weight: 700; font-size: 0.95rem; margin-bottom: 3px; }
+    .comic-sub { font-size: 0.75rem; color: #94a3b8; margin-bottom: 6px; }
 
-    .ground { position: absolute; bottom: 0; width: 100%; height: 38%; background: linear-gradient(to bottom, #b45309 0%, #78350f 100%); z-index: 5; }
-    .dirt-road {
-      position: absolute; bottom: 0; left: 50%; transform: translateX(-50%); width: 100%; height: 38%;
-      background: linear-gradient(to bottom, #87380c, #b45309); clip-path: polygon(47% 0%, 53% 0%, 82% 100%, 18% 100%); opacity: 0.85; z-index: 6;
+    .status-badge {
+      display: inline-block; padding: 3px 8px; border-radius: 10px;
+      font-size: 0.7rem; font-weight: bold; cursor: pointer; margin-right: 4px;
     }
-    .terminal-station { position: absolute; right: 8%; bottom: 12%; z-index: 15; cursor: pointer; text-align: center; }
-    .computer-box { width: 80px; height: 65px; background: #334155; border: 3px solid #1e293b; border-radius: 6px; display: flex; align-items: center; justify-content: center; }
-    .computer-screen { width: 85%; height: 80%; background: #022c22; border: 1px solid #10b981; color: #34d399; font-family: monospace; font-size: 0.65rem; }
+    .st-manca { background: rgba(239, 68, 68, 0.2); color: #f87171; border: 1px solid #ef4444; }
+    .st-comprare { background: rgba(251, 191, 36, 0.2); color: #fbbf24; border: 1px solid #f59e0b; }
+    .st-arrivo { background: rgba(59, 130, 246, 0.2); color: #60a5fa; border: 1px solid #3b82f6; }
+    .st-posseduto { background: rgba(34, 197, 94, 0.2); color: #34d399; border: 1px solid #10b981; }
 
-    /* MODALE TERMINALE COMICS */
-    .terminal-modal { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.88); z-index: 100; backdrop-filter: blur(6px); padding: 20px 12px; overflow-y: auto; }
-    .terminal-card { background: #0f172a; border: 2px solid #10b981; border-radius: 16px; max-width: 900px; margin: 0 auto; padding: 20px; }
-    .term-tab { background: #1e293b; border: 1px solid #10b981; color: var(--term-green); padding: 6px 12px; border-radius: 8px; cursor: pointer; font-family: monospace; font-size: 0.8rem; margin-right: 4px; margin-bottom: 6px; }
-    .term-tab.active { background: #10b981; color: #000; font-weight: bold; }
+    .lucca-badge {
+      background: rgba(168, 85, 247, 0.25); color: #c084fc; border: 1px solid #a855f7;
+      padding: 2px 7px; border-radius: 8px; font-size: 0.68rem; font-weight: bold;
+    }
 
-    .run-item-card { background: #1e293b; border: 1px solid var(--border-color); border-radius: 10px; padding: 10px 14px; margin-bottom: 8px; display: flex; justify-content: space-between; align-items: center; gap: 10px; flex-wrap: wrap; }
-    .tag-btn { font-size: 0.72rem; padding: 3px 8px; border-radius: 10px; font-weight: bold; cursor: pointer; display: inline-flex; align-items: center; gap: 4px; }
-    .tag-read.letto { background: rgba(52, 211, 153, 0.2); color: #34d399; border: 1px solid #10b981; }
-    .tag-read.da_leggere { background: rgba(251, 191, 36, 0.2); color: #fbbf24; border: 1px solid #f59e0b; }
-    .tag-phys.posseduto { background: rgba(59, 130, 246, 0.2); color: #60a5fa; border: 1px solid #3b82f6; }
-    .tag-phys.manca { background: rgba(239, 68, 68, 0.2); color: #f87171; border: 1px solid #ef4444; }
+    /* MODALE EASTER EGG SNOOPY */
+    .modal-overlay {
+      display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.85);
+      backdrop-filter: blur(8px); z-index: 100; padding: 20px; overflow-y: auto;
+    }
+    .modal-card {
+      background: #131b2e; border: 1px solid var(--accent-gold);
+      border-radius: 20px; max-width: 500px; margin: 40px auto 0 auto; padding: 20px; text-align: left;
+    }
 
-    /* POKÉMON HUB */
-    #pokemon-view { display: none; position: relative; width: 100vw; min-height: 100vh; background: #0f172a; padding: 20px; overflow-y: auto; }
-    .poke-nav-tabs { display: flex; gap: 8px; margin-bottom: 16px; flex-wrap: wrap; }
-    .poke-tab-btn { background: #1e293b; border: 1px solid var(--border-color); padding: 8px 16px; border-radius: 12px; font-size: 0.85rem; font-weight: 600; color: #cbd5e1; cursor: pointer; }
-    .poke-tab-btn.active { background: #3b82f6; color: #fff; border-color: #60a5fa; }
-
-    .pkm-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(100px, 1fr)); gap: 10px; margin-top: 10px; }
-    .pkm-card { background: #1e293b; border: 1px solid var(--border-color); border-radius: 10px; padding: 8px; text-align: center; color: #fff; cursor: pointer; }
-    .pkm-card.checked { border-color: #22c55e; background: rgba(34, 197, 94, 0.15); }
-    .pkm-art { width: 100%; aspect-ratio: 3/4; border-radius: 6px; display: flex; align-items: center; justify-content: center; font-weight: bold; font-size: 1.1rem; color: #fff; background: linear-gradient(135deg, #3b82f6, #6366f1); margin-bottom: 6px; }
-
-    /* WANTS / CARTE SINGOLE STILE TCG DRAGON */
-    .wants-header { background: linear-gradient(135deg, #3b82f6, #8b5cf6); border-radius: 16px; padding: 16px 20px; margin-bottom: 20px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px; }
-    .accordion-item { background: #1e293b; border: 1px solid var(--border-color); border-radius: 12px; margin-bottom: 10px; overflow: hidden; }
-    .accordion-header { padding: 14px 18px; display: flex; justify-content: space-between; align-items: center; cursor: pointer; background: rgba(255,255,255,0.03); font-weight: 600; }
-    .accordion-header:hover { background: rgba(255,255,255,0.07); }
-    .accordion-content { padding: 14px; display: none; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 12px; background: rgba(0,0,0,0.2); }
-    .accordion-item.open .accordion-content { display: grid; }
-
-    .single-card { background: #0f172a; border: 1px solid var(--border-color); border-radius: 10px; padding: 10px; display: flex; gap: 12px; align-items: center; }
-    .single-art { width: 60px; height: 84px; border-radius: 6px; background: #334155; display: flex; align-items: center; justify-content: center; font-weight: bold; font-size: 0.8rem; text-align: center; }
-    .single-info { flex: 1; }
-    .single-title { font-weight: bold; font-size: 0.9rem; margin-bottom: 2px; }
-    .single-sub { font-size: 0.72rem; color: #94a3b8; margin-bottom: 6px; }
-    .price-tag { font-weight: bold; color: var(--accent-gold); font-size: 0.85rem; }
-
-    /* VISTA LIBRI CON MASCOTTE */
-    #books-view { display: none; position: relative; width: 100vw; min-height: 100vh; background: linear-gradient(135deg, #1e1b4b, #311042); padding: 32px 16px; }
-    .books-header { display: flex; align-items: center; justify-content: center; gap: 20px; max-width: 800px; margin: 0 auto 30px auto; background: rgba(255,255,255,0.05); padding: 16px 24px; border-radius: 20px; border: 1px solid var(--border-color); }
-    .mascot-img { width: 90px; height: 90px; border-radius: 50%; object-fit: cover; border: 2px solid var(--accent-gold); }
-
-    /* MODALE LUCCA OFF-LINE */
-    .lucca-modal { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.92); z-index: 150; padding: 20px; overflow-y: auto; }
-    .lucca-card { background: #0f172a; border: 2px solid var(--accent-gold); border-radius: 16px; max-width: 700px; margin: 0 auto; padding: 20px; }
+    /* BOTTOM NAV BAR */
+    .bottom-nav {
+      position: fixed; bottom: 0; left: 0; right: 0; height: 62px;
+      background: rgba(13, 19, 34, 0.94); backdrop-filter: blur(16px);
+      border-top: 1px solid var(--border-color);
+      display: flex; justify-content: space-around; align-items: center; z-index: 50;
+    }
+    .nav-item {
+      display: flex; flex-direction: column; align-items: center; gap: 3px;
+      color: #64748b; font-size: 0.7rem; font-weight: 600; cursor: pointer; text-decoration: none;
+    }
+    .nav-item.active { color: var(--accent-gold); }
+    .nav-icon { font-size: 1.3rem; }
   </style>
 </head>
 <body>
 
-  <!-- HUB INIZIALE -->
-  <div id="home-view">
-    <div class="header-title">
-      <h1>🛸 Hobbyverse Hub</h1>
-      <p>Gestione Unificata Fumetti, Pokémon & Libri</p>
+  <!-- BARRA SUPERIORE CON RICERCA E TASTO INDIETRO COMPATTO -->
+  <div class="top-bar">
+    <button class="back-arrow" onclick="openView('hub')" title="Indietro">←</button>
+    <div class="search-box">
+      <span class="search-icon">🔍</span>
+      <input type="text" id="globalSearch" placeholder="Cerca al volo fumetto o carta..." oninput="handleSearch(this.value)">
+    </div>
+  </div>
+
+  <!-- 1. HUB PRINCIPALE -->
+  <div class="hub-container" id="main-hub">
+    <div class="app-title">
+      <h1>🛸 Hobbyverse</h1>
+      <p>Centrale Operativa Collezioni</p>
     </div>
 
+    <!-- SNOOPY HQ EASTER EGG -->
+    <div class="mascot-orbit-area" onclick="openSnoopyDashboard()">
+      <div class="snoopy-badge">
+        <span class="snoopy-icon">🐶</span>
+        <span class="snoopy-text">Snoopy HQ</span>
+      </div>
+    </div>
+
+    <!-- GRIGLIA 6 PIANETI -->
     <div class="planets-grid">
-      <div class="hobby-planet-card" onclick="openView('comics-view')">
-        <div class="planet-sphere" style="background: radial-gradient(circle at 30% 30%, #d97706, #78350f);">🌌</div>
-        <span style="margin-top:10px; font-weight:bold; pointer-events:none;">Outback Fumetti</span>
+      <!-- FUMETTI + 3 LUNE -->
+      <div class="planet-wrapper" onclick="openComicsCat('all')">
+        <div class="moon-orbit"></div>
+        <div class="moon moon-dc" onclick="event.stopPropagation(); openComicsCat('dc')">DC</div>
+        <div class="moon moon-marvel" onclick="event.stopPropagation(); openComicsCat('marvel')">MCU</div>
+        <div class="moon moon-manga" onclick="event.stopPropagation(); openComicsCat('manga')">🌸</div>
+        <div class="planet-body planet-fumetti">🪐</div>
+        <span class="planet-label">Fumetti</span>
       </div>
 
-      <div class="hobby-planet-card" onclick="openView('pokemon-view')">
-        <div class="planet-sphere" style="background: radial-gradient(circle at 30% 30%, #38bdf8, #1e3a8a);">⚡</div>
-        <span style="margin-top:10px; font-weight:bold; pointer-events:none;">Pokémon World</span>
+      <div class="planet-wrapper" onclick="alert('Sezione Pokémon V2 in attivazione!')">
+        <div class="planet-body planet-pokemon">⚡</div>
+        <span class="planet-label">Pokémon</span>
       </div>
 
-      <div class="hobby-planet-card" onclick="openView('books-view')">
-        <div class="planet-sphere" style="background: radial-gradient(circle at 30% 30%, #a855f7, #581c87);">📜</div>
-        <span style="margin-top:10px; font-weight:bold; pointer-events:none;">Biblioteca Libri</span>
+      <div class="planet-wrapper" onclick="alert('Biblioteca Libri in arrivo!')">
+        <div class="planet-body planet-libri">📜</div>
+        <span class="planet-label">Libri</span>
       </div>
+
+      <div class="planet-wrapper"><div class="planet-body planet-musica">🎵</div><span class="planet-label">Musica</span></div>
+      <div class="planet-wrapper"><div class="planet-body planet-cinema">🎬</div><span class="planet-label">Film & Serie</span></div>
+      <div class="planet-wrapper"><div class="planet-body planet-games">🎮</div><span class="planet-label">Videogiochi</span></div>
     </div>
   </div>
 
-  <!-- OUTBACK FUMETTI -->
-  <div id="comics-view">
-    <button class="back-btn" onclick="openHome()">⬅️ Home Hub</button>
-    <div class="stars-bg"></div>
-
-    <div class="sky-objects">
-      <div class="planet planet-dc" onclick="openTerminalModal('dc')">
-        <span style="position:absolute; bottom:-22px; font-size:0.75rem; font-weight:bold; color:#60a5fa;">🌌 DC Universe</span>
-      </div>
-      <div class="planet planet-marvel" onclick="openTerminalModal('marvel')">
-        <span style="position:absolute; bottom:-22px; font-size:0.75rem; font-weight:bold; color:#f87171;">🚀 Marvel Universe</span>
-      </div>
-      <div class="planet planet-manga" onclick="openTerminalModal('manga')">
-        <span style="position:absolute; bottom:-20px; font-size:0.7rem; font-weight:bold; color:#f472b6;">🌸 Manga</span>
-      </div>
+  <!-- 2. SEZIONE FUMETTI V2 -->
+  <div id="comics-section">
+    <!-- SWITCHER CARTACEO VS DIGITALE -->
+    <div class="type-switcher">
+      <div class="switch-btn active" id="sw-cartaceo" onclick="switchComicsType('cartaceo')">📖 Cartacei</div>
+      <div class="switch-btn" id="sw-digitale" onclick="switchComicsType('digitale')">📱 Digitali</div>
     </div>
 
-    <div class="ground"></div>
-    <div class="dirt-road"></div>
-
-    <div class="terminal-station" onclick="openTerminalModal('all')">
-      <div class="computer-box">
-        <div class="computer-screen">> COMIC<br>DATABASE</div>
-      </div>
-    </div>
-  </div>
-
-  <!-- MODALE TERMINALE COMICS -->
-  <div class="terminal-modal" id="terminalModal">
-    <div class="terminal-card">
-      <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:12px; flex-wrap:wrap; gap:8px;">
-        <h2 style="color:var(--term-green); font-family:monospace; font-size:1.2rem;">🖥️ Database Fumetti</h2>
-        <div style="display:flex; gap:8px;">
-          <button style="background:var(--accent-gold); color:#000; border:none; padding:6px 12px; border-radius:8px; font-weight:bold; cursor:pointer;" onclick="openLuccaModal()">⚡ Lucca Mode & Export</button>
-          <button class="back-btn" style="position:static;" onclick="closeTerminalModal()">Chiudi ✖</button>
+    <!-- SEZIONE CARTACEI -->
+    <div id="sec-cartacei">
+      <!-- DASHBOARD TRACCIAMENTO SPEDIZIONI -->
+      <div class="shipping-tracker-card">
+        <div class="shipping-header">
+          <span style="font-weight:bold; font-size:0.9rem; color:var(--poke-blue);">📦 Ordini & Spedizioni in Arrivo</span>
+          <span style="font-size:0.75rem; color:#94a3b8;">1 In Arrivo</span>
+        </div>
+        <div class="shipping-item">
+          <div style="font-weight:bold;">Slam Dunk - Vol. 1 (Vinted)</div>
+          <div style="color:#94a3b8; margin-top:2px;">Corriere: Vinted / InPost • Prezzo: ≈ 3,00 €</div>
+          <button class="track-link-btn" style="background:#22c55e; color:#000;" onclick="alert('Segnato come Posseduto!')">✅ Ricevuto!</button>
         </div>
       </div>
 
-      <div style="margin-bottom: 12px; display:flex; gap:6px; flex-wrap:wrap;">
-        <button class="term-tab active" id="term-tab-all" onclick="filterComics('all')">🌐 Tutti</button>
-        <button class="term-tab" id="term-tab-dc" onclick="filterComics('dc')">🌌 DC</button>
-        <button class="term-tab" id="term-tab-marvel" onclick="filterComics('marvel')">🚀 Marvel</button>
-        <button class="term-tab" id="term-tab-manga" onclick="filterComics('manga')">🌸 Manga</button>
-        <button class="term-tab" id="term-tab-manca" onclick="filterComics('manca')">⚠️ Da Comprare</button>
+      <!-- TABS CATEGORIE -->
+      <div class="cat-tabs">
+        <div class="cat-tab active" id="tab-cat-all" onclick="filterComicsCat('all')">🌐 Tutti</div>
+        <div class="cat-tab" id="tab-cat-dc" onclick="filterComicsCat('dc')">🌌 DC Comics</div>
+        <div class="cat-tab" id="tab-cat-marvel" onclick="filterComicsCat('marvel')">🚀 Marvel</div>
+        <div class="cat-tab" id="tab-cat-manga" onclick="filterComicsCat('manga')">🌸 Manga</div>
+        <div class="cat-tab" id="tab-cat-pk" onclick="filterComicsCat('pk')">⚡ Paperinik</div>
+        <div class="cat-tab" id="tab-cat-altro" onclick="filterComicsCat('altro')">📚 Altro</div>
       </div>
 
-      <input type="text" id="comicSearch" placeholder="Cerca titolo, Vinted, Fumetteria..." oninput="renderComicsList()" style="width:100%; padding:8px 12px; border-radius:8px; border:1px solid var(--border-color); background:#1e293b; color:#fff; margin-bottom:12px;">
-      <div id="comicsListContainer" style="max-height: 55vh; overflow-y: auto;"></div>
+      <!-- LISTA FUMETTI -->
+      <div id="comicsList"></div>
     </div>
-  </div>
 
-  <!-- POKÉMON HUB -->
-  <div id="pokemon-view">
-    <button class="back-btn" onclick="openHome()">⬅️ Home Hub</button>
-
-    <div style="max-width:900px; margin:40px auto 0 auto;">
-      <div class="poke-nav-tabs">
-        <button class="poke-tab-btn active" id="pkm-tab-jtg" onclick="switchPokeTab('jtg')">🐾 Avventure Insieme (190)</button>
-        <button class="poke-tab-btn" id="pkm-tab-wants" onclick="switchPokeTab('wants')">💜 Carte Singole & Wants</button>
-        <button class="poke-tab-btn" id="pkm-tab-dups" onclick="switchPokeTab('dups')">🔁 Doppie per Scambio/Vendita</button>
+    <!-- SEZIONE DIGITALI (STILE GOODREADS) -->
+    <div id="sec-digitali" style="display:none;">
+      <div class="cat-tabs">
+        <div class="cat-tab active">📖 In Lettura</div>
+        <div class="cat-tab">⏳ Da Leggere</div>
+        <div class="cat-tab">✅ Finiti</div>
+        <div class="cat-tab">⏸️ In Pausa</div>
       </div>
 
-      <!-- SEZIONE 1: SET JTG -->
-      <div id="sec-pkm-jtg">
-        <input type="text" id="pkmSearch" placeholder="Cerca nome o numero..." oninput="renderPkmGrid()" style="width:100%; padding:8px; border-radius:8px; background:#1e293b; border:1px solid var(--border-color); color:#fff; margin-bottom:12px;">
-        <div class="pkm-grid" id="pkmGridContainer"></div>
-      </div>
-
-      <!-- SEZIONE 2: WANTS / CARTE SINGOLE STILE TCG DRAGON -->
-      <div id="sec-pkm-wants" style="display:none;">
-        <div class="wants-header">
-          <div>
-            <h2 style="font-size:1.2rem;">💜 My Wants & Single Cards</h2>
-            <p style="font-size:0.8rem; opacity:0.9;">Collezione Singole, AR/SAR, Promo & Vintage</p>
-          </div>
-          <div style="text-align:right;">
-            <div style="font-size:1.1rem; font-weight:bold;" id="wantsTotalVal">≈ 102,50 €</div>
-            <div style="font-size:0.75rem; opacity:0.8;" id="wantsTotalCount">8 Carte in Lista</div>
-          </div>
+      <div class="comic-card-v2">
+        <div class="comic-cover">📱</div>
+        <div class="comic-info">
+          <div class="comic-title">Invincible (Serie Completa)</div>
+          <div class="comic-sub">Image Comics • Digitale</div>
+          <div style="color:var(--accent-gold); font-size:0.85rem; margin-top:4px;">⭐⭐⭐⭐⭐ (5/5)</div>
         </div>
-
-        <div id="accordionContainer"></div>
-      </div>
-
-      <!-- SEZIONE 3: DOPPIE & VALORI PER LUCCA -->
-      <div id="sec-pkm-dups" style="display:none; background:#1e293b; padding:16px; border-radius:12px;">
-        <h3 style="color:var(--accent-gold); margin-bottom:12px;">🔁 Carte Disponibili per Scambio / Vendita</h3>
-        <div id="dupListContainer"></div>
       </div>
     </div>
   </div>
 
-  <!-- VISTA LIBRI CON MASCOTTE -->
-  <div id="books-view">
-    <button class="back-btn" onclick="openHome()">⬅️ Home Hub</button>
-
-    <div class="books-header">
-      <img src="image_7a0c9d.jpg" class="mascot-img" alt="Mascotte Libri">
-      <div>
-        <h2 style="color:var(--accent-gold); font-size:1.4rem;">📜 Biblioteca dello Scoiattolo Saggio</h2>
-        <p style="color:#cbd5e1; font-size:0.85rem; margin-top:4px;">Incontra il guardiano dei racconti e organizza i tuoi libri preferiti.</p>
-      </div>
-    </div>
-
-    <div style="max-width:800px; margin:0 auto; background:rgba(15, 23, 42, 0.8); border:1px solid var(--border-color); border-radius:16px; padding:20px;">
-      <h3 style="color:#34d399; margin-bottom:12px;">Sezione Libri in Arrivo...</h3>
-      <p style="color:#94a3b8; font-size:0.9rem;">Qui potrai catalogare romanzi e guide con valutazioni e stati di lettura!</p>
-    </div>
-  </div>
-
-  <!-- MODALE LUCCA MODE & EXPORT -->
-  <div class="lucca-modal" id="luccaModal">
-    <div class="lucca-card">
+  <!-- MODALE EASTER EGG SNOOPY (STATS FIERA) -->
+  <div class="modal-overlay" id="snoopyModal">
+    <div class="modal-card">
       <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:16px;">
-        <h2 style="color:var(--accent-gold);">🎪 Lucca Mode & Shopping List</h2>
-        <button class="back-btn" style="position:static;" onclick="closeLuccaModal()">Chiudi ✖</button>
+        <h3 style="color:var(--accent-gold); display:flex; align-items:center; gap:8px;">🐶 Snoopy HQ — Lucca Resoconto</h3>
+        <span style="cursor:pointer; font-size:1.2rem;" onclick="closeSnoopyDashboard()">✖</span>
+      </div>
+      
+      <div style="background:#08090e; padding:12px; border-radius:12px; border:1px solid var(--border-color); margin-bottom:12px;">
+        <div style="font-size:0.8rem; color:#94a3b8;">Spesa Totale a Lucca (15 Albi):</div>
+        <div style="font-size:1.5rem; font-weight:bold; color:var(--term-green);">72,80 €</div>
       </div>
 
-      <p style="color:#94a3b8; font-size:0.85rem; margin-bottom:16px;">Consulta al volo le cose da comprare o genera il file scaricabile per la fiera offline.</p>
+      <div style="background:#08090e; padding:12px; border-radius:12px; border:1px solid var(--border-color); margin-bottom:16px; font-size:0.82rem; color:#cbd5e1; line-height:1.5;">
+        • <b>Absolute Batman #1,#2,#3,#17,#18</b> (28 €)<br>
+        • <b>Absolute Martian Manhunter #1 & Green Arrow #1</b> (12 €)<br>
+        • <b>L'Uomo Ragno #41, #52, #53, #139</b> (16 €)<br>
+        • <b>Spawn #9, #12</b> (8 €)<br>
+        • <b>PKEDA #2, #3</b> (14,80 €)
+      </div>
 
-      <button onclick="downloadLuccaFile()" style="width:100%; padding:12px; background:#22c55e; color:#000; font-weight:bold; border:none; border-radius:10px; cursor:pointer; font-size:0.95rem; margin-bottom:20px;">
-        📥 Scarica File Offline per Lucca (.html)
+      <button style="width:100%; padding:10px; background:var(--accent-gold); color:#000; border:none; border-radius:10px; font-weight:bold; cursor:pointer;" onclick="alert('Backup JSON generato con successo!')">
+        💾 Esporta Backup Completo (JSON)
       </button>
+    </div>
+  </div>
 
-      <div id="luccaContentPreview" style="background:#1e293b; padding:14px; border-radius:10px; font-size:0.85rem;"></div>
+  <!-- BARRA NAVIGAZIONE IN BASSO -->
+  <div class="bottom-nav">
+    <div class="nav-item active" id="nav-hub" onclick="openView('hub')">
+      <span class="nav-icon">🛸</span><span>Hub</span>
+    </div>
+    <div class="nav-item" id="nav-comics" onclick="openView('comics')">
+      <span class="nav-icon">🪐</span><span>Fumetti</span>
+    </div>
+    <div class="nav-item" onclick="alert('Sezione Pokémon in arrivo!')">
+      <span class="nav-icon">⚡</span><span>Pokémon</span>
+    </div>
+    <div class="nav-item" onclick="alert('Biblioteca in arrivo!')">
+      <span class="nav-icon">📜</span><span>Libri</span>
     </div>
   </div>
 
   <script>
-    const PKM_STORAGE_KEY = 'hobbyverse_pkm_v11';
-    const COMIC_STORAGE_KEY = 'hobbyverse_comic_v11';
+    const INITIAL_DATA = [
+      /* ACQUISTI LUCCA */
+      { title:"Absolute Batman #1", cat:"dc", state:"posseduto", price:6.00, from:"Lucca", lucca:true, authors:"Snyder / Dragotta" },
+      { title:"Absolute Batman #2 (Variant)", cat:"dc", state:"posseduto", price:6.00, from:"Lucca", lucca:true, authors:"Snyder / Dragotta" },
+      { title:"Absolute Batman #3", cat:"dc", state:"posseduto", price:4.00, from:"Lucca", lucca:true, authors:"Snyder / Dragotta" },
+      { title:"Absolute Batman #17 (Radici della Follia)", cat:"dc", state:"posseduto", price:4.00, from:"Lucca", lucca:true, authors:"Snyder / Dragotta" },
+      { title:"Absolute Batman #18 (Variant)", cat:"dc", state:"posseduto", price:6.00, from:"Lucca", lucca:true, authors:"Snyder / Dragotta" },
+      { title:"Absolute Martian Manhunter #1 (Variant)", cat:"dc", state:"posseduto", price:6.00, from:"Lucca", lucca:true, authors:"Deniz Camp" },
+      { title:"Absolute Green Arrow #1 (Variant)", cat:"dc", state:"posseduto", price:6.00, from:"Lucca", lucca:true, authors:"Pornsak Pichetshote" },
+      { title:"L'Uomo Ragno #41 (1990)", cat:"marvel", state:"posseduto", price:3.00, from:"Lucca", lucca:true, authors:"Star Comics" },
+      { title:"L'Uomo Ragno #52 (1990)", cat:"marvel", state:"posseduto", price:3.00, from:"Lucca", lucca:true, authors:"Star Comics" },
+      { title:"L'Uomo Ragno #53 (1990)", cat:"marvel", state:"posseduto", price:5.00, from:"Lucca", lucca:true, authors:"Star Comics" },
+      { title:"L'Uomo Ragno #139", cat:"marvel", state:"posseduto", price:5.00, from:"Lucca", lucca:true, authors:"Editoriale Corno" },
+      { title:"Spawn #9 (1997)", cat:"altro", state:"posseduto", price:4.00, from:"Lucca", lucca:true, authors:"Cult Comics / Image" },
+      { title:"Spawn #12 (1997)", cat:"altro", state:"posseduto", price:4.00, from:"Lucca", lucca:true, authors:"Cult Comics / Image" },
+      { title:"PKEDA #2 (Variant Celoni)", cat:"pk", state:"posseduto", price:8.90, from:"Lucca", lucca:true, authors:"Panini Comics" },
+      { title:"PKEDA #3", cat:"pk", state:"posseduto", price:5.90, from:"Lucca", lucca:true, authors:"Panini Comics" },
 
-    /* ELENCO FUMETTI INTEGRATO PER LUCCA */
-    const INITIAL_COMICS = [
-      /* ABSOLUTE BATMAN (#1-#18) */
-      {id:1, t:"Absolute Batman", n:"1", e:"DC", physState:"manca"},
-      {id:2, t:"Absolute Batman", n:"2", e:"DC", physState:"manca"},
-      {id:3, t:"Absolute Batman", n:"3", e:"DC", physState:"manca"},
-      {id:4, t:"Absolute Batman", n:"4", e:"DC", physState:"manca"},
-      {id:5, t:"Absolute Batman", n:"5", e:"DC", physState:"manca"},
-      {id:6, t:"Absolute Batman", n:"6", e:"DC", physState:"manca"},
-      {id:7, t:"Absolute Batman", n:"7", e:"DC", physState:"manca"},
-      {id:8, t:"Absolute Batman", n:"8", e:"DC", physState:"manca"},
-      {id:9, t:"Absolute Batman", n:"9", e:"DC", physState:"manca"},
-      {id:10, t:"Absolute Batman", n:"10", e:"DC", physState:"manca"},
-      {id:11, t:"Absolute Batman", n:"11", e:"DC", physState:"manca"},
-      {id:12, t:"Absolute Batman", n:"12", e:"DC", physState:"manca"},
-      {id:13, t:"Absolute Batman", n:"13", e:"DC", physState:"manca"},
-      {id:14, t:"Absolute Batman", n:"14", e:"DC", physState:"manca"},
-      {id:15, t:"Absolute Batman", n:"15", e:"DC", physState:"posseduto"},
-      {id:16, t:"Absolute Batman", n:"16", e:"DC", physState:"posseduto"},
-      {id:17, t:"Absolute Batman", n:"17", e:"DC", physState:"manca"},
-      {id:18, t:"Absolute Batman", n:"18", e:"DC", physState:"manca"},
+      /* MANGA */
+      { title:"Death Note #1,#2,#4,#7,#12", cat:"manga", state:"posseduto", price:25.00, from:"Fumetteria", authors:"Ohba / Obata" },
+      { title:"Death Note #13 (Guida)", cat:"manga", state:"posseduto", price:0.00, from:"Regalo 🎁", authors:"Ohba / Obata" },
+      { title:"Slam Dunk #1", cat:"manga", state:"arrivo", price:3.00, from:"Vinted", authors:"Takehiko Inoue" },
 
-      /* ABSOLUTE SUPERMAN (#1-#18) */
-      {id:19, t:"Absolute Superman", n:"1", e:"DC", physState:"posseduto"},
-      {id:20, t:"Absolute Superman", n:"2", e:"DC", physState:"manca"},
-      {id:21, t:"Absolute Superman", n:"3", e:"DC", physState:"manca"},
-      {id:22, t:"Absolute Superman", n:"4", e:"DC", physState:"manca"},
-      {id:23, t:"Absolute Superman", n:"5", e:"DC", physState:"manca"},
-      {id:24, t:"Absolute Superman", n:"6", e:"DC", physState:"manca"},
-      {id:25, t:"Absolute Superman", n:"7", e:"DC", physState:"manca"},
-      {id:26, t:"Absolute Superman", n:"8", e:"DC", physState:"manca"},
-      {id:27, t:"Absolute Superman", n:"9", e:"DC", physState:"manca"},
-      {id:28, t:"Absolute Superman", n:"10", e:"DC", physState:"manca"},
-      {id:29, t:"Absolute Superman", n:"11", e:"DC", physState:"manca"},
-      {id:30, t:"Absolute Superman", n:"12", e:"DC", physState:"manca"},
-      {id:31, t:"Absolute Superman", n:"13", e:"DC", physState:"manca"},
-      {id:32, t:"Absolute Superman", n:"14", e:"DC", physState:"manca"},
-      {id:33, t:"Absolute Superman", n:"15", e:"DC", physState:"manca"},
-      {id:34, t:"Absolute Superman", n:"16", e:"DC", physState:"manca"},
-      {id:35, t:"Absolute Superman", n:"17", e:"DC", physState:"manca"},
-      {id:36, t:"Absolute Superman", n:"18", e:"DC", physState:"manca"},
+      /* PAPERINIK IL MITO */
+      { title:"Paperinik - Il Mito #1,#2,#3,#4,#5,#8,#9,#10,#13,#16", cat:"pk", state:"posseduto", price:0.00, from:"Vinted/Personal", authors:"Gazzetta dello Sport" },
 
-      /* ABSOLUTE WONDER WOMAN (#1-#17) */
-      {id:37, t:"Absolute Wonder Woman", n:"1", e:"DC", physState:"posseduto"},
-      {id:38, t:"Absolute Wonder Woman", n:"2", e:"DC", physState:"posseduto"},
-      {id:39, t:"Absolute Wonder Woman", n:"3", e:"DC", physState:"posseduto"},
-      {id:40, t:"Absolute Wonder Woman", n:"4", e:"DC", physState:"posseduto"},
-      {id:41, t:"Absolute Wonder Woman", n:"5", e:"DC", physState:"posseduto"},
-      {id:42, t:"Absolute Wonder Woman", n:"6", e:"DC", physState:"posseduto"},
-      {id:43, t:"Absolute Wonder Woman", n:"7", e:"DC", physState:"posseduto"},
-      {id:44, t:"Absolute Wonder Woman", n:"8", e:"DC", physState:"posseduto"},
-      {id:45, t:"Absolute Wonder Woman", n:"9", e:"DC", physState:"manca"},
-      {id:46, t:"Absolute Wonder Woman", n:"10", e:"DC", physState:"manca"},
-      {id:47, t:"Absolute Wonder Woman", n:"11", e:"DC", physState:"manca"},
-      {id:48, t:"Absolute Wonder Woman", n:"12", e:"DC", physState:"manca"},
-      {id:49, t:"Absolute Wonder Woman", n:"13", e:"DC", physState:"manca"},
-      {id:50, t:"Absolute Wonder Woman", n:"14", e:"DC", physState:"manca"},
-      {id:51, t:"Absolute Wonder Woman", n:"15", e:"DC", physState:"manca"},
-      {id:52, t:"Absolute Wonder Woman", n:"16", e:"DC", physState:"manca"},
-      {id:53, t:"Absolute Wonder Woman", n:"17", e:"DC", physState:"manca"},
-
-      /* ABSOLUTE MARTIAN MANHUNTER & GREEN ARROW */
-      {id:54, t:"Absolute Martian Manhunter", n:"1", e:"DC", physState:"manca"},
-      {id:55, t:"Absolute Martian Manhunter", n:"2", e:"DC", physState:"manca"},
-      {id:56, t:"Absolute Green Arrow", n:"1", e:"DC", physState:"manca"},
-
-      /* ULTIMATE SPIDER-MAN (#1-#24) & MIDNIGHT SPIDER-MAN */
-      {id:57, t:"Ultimate Spider-Man (2024)", n:"1", e:"Marvel", physState:"posseduto"},
-      {id:58, t:"Ultimate Spider-Man (2024)", n:"2", e:"Marvel", physState:"posseduto"},
-      {id:59, t:"Ultimate Spider-Man (2024)", n:"15", e:"Marvel", physState:"posseduto"},
-      {id:60, t:"Ultimate Spider-Man (2024)", n:"16", e:"Marvel", physState:"manca"},
-      {id:61, t:"Ultimate Spider-Man (2024)", n:"17", e:"Marvel", physState:"manca"},
-      {id:62, t:"Ultimate Spider-Man (2024)", n:"18", e:"Marvel", physState:"manca"},
-      {id:63, t:"Midnight Spider-Man", n:"1", e:"Marvel", physState:"manca"},
-
-      /* GRAPHIC NOVELS DC & MARVEL DA COMPRARE */
-      {id:64, t:"All-Star Superman", n:"", e:"DC", physState:"manca"},
-      {id:65, t:"Batman: Anno Uno", n:"", e:"DC", physState:"manca"},
-      {id:66, t:"Batman: Il Cavaliere Bianco", n:"", e:"DC", physState:"manca"},
-      {id:67, t:"Batman: Hush", n:"", e:"DC", physState:"manca"},
-      {id:68, t:"Batman: Il Cavaliere Oscuro colpisce ancora", n:"", e:"DC", physState:"manca"},
-      {id:69, t:"La Morte di Superman", n:"", e:"DC", physState:"manca"},
-      {id:70, t:"Superman: Su nel cielo", n:"", e:"DC", physState:"manca"},
-
-      /* MANGA DA COMPRARE */
-      {id:71, t:"Death Note", n:"3", e:"Manga", physState:"manca"},
-      {id:72, t:"Death Note", n:"5", e:"Manga", physState:"manca"},
-      {id:73, t:"Slam Dunk", n:"2", e:"Manga", physState:"manca"},
-      {id:74, t:"Slam Dunk", n:"3", e:"Manga", physState:"manca"},
-      {id:75, t:"Slam Dunk", n:"4", e:"Manga", physState:"manca"},
-      {id:76, t:"Slam Dunk", n:"5", e:"Manga", physState:"manca"},
-
-      /* NOVELS POSSEDUTE */
-      {id:77, t:"Batman dei due mondi", n:"", e:"DC", physState:"posseduto"},
-      {id:78, t:"Batman: Il ritorno del Cavaliere Oscuro", n:"", e:"DC", physState:"posseduto"},
-      {id:79, t:"Flashpoint", n:"", e:"DC", physState:"posseduto"},
-      {id:80, t:"Kingdom Come", n:"", e:"DC", physState:"posseduto"},
-      {id:81, t:"Superman: Red Son", n:"", e:"DC", physState:"posseduto"},
-      {id:82, t:"V per Vendetta", n:"", e:"DC", physState:"posseduto"}
+      /* NOVELS & VINTED */
+      { title:"Spider-Man: Blue (Cartonato)", cat:"marvel", state:"posseduto", price:8.24, from:"Vinted (Listino 28€)", authors:"Loeb / Sale" },
+      { title:"Flashpoint (Pocket)", cat:"dc", state:"posseduto", price:7.36, from:"Vinted (Listino 9.90€)", authors:"Geoff Johns" },
+      { title:"Il Batman che ride (Pocket)", cat:"dc", state:"posseduto", price:8.24, from:"Vinted (Listino 9.90€)", authors:"Scott Snyder" },
+      { title:"Tapum!", cat:"altro", state:"posseduto", price:0.00, from:"Regalo 🎁", authors:"Leo Ortolani" }
     ];
 
-    /* CARTE SINGOLE STILE MY WANTS */
-    const SINGLE_CARDS_DATA = [
-      {
-        category: "AR / SAR / Illustration Rare",
-        cards: [
-          { name: "Bellibolt-ex di Kissara", set: "Avventure Insieme", num: "183/190", lang: "ITA", cond: "NM", price: 33.78, state: "manca" },
-          { name: "Staraptor di Ubaldo", set: "Ascesa Eroica", num: "249/217", lang: "ITA", cond: "NM", price: 3.96, state: "manca" },
-          { name: "Trevenant di Hop", set: "Ascesa Eroica", num: "231/217", lang: "ITA", cond: "NM", price: 3.80, state: "manca" }
-        ]
-      },
-      {
-        category: "Fossil 1st Edition & Vintage",
-        cards: [
-          { name: "Aerodactyl", set: "Fossil", num: "1/62", lang: "ITA 1a ed.", cond: "NM", price: 19.06, state: "manca" },
-          { name: "Articuno", set: "Fossil", num: "2/62", lang: "ITA 1a ed.", cond: "NM", price: 25.99, state: "manca" }
-        ]
-      },
-      {
-        category: "ex Gold & VSTAR",
-        cards: [
-          { name: "Druddigon", set: "Tesoro dei Draghi", num: "17/20", lang: "ITA", cond: "NM", price: 15.00, state: "posseduto" }
-        ]
-      }
-    ];
+    let comicsData = [...INITIAL_DATA];
 
-    /* SET AVVENTURE INSIEME JTG */
-    const JTG_DATA = [
-      [1,"Caterpie"],[2,"Metapod"],[3,"Butterfree"],[4,"Paras"],[5,"Parasect"],[6,"Petilil"],[7,"Lilligant"],[8,"Maractus"],[9,"Karrablast"],[10,"Foongus"],
-      [11,"Amoonguss ex"],[12,"Shelmet"],[13,"Accelgor"],[14,"Durant"],[15,"Virizion"],[16,"Sprigatito"],[17,"Floragato"],[18,"Meowscarada"],[19,"Nymble"],[20,"Magmar"],
-      [21,"Magmortar"],[22,"Torchic"],[23,"Combusken"],[24,"Blaziken ex"],[25,"Torkoal"],[26,"Darumaka di N"],[27,"Darmanitan di N"],[28,"Larvesta"],[29,"Volcarona"],[30,"Reshiram ex"]
-    ];
+    function openView(view) {
+      document.getElementById('main-hub').style.display = (view === 'hub') ? 'block' : 'none';
+      document.getElementById('comics-section').style.display = (view === 'comics') ? 'block' : 'none';
 
-    let comicsData = [];
-    let pkmState = {"1":1, "3":1, "4":1, "7":1, "8":1, "9":1, "10":1, "12":1, "14":2, "15":1, "16":1, "17":1, "19":1, "20":1, "21":1, "22":1, "24":1, "26":1, "27":1, "28":1, "30":1, "39":2, "40":3, "42":2};
-
-    function init() {
-      comicsData = JSON.parse(localStorage.getItem(COMIC_STORAGE_KEY)) || INITIAL_COMICS;
-      renderComicsList();
-      renderPkmGrid();
-      renderWantsAccordion();
+      document.querySelectorAll('.nav-item').forEach(e => e.classList.remove('active'));
+      if(view === 'hub') document.getElementById('nav-hub').classList.add('active');
+      if(view === 'comics') document.getElementById('nav-comics').classList.add('active');
     }
 
-    function openView(id) {
-      document.querySelectorAll('#home-view, #comics-view, #pokemon-view, #books-view').forEach(e => {
-        if (e) e.style.display = 'none';
-      });
-      const target = document.getElementById(id);
-      if (target) {
-        target.style.display = (id === 'home-view') ? 'flex' : 'block';
-      }
+    function openComicsCat(cat) {
+      openView('comics');
+      filterComicsCat(cat);
     }
 
-    function openHome() { openView('home-view'); }
+    function switchComicsType(type) {
+      document.getElementById('sw-cartaceo').classList.toggle('active', type === 'cartaceo');
+      document.getElementById('sw-digitale').classList.toggle('active', type === 'digitale');
 
-    function openTerminalModal(f) {
-      const modal = document.getElementById('terminalModal');
-      if (modal) modal.style.display = 'block';
-      if (f) filterComics(f);
-    }
-    function closeTerminalModal() {
-      const modal = document.getElementById('terminalModal');
-      if (modal) modal.style.display = 'none';
+      document.getElementById('sec-cartacei').style.display = (type === 'cartaceo') ? 'block' : 'none';
+      document.getElementById('sec-digitali').style.display = (type === 'digitale') ? 'block' : 'none';
     }
 
-    function filterComics(f) { renderComicsList(f); }
+    function filterComicsCat(cat) {
+      document.querySelectorAll('.cat-tab').forEach(t => t.classList.remove('active'));
+      const activeTab = document.getElementById('tab-cat-' + cat);
+      if(activeTab) activeTab.classList.add('active');
 
-    function renderComicsList(filter = 'all') {
-      const container = document.getElementById('comicsListContainer');
-      if (!container) return;
+      renderComicsList(cat);
+    }
+
+    function renderComicsList(filterCat = 'all') {
+      const container = document.getElementById('comicsList');
       container.innerHTML = '';
-      
-      const filtered = comicsData.filter(c => {
-        if(filter === 'dc') return c.e === 'DC';
-        if(filter === 'marvel') return c.e === 'Marvel';
-        if(filter === 'manga') return c.e === 'Manga';
-        if(filter === 'manca') return c.physState === 'manca';
-        return true;
-      });
+
+      const filtered = comicsData.filter(c => filterCat === 'all' || c.cat === filterCat);
 
       filtered.forEach(c => {
         const item = document.createElement('div');
-        item.className = 'run-item-card';
+        item.className = 'comic-card-v2';
         item.innerHTML = `
-          <div><strong>${c.t} ${c.n ? '#' + c.n : ''}</strong> (${c.e})</div>
-          <span class="tag-btn tag-phys ${c.physState}">${c.physState === 'posseduto' ? '📦 Posseduto' : '✖ Manca'}</span>
+          <div class="comic-cover">📖</div>
+          <div class="comic-info">
+            <div class="comic-title">${c.title}</div>
+            <div class="comic-sub">${c.authors} • ${c.from} • ${c.price > 0 ? c.price.toFixed(2) + ' €' : 'In Collezione'}</div>
+            <span class="status-badge st-${c.state}">${getStatusText(c.state)}</span>
+            ${c.lucca ? '<span class="lucca-badge">🎪 Lucca60</span>' : ''}
+          </div>
         `;
         container.appendChild(item);
       });
     }
 
-    function switchPokeTab(tab) {
-      document.querySelectorAll('.poke-tab-btn').forEach(b => b.classList.remove('active'));
-      const activeBtn = document.getElementById('pkm-tab-' + tab);
-      if (activeBtn) activeBtn.classList.add('active');
-
-      const secJtg = document.getElementById('sec-pkm-jtg');
-      const secWants = document.getElementById('sec-pkm-wants');
-      const secDups = document.getElementById('sec-pkm-dups');
-
-      if (secJtg) secJtg.style.display = (tab === 'jtg') ? 'block' : 'none';
-      if (secWants) secWants.style.display = (tab === 'wants') ? 'block' : 'none';
-      if (secDups) secDups.style.display = (tab === 'dups') ? 'block' : 'none';
-
-      if(tab === 'dups') renderDupList();
+    function getStatusText(st) {
+      if(st === 'manca') return '🔴 Manca';
+      if(st === 'comprare') return '🟡 Da Comprare';
+      if(st === 'arrivo') return '🔵 In Arrivo';
+      if(st === 'posseduto') return '🟢 Posseduto';
+      return st;
     }
 
-    function renderPkmGrid() {
-      const container = document.getElementById('pkmGridContainer');
-      if (!container) return;
-      container.innerHTML = '';
-      JTG_DATA.forEach(([n, name]) => {
-        const qty = pkmState[n] || 0;
-        const card = document.createElement('div');
-        card.className = 'pkm-card' + (qty > 0 ? ' checked' : '');
-        card.innerHTML = `<div class="pkm-art">${name.charAt(0)}</div><div style="font-size:0.75rem;">#${n} ${name}</div><div style="font-weight:bold; color:var(--poke-accent); font-size:0.8rem; margin-top:2px;">x${qty}</div>`;
-        container.appendChild(card);
-      });
-    }
+    function openSnoopyDashboard() { document.getElementById('snoopyModal').style.display = 'block'; }
+    function closeSnoopyDashboard() { document.getElementById('snoopyModal').style.display = 'none'; }
 
-    function renderWantsAccordion() {
-      const container = document.getElementById('accordionContainer');
-      if (!container) return;
-      container.innerHTML = '';
-
-      SINGLE_CARDS_DATA.forEach((cat, idx) => {
-        const item = document.createElement('div');
-        item.className = 'accordion-item' + (idx === 0 ? ' open' : '');
-
-        let cardsHtml = '';
-        cat.cards.forEach(c => {
-          cardsHtml += `
-            <div class="single-card">
-              <div class="single-art">🎴</div>
-              <div class="single-info">
-                <div class="single-title">${c.name}</div>
-                <div class="single-sub">${c.set} • ${c.num} • ${c.lang} • ${c.cond}</div>
-                <div class="price-tag">≈ ${c.price.toFixed(2)} €</div>
-              </div>
-            </div>
-          `;
-        });
-
-        item.innerHTML = `
-          <div class="accordion-header" onclick="this.parentElement.classList.toggle('open')">
-            <span>${cat.category}</span>
-            <span style="color:var(--accent-gold); font-size:0.85rem;">${cat.cards.length} carte ▾</span>
-          </div>
-          <div class="accordion-content">${cardsHtml}</div>
-        `;
-        container.appendChild(item);
-      });
-    }
-
-    function renderDupList() {
-      const container = document.getElementById('dupListContainer');
-      if (container) {
-        container.innerHTML = `
-          <div style="color:#cbd5e1; font-size:0.85rem; line-height:1.8;">
-            <div style="margin-bottom:8px;">🔥 <b>Charizard ex</b> (SVP 074 Teracristal) — <i>Valore: ≈ 4 - 6 €</i></div>
-            <div style="margin-bottom:8px;">🐸 <b>Tympole</b> (BLK 103/086 Illustration Rare) — <i>Valore: ≈ 3,50 - 5 €</i></div>
-            <div style="margin-bottom:8px;">⚙️ <b>Genesect ex</b> (BLK 161/086 Full Art) — <i>Valore: ≈ 2,50 - 4 €</i></div>
-            <div style="margin-bottom:8px;">❄️ <b>Snover</b> (MEG 140/132 Illustration Rare) — <i>Valore: ≈ 2 - 3,50 €</i></div>
-            <hr style="border-color:rgba(255,255,255,0.1); margin:10px 0;">
-            <div style="opacity:0.8;">
-              • <b>#14 Durant</b> (+1 doppia extra)<br>
-              • <b>#39 Pelipper</b> (+1 doppia extra)<br>
-              • <b>#40 Wailmer</b> (+2 doppie extra)<br>
-              • <b>#42 Regice</b> (+1 doppia extra)
-            </div>
-          </div>
-        `;
-      }
-    }
-
-    function openLuccaModal() {
-      const modal = document.getElementById('luccaModal');
-      if (modal) modal.style.display = 'block';
-      const preview = document.getElementById('luccaContentPreview');
-      if (!preview) return;
-      const mancaComics = comicsData.filter(c => c.physState === 'manca');
-
-      preview.innerHTML = `
-        <h4 style="color:var(--accent-gold); margin-bottom:8px;">📚 Fumetti & Manga da Comprare (${mancaComics.length}):</h4>
-        <div style="max-height:200px; overflow-y:auto; margin-bottom:12px;">
-          ${mancaComics.map(c => `<div>• <b>${c.t}</b> ${c.n ? '#' + c.n : ''} (${c.e})</div>`).join('')}
-        </div>
-        <h4 style="color:var(--poke-accent); margin-top:12px; margin-bottom:8px;">🎴 Carte Pokémon da Scambiare / Vendere:</h4>
-        <div>• Charizard ex SVP 074 (≈ 5 €)</div>
-        <div>• Tympole AR BLK 103 (≈ 4 €)</div>
-        <div>• Genesect ex FA BLK 161 (≈ 3 €)</div>
-        <div>• Snover AR MEG 140 (≈ 2,50 €)</div>
-      `;
-    }
-
-    function closeLuccaModal() {
-      const modal = document.getElementById('luccaModal');
-      if (modal) modal.style.display = 'none';
-    }
-
-    function downloadLuccaFile() {
-      const mancaComics = comicsData.filter(c => c.physState === 'manca');
-      let html = `<!DOCTYPE html><html><head><meta charset="utf-8"><title>Lucca Offline Shopping List</title><style>body{font-family:sans-serif;padding:20px;background:#0f172a;color:#fff;}h2{color:#fbbf24;}</style></head><body>
-      <h2>🎪 Lucca Comics - Lista Spesa Offline</h2>
-      <h3>📚 Fumetti e Manga Mancanti:</h3><ul>${mancaComics.map(c => `<li><b>${c.t}</b> ${c.n ? '#' + c.n : ''} (${c.e})</li>`).join('')}</ul>
-      <h3>🎴 Carte Pokémon Doppie / Da Scambio:</h3>
-      <ul>
-        <li>Charizard ex (SVP 074) - ≈ 5 €</li>
-        <li>Tympole AR (BLK 103) - ≈ 4 €</li>
-        <li>Genesect ex Full Art (BLK 161) - ≈ 3 €</li>
-        <li>Snover AR (MEG 140) - ≈ 2,50 €</li>
-      </ul>
-      </body></html>`;
-
-      const blob = new Blob([html], { type: 'text/html' });
-      const a = document.createElement('a');
-      a.href = URL.createObjectURL(blob);
-      a.download = 'Lucca-Offline-Shopping-List.html';
-      a.click();
-    }
-
-    window.addEventListener('DOMContentLoaded', () => {
-      init();
-    });
+    renderComicsList();
   </script>
 </body>
 </html>
