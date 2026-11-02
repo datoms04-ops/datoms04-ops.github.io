@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <title>Hobbyverse 5.1 - Smart Forms & Fixes</title>
+  <title>Hobbyverse 5.2 - Refined Experience</title>
 
   <link rel="manifest" href="manifest.json">
   <meta name="theme-color" content="#0d0e12">
@@ -112,14 +112,14 @@
       border-radius: 50%; border: 1px solid rgba(255,255,255,0.2);
     }
 
-    /* DIGITAL TABS */
+    /* DIGITAL TABS SEMPLIFICATI (3 CATEGORIE) */
     .digital-tabs { display: flex; gap: 8px; padding: 0 16px 12px 16px; overflow-x: auto; scrollbar-width: none; }
     .digital-tabs::-webkit-scrollbar { display: none; }
 
     .d-tab {
-      background: var(--card-bg); border: 1px solid var(--card-border);
-      color: var(--text-muted); padding: 6px 14px; border-radius: 20px; font-size: 0.75rem;
-      font-weight: 700; white-space: nowrap; cursor: pointer;
+      flex: 1; background: var(--card-bg); border: 1px solid var(--card-border);
+      color: var(--text-muted); padding: 8px 12px; border-radius: 12px; font-size: 0.75rem;
+      font-weight: 700; text-align: center; white-space: nowrap; cursor: pointer;
     }
     .d-tab.active { background: var(--accent-blue); color: #fff; border-color: var(--accent-blue); }
 
@@ -155,7 +155,7 @@
     }
     .fab-add:active { transform: scale(0.9); }
 
-    /* BOTTOM SHEET MODAL (FOGLIO DAL BASSO NATIVO) */
+    /* BOTTOM SHEET MODAL */
     .modal-overlay {
       display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.8);
       backdrop-filter: blur(8px); z-index: 100; align-items: flex-end;
@@ -201,14 +201,14 @@
   <!-- HEADER NATIVO -->
   <div class="app-header">
     <div class="app-title">📖 Hobbyverse</div>
-    <div class="version-badge">V5.1 Smart</div>
+    <div class="version-badge">V5.2 Pro</div>
   </div>
 
   <!-- DASHBOARD STRISCIA COMPATTA -->
   <div class="hero-stats-bar">
-    <span>Posseduti: <b id="st-val1">96</b></span>
+    <span>Posseduti: <b id="st-val1">115</b></span>
     <span>Mancanti: <b id="st-val3">105</b></span>
-    <span>Spesa: <b style="color:var(--accent-gold);" id="st-val4">248,55 €</b></span>
+    <span>Spesa: <b style="color:var(--accent-gold);" id="st-val4">263,55 €</b></span>
   </div>
 
   <!-- SWITCHER SEZIONI PRINCIPALI -->
@@ -233,49 +233,48 @@
     <div id="physicalRunsContainer"></div>
   </div>
 
-  <!-- VISTA 2: DIGITALE -->
+  <!-- VISTA 2: DIGITALE (3 CATEGORIE UNIFICATE) -->
   <div id="viewDigital" style="display:none;">
     <div class="digital-tabs" id="digitalTabsContainer">
-      <div class="d-tab active" id="tab-reading" onclick="filterDigitalCategory('reading')">📖 In Lettura (13)</div>
-      <div class="d-tab" id="tab-later" onclick="filterDigitalCategory('later')">⏳ Da Leggere (22)</div>
-      <div class="d-tab" id="tab-finished" onclick="filterDigitalCategory('finished')">✅ Finiti (22)</div>
-      <div class="d-tab" id="tab-fav" onclick="filterDigitalCategory('favorites')">⭐ Preferiti (1)</div>
+      <div class="d-tab active" id="tab-reading" onclick="filterDigitalCategory('reading')">📖 In Lettura</div>
+      <div class="d-tab" id="tab-later" onclick="filterDigitalCategory('later')">⏳ Da Leggere</div>
+      <div class="d-tab" id="tab-finished" onclick="filterDigitalCategory('finished')">✅ Finiti & Preferiti ⭐</div>
     </div>
     <div id="digitalRunsContainer"></div>
   </div>
 
-  <!-- VISTA 3: SPESE ANALYTICS -->
+  <!-- VISTA 3: SPESE ANALYTICS (CANALI D'ACQUISTO) -->
   <div id="viewExpenses" style="display:none;">
     <div class="expense-card">
-      <div class="expense-header-title">🛒 Spese per Canale</div>
-      <div class="channel-row"><b>Vinted / Mercatini:</b> 113,33 € <span style="font-size:0.73rem; color:var(--text-muted);">(18 fumetti)</span></div>
+      <div class="expense-header-title">🛒 Spese per Canale d'Acquisto</div>
+      <div class="channel-row"><b>Vinted / Online:</b> 128,33 € <span style="font-size:0.73rem; color:var(--text-muted);">(19 fumetti/volumi)</span></div>
       <div class="channel-row"><b>Fumetteria:</b> 67,90 € <span style="font-size:0.73rem; color:var(--text-muted);">(19 fumetti)</span></div>
-      <div class="channel-row"><b>Lucca C&G 60 🔴:</b> 51,06 € <span style="font-size:0.73rem; color:var(--text-muted);">(14 albi, compresi PKEDA #2 Celoni & #3)</span></div>
+      <div class="channel-row"><b>Lucca C&G 60 🔴:</b> 51,06 € <span style="font-size:0.73rem; color:var(--text-muted);">(14 albi speciali)</span></div>
       <div class="channel-row"><b>Regali:</b> 0,00 € <span style="font-size:0.73rem; color:var(--text-muted);">(8 fumetti a costo 0 €)</span></div>
     </div>
 
     <div class="expense-card">
-      <div class="expense-header-title">📊 Ripartizione per Editore</div>
+      <div class="expense-header-title">📊 Ripartizione Budget Canali</div>
       <div class="chart-container">
         <canvas id="expensesPieChart"></canvas>
       </div>
     </div>
 
     <div class="expense-card">
-      <div class="expense-header-title">🧾 Ultimi Acquisti</div>
+      <div class="expense-header-title">🧾 Ultimi Arrivi</div>
+      <div class="expense-item">
+        <div>
+          <div style="font-weight:bold; font-size:0.88rem;">Batman: Le grandi storie</div>
+          <div style="font-size:0.72rem; color:var(--text-muted);">🛍️ Online • pagato 15,00 € (Listino 30,00 €)</div>
+        </div>
+        <div class="saving-badge">-15,00 €</div>
+      </div>
       <div class="expense-item">
         <div>
           <div style="font-weight:bold; font-size:0.88rem;">Spider-Man: Blue</div>
           <div style="font-size:0.72rem; color:var(--text-muted);">🛍️ Vinted • pagato 8,24 €</div>
         </div>
         <div class="saving-badge">-19,76 €</div>
-      </div>
-      <div class="expense-item">
-        <div>
-          <div style="font-weight:bold; font-size:0.88rem;">PKEDA #2 (Variant Celoni)</div>
-          <div style="font-size:0.72rem; color:var(--text-muted);">🎪 Lucca C&G 60</div>
-        </div>
-        <div class="saving-badge">Lucca 60</div>
       </div>
     </div>
   </div>
@@ -302,29 +301,28 @@
           <option value="gia_posseduto">📜 Già Posseduto (Storico)</option>
         </select>
 
-        <!-- CAMPO PREZZO UNICO -->
         <div id="singlePriceGroup">
           <label style="font-size:0.72rem; color:var(--text-muted);">✏️ Prezzo Pagato (€):</label>
           <input type="number" id="editPriceInput" class="edit-input-field" value="5.00" step="0.01">
         </div>
 
-        <!-- CAMPI SCORPORATI VINTED -->
         <div id="vintedGroup" style="display:none; background:#16181e; padding:8px; border-radius:8px; border:1px solid var(--card-border); margin-bottom:10px;">
           <label style="font-size:0.7rem; color:var(--accent-gold);">Prezzo Oggetto (€):</label>
-          <input type="number" id="vintedObj" class="edit-input-field" placeholder="Es. 5.50" oninput="calcVintedTotal()">
-
+          <input type="number" id="vintedObj" class="edit-input-field" placeholder="Es. 15.00" oninput="calcVintedTotal()">
           <label style="font-size:0.7rem; color:var(--accent-gold);">Spedizione (€):</label>
-          <input type="number" id="vintedShip" class="edit-input-field" placeholder="Es. 2.29" oninput="calcVintedTotal()">
-
+          <input type="number" id="vintedShip" class="edit-input-field" placeholder="Es. 0.00" oninput="calcVintedTotal()">
           <label style="font-size:0.7rem; color:var(--accent-gold);">Commissioni (€):</label>
-          <input type="number" id="vintedFee" class="edit-input-field" placeholder="Es. 0.98" oninput="calcVintedTotal()">
+          <input type="number" id="vintedFee" class="edit-input-field" placeholder="Es. 0.00" oninput="calcVintedTotal()">
         </div>
 
-        <label style="font-size:0.72rem; color:var(--accent-gold);">🇮🇹 Converti da Prezzo in Lire (L.):</label>
-        <input type="number" id="editLireInput" class="edit-input-field" placeholder="Es. 4000" oninput="convertLireToEuro()">
+        <!-- CONVERTITORE LIRE ESCLUSIVO PER PK2 -->
+        <div id="lireContainer" style="display:none; border-top:1px dashed var(--card-border); padding-top:8px; margin-top:8px;">
+          <label style="font-size:0.72rem; color:var(--accent-gold);">🇮🇹 Converti da Prezzo in Lire (L.) [PK2]:</label>
+          <input type="number" id="editLireInput" class="edit-input-field" placeholder="Es. 4000" oninput="convertLireToEuro()">
+        </div>
 
         <label style="font-size:0.72rem; color:var(--text-muted);">📝 Note Aggiuntive / Edizione:</label>
-        <input type="text" id="editNotesInput" class="edit-input-field" placeholder="Es. Variant Cover Fabio Celoni">
+        <input type="text" id="editNotesInput" class="edit-input-field" placeholder="Es. Edizione Deluxe / Variant">
       </div>
 
       <button class="btn-save-modal" onclick="saveItemChanges()">💾 Salva Modifiche</button>
@@ -340,31 +338,35 @@
 
   <script>
     const PHYSICAL_RUNS = [
-      { id: "spidey-corno", title: "L'Uomo Ragno (Editoriale Corno 1975)", publisher: "Marvel", total: 200, owned: [139], luccaItems: [139], authors: "Stan Lee / John Romita Sr.", customCovers: { 139: "img/uomo ragno 139-editoriale corno.png" }, prices: { 139: 5.00 } },
-      { id: "spidey-panini-1990", title: "L'Uomo Ragno (Panini 1990)", publisher: "Marvel", total: 100, owned: [41, 52, 53], luccaItems: [41, 52, 53], authors: "Todd McFarlane / Michelinie", customCovers: { 41: "img/uomo ragno 41- panini.png", 52: "img/uomo ragno 52- panini.png", 53: "img/uomo ragno 53- panini.png" }, prices: { 41: 5.00, 52: 6.00, 53: 5.00 } },
-      { id: "ult-spidey-2024", title: "Ultimate Spider-Man (2024)", publisher: "Marvel", total: 24, owned: [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15], luccaItems: [], authors: "Jonathan Hickman / Checchetto", prices: {1: 2.52, 2: 2.50, 3: 3.00, 4: 3.00, 5: 3.00, 6: 3.00, 7: 3.00, 8: 3.00, 9: 3.00, 10: 3.00, 11: 3.00, 12: 3.00, 13: 3.00, 14: 4.00, 15: 4.00} },
+      { id: "spidey-corno", title: "L'Uomo Ragno (Editoriale Corno 1975)", publisher: "Marvel", total: 200, owned: [139], luccaItems: [139], authors: "Stan Lee / John Romita Sr.", prices: { 139: 5.00 } },
+      { id: "spidey-panini-1990", title: "L'Uomo Ragno (Panini 1990)", publisher: "Marvel", total: 100, owned: [41, 52, 53], luccaItems: [41, 52, 53], authors: "Todd McFarlane", prices: { 41: 5.00, 52: 6.00, 53: 5.00 } },
+      { id: "ult-spidey-2024", title: "Ultimate Spider-Man (2024)", publisher: "Marvel", total: 24, owned: [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15], luccaItems: [], authors: "Jonathan Hickman", prices: {} },
       { id: "spidey-blue", title: "Spider-Man: Blue", publisher: "Marvel", total: 1, owned: [1], luccaItems: [], authors: "Jeph Loeb / Tim Sale", prices: { 1: 8.24 } },
-      { id: "spidey-verse", title: "Spider-Man: Spider-Verse", publisher: "Marvel", total: 1, owned: [1], luccaItems: [], authors: "Dan Slott / Coipel", prices: { 1: 9.90 } },
+      { id: "spidey-verse", title: "Spider-Man: Spider-Verse", publisher: "Marvel", total: 1, owned: [1], luccaItems: [], authors: "Dan Slott", prices: { 1: 9.90 } },
       { id: "x-men-2000", title: "Gli Incredibili X-Men #2", publisher: "Marvel", total: 1, owned: [1], luccaItems: [], authors: "Marvel Comics", prices: { 1: 0.00 } },
       { id: "thor-2002", title: "Il Mitico Thor #34", publisher: "Marvel", total: 1, owned: [1], luccaItems: [], authors: "Marvel Comics", prices: { 1: 0.00 } },
-      { id: "abs-batman", title: "Absolute Batman", publisher: "DC", total: 18, owned: [1,2,3,15,16,17,18], luccaItems: [1,2,3,17,18], authors: "Scott Snyder", prices: {15: 8.77, 16: 8.77} },
-      { id: "abs-sup", title: "Absolute Superman", publisher: "DC", total: 18, owned: [1], luccaItems: [], authors: "Jason Aaron", prices: { 1: 6.07 } },
-      { id: "abs-ww", title: "Absolute Wonder Woman", publisher: "DC", total: 17, owned: [1,2,3,4,5,6,7,8], luccaItems: [], authors: "Kelly Thompson", prices: {1: 3.44, 2: 3.44, 3: 3.46, 4: 4.00, 5: 4.00, 6: 3.97, 7: 4.00, 8: 4.00} },
+
+      { id: "abs-batman", title: "Absolute Batman", publisher: "DC", total: 18, owned: [1,2,3,15,16,17,18], luccaItems: [1,2,3,17,18], authors: "Scott Snyder", prices: {} },
+      { id: "abs-sup", title: "Absolute Superman", publisher: "DC", total: 18, owned: [1], luccaItems: [], authors: "Jason Aaron", prices: {} },
+      { id: "abs-ww", title: "Absolute Wonder Woman", publisher: "DC", total: 17, owned: [1,2,3,4,5,6,7,8], luccaItems: [], authors: "Kelly Thompson", prices: {} },
+      { id: "batman-grandi-storie", title: "Batman: Le grandi storie", publisher: "DC", total: 1, owned: [1], luccaItems: [], authors: "DC Deluxe", prices: { 1: 15.00 } },
       { id: "batman-due-mondi", title: "Batman dei due mondi", publisher: "DC", total: 1, owned: [1], luccaItems: [], authors: "Fraction / Snyder", prices: { 1: 1.00 } },
       { id: "batman-gotham-knights", title: "Batman: Gotham Knights – Città dorata", publisher: "DC", total: 1, owned: [1], luccaItems: [], authors: "Evan Narcisse", prices: { 1: 0.00 } },
       { id: "batman-dkr", title: "Batman: Il ritorno del Cavaliere Oscuro", publisher: "DC", total: 1, owned: [1], luccaItems: [], authors: "Frank Miller", prices: { 1: 7.38 } },
       { id: "batman-maledizione", title: "Batman: La maledizione del Cavaliere Bianco", publisher: "DC", total: 1, owned: [1], luccaItems: [], authors: "Sean Murphy", prices: { 1: 8.24 } },
       { id: "batman-ride", title: "Il Batman che ride", publisher: "DC", total: 1, owned: [1], luccaItems: [], authors: "Scott Snyder / Jock", prices: { 1: 8.24 } },
-      { id: "flashpoint", title: "Flashpoint", publisher: "DC", total: 1, owned: [1], luccaItems: [], authors: "Geoff Johns / Kubert", prices: { 1: 7.36 } },
+      { id: "flashpoint", title: "Flashpoint", publisher: "DC", total: 1, owned: [1], luccaItems: [], authors: "Geoff Johns", prices: { 1: 7.36 } },
       { id: "kingdom-come", title: "Kingdom Come", publisher: "DC", total: 1, owned: [1], luccaItems: [], authors: "Mark Waid / Alex Ross", prices: { 1: 7.56 } },
       { id: "supergirl-domani", title: "Supergirl: La donna del domani", publisher: "DC", total: 1, owned: [1], luccaItems: [], authors: "Tom King / Evely", prices: { 1: 8.24 } },
       { id: "superman-red-son", title: "Superman: Red Son", publisher: "DC", total: 1, owned: [1], luccaItems: [], authors: "Mark Millar", prices: { 1: 7.57 } },
-      { id: "jsa-classified", title: "JSA Classified", publisher: "DC", total: 7, owned: [2, 4, 5, 6, 7], luccaItems: [], authors: "DC Comics", prices: {2:0, 4:0, 5:0, 6:0, 7:0} },
-      { id: "v-vendetta", title: "V per Vendetta", publisher: "DC", total: 1, owned: [1], luccaItems: [], authors: "Alan Moore / David Lloyd", prices: { 1: 7.56 } },
+      { id: "jsa-classified", title: "JSA Classified", publisher: "DC", total: 7, owned: [2, 4, 5, 6, 7], luccaItems: [], authors: "DC Comics", prices: {} },
+      { id: "v-vendetta", title: "V per Vendetta", publisher: "DC", total: 1, owned: [1], luccaItems: [], authors: "Alan Moore", prices: { 1: 7.56 } },
+
+      { id: "pk2", title: "PK2 - Ducklair (2001 + Speciale)", publisher: "PK", total: 19, owned: [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19], luccaItems: [], authors: "Faraci / Artibani", prices: {} },
       { id: "pkeda", title: "PKEDA (Paperinik Elite)", publisher: "PK", total: 10, owned: [2, 3], luccaItems: [2, 3], authors: "Disney / Celoni", prices: {} },
-      { id: "pk2", title: "PK2 - Ducklair (2001)", publisher: "PK", total: 18, owned: [1,2,3], luccaItems: [], authors: "Faraci / Artibani", prices: { 1: 2.06, 2: 2.06, 3: 2.06 } },
-      { id: "pkna", title: "PKNA (Paperinik New Adventures)", publisher: "PK", total: 50, owned: [], luccaItems: [], authors: "Disney Italia", prices: {} },
+      { id: "pkna", title: "PKNA", publisher: "PK", total: 50, owned: [], luccaItems: [], authors: "Disney Italia", prices: {} },
       { id: "pk-mito", title: "Paperinik - Il Mito", publisher: "PK", total: 20, owned: [1,2,3,4,5,8,9,10,13,16], luccaItems: [], authors: "Gazzetta dello Sport", prices: {} },
+
       { id: "death-note", title: "Death Note", publisher: "Manga", total: 13, owned: [1,2,4,7,12,13], luccaItems: [], authors: "Ohba / Obata", prices: {} },
       { id: "slam-dunk", title: "Slam Dunk", publisher: "Manga", total: 31, owned: [], luccaItems: [], authors: "Takehiko Inoue", prices: {} }
     ];
@@ -372,13 +374,11 @@
     const DIGITAL_RUNS = [
       { id: "dig-abs-batman", title: "Absolute Batman (2024-)", publisher: "DC", category: "reading", total: 24, read: [1,2,3,4,5], authors: "Scott Snyder" },
       { id: "dig-abs-sup", title: "Absolute Superman (2024-)", publisher: "DC", category: "reading", total: 24, read: [1,2], authors: "Jason Aaron" },
-      { id: "dig-abs-ww", title: "Absolute Wonder Woman (2024-)", publisher: "DC", category: "reading", total: 25, read: [1,2,3], authors: "Kelly Thompson" },
-      { id: "dig-poison-ivy", title: "Poison Ivy (2022-)", publisher: "DC", category: "reading", total: 49, read: [1,2,3,4,5,6], authors: "G. Willow Wilson" },
-      { id: "dig-invincible", title: "Invincible (2003)", publisher: "Altro", category: "favorites", total: 144, read: Array.from({length: 144}, (_, i) => i + 1), authors: "Robert Kirkman" }
+      { id: "dig-invincible", title: "Invincible (2003)", publisher: "Altro", category: "finished", isFavorite: true, total: 144, read: Array.from({length: 144}, (_, i) => i + 1), authors: "Robert Kirkman" }
     ];
 
     const MODES = ['physical', 'digital', 'expenses'];
-    const DIG_CATS = ['reading', 'later', 'finished', 'favorites'];
+    const DIG_CATS = ['reading', 'later', 'finished'];
 
     let currentMainMode = 'physical';
     let currentPublisherFilter = 'ALL';
@@ -388,7 +388,7 @@
     let activeNum = null;
     let isSwiping = false;
 
-    /* TOUCH SWIPE CON DEBOUNCE ANTI-BUG */
+    /* TOUCH SWIPE CON DEBOUNCE */
     let touchStartX = 0, touchStartY = 0, touchEndX = 0, touchEndY = 0;
     document.addEventListener('touchstart', e => { touchStartX = e.changedTouches[0].screenX; touchStartY = e.changedTouches[0].screenY; }, false);
     document.addEventListener('touchend', e => { touchEndX = e.changedTouches[0].screenX; touchEndY = e.changedTouches[0].screenY; handleSwipe(); }, false);
@@ -397,7 +397,6 @@
       if(isSwiping) return;
       const diffX = touchEndX - touchStartX;
       const diffY = touchEndY - touchStartY;
-      
       if (Math.abs(diffY) > Math.abs(diffX) * 0.7) return;
 
       if (Math.abs(diffX) > 130) {
@@ -437,20 +436,9 @@
 
     function toggleSourceFields() {
       const src = document.getElementById('sourceTypeSelect').value;
-      const vintedGrp = document.getElementById('vintedGroup');
-      const singlePriceGrp = document.getElementById('singlePriceGroup');
-
-      if(src === 'vinted') {
-        vintedGrp.style.display = 'block';
-        singlePriceGrp.style.display = 'none';
-      } else if (src === 'regalo') {
-        vintedGrp.style.display = 'none';
-        singlePriceGrp.style.display = 'block';
-        document.getElementById('editPriceInput').value = '0.00';
-      } else {
-        vintedGrp.style.display = 'none';
-        singlePriceGrp.style.display = 'block';
-      }
+      document.getElementById('vintedGroup').style.display = (src === 'vinted') ? 'block' : 'none';
+      document.getElementById('singlePriceGroup').style.display = (src === 'vinted') ? 'none' : 'block';
+      if(src === 'regalo') document.getElementById('editPriceInput').value = '0.00';
     }
 
     function calcVintedTotal() {
@@ -513,7 +501,7 @@
         card.innerHTML = `
           <div class="run-header-row" onclick="toggleAccordion('${run.id}', 'digital')">
             <div>
-              <div class="run-title">${run.title}</div>
+              <div class="run-title">${run.title} ${run.isFavorite ? '⭐' : ''}</div>
               <div class="run-meta">${run.publisher} • ${run.authors}</div>
             </div>
             <div class="toggle-arrow" id="arrow-${run.id}">▼</div>
@@ -556,7 +544,6 @@
       arrow.classList.toggle('open', !isOpen);
     }
 
-    /* FETCH AUTOMATICO COPERTINA DA API */
     function fetchAutoCover(runTitle, volNum) {
       const query = encodeURIComponent(`${runTitle} ${volNum}`);
       fetch(`https://openlibrary.org/search.json?q=${query}&limit=1`)
@@ -592,10 +579,10 @@
       chartInstance = new Chart(ctx, {
         type: 'doughnut',
         data: {
-          labels: ['DC Comics', 'Marvel (Panini)', 'Ed. Corno', 'PK Disney'],
+          labels: ['Vinted / Online', 'Fumetteria', 'Lucca C&G 60', 'Regali'],
           datasets: [{
-            data: [117.07, 105.30, 5.00, 21.18],
-            backgroundColor: ['#3b82f6', '#ef4444', '#fbbf24', '#a855f7'],
+            data: [128.33, 67.90, 51.06, 0.00],
+            backgroundColor: ['#3b82f6', '#ef4444', '#fbbf24', '#22c55e'],
             borderWidth: 0
           }]
         },
@@ -609,16 +596,14 @@
 
       document.getElementById('m-title').innerText = `${run.title} #${num}`;
       document.getElementById('editLireInput').value = '';
-      const coverBox = document.getElementById('m-cover');
+      
+      // Mostra convertitore lire solo se è PK2
+      document.getElementById('lireContainer').style.display = (runId === 'pk2') ? 'block' : 'none';
 
-      if (run.customCovers && run.customCovers[num]) {
-        coverBox.style.backgroundImage = `url('${run.customCovers[num]}')`;
-        coverBox.innerText = '';
-      } else {
-        coverBox.style.backgroundImage = 'none';
-        coverBox.innerText = (mode === 'physical') ? '📖' : '📱';
-        fetchAutoCover(run.title, num);
-      }
+      const coverBox = document.getElementById('m-cover');
+      coverBox.style.backgroundImage = 'none';
+      coverBox.innerText = (mode === 'physical') ? '📖' : '📱';
+      if(mode === 'physical') fetchAutoCover(run.title, num);
 
       document.getElementById('itemModal').classList.add('open');
     }
@@ -626,6 +611,7 @@
     function openAddModal() {
       document.getElementById('m-title').innerText = "➕ Aggiungi Nuovo Acquisto";
       document.getElementById('m-cover').innerText = "🛍️";
+      document.getElementById('lireContainer').style.display = 'none';
       document.getElementById('itemModal').classList.add('open');
     }
 
