@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Hobbyverse 4.0 - Ultra Performance</title>
+  <title>Hobbyverse 4.2 - Navigation Hub</title>
 
   <link rel="manifest" href="manifest.json">
   <meta name="theme-color" content="#0d0e12">
@@ -29,27 +29,35 @@
     * { box-sizing: border-box; margin: 0; padding: 0; user-select: none; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; }
     body { background-color: var(--bg-main); color: #fff; min-height: 100vh; overflow-x: hidden; padding-bottom: 75px; touch-action: pan-y; }
 
-    /* HEADER */
+    /* HEADER STICKY CON TASTI HUB NAV */
     .top-bar {
       position: sticky; top: 0; z-index: 50;
       background: rgba(13, 14, 18, 0.92); backdrop-filter: blur(12px);
       border-bottom: 1px solid var(--card-border);
-      padding: 12px 16px; display: flex; align-items: center; justify-content: space-between;
+      padding: 10px 14px; display: flex; align-items: center; justify-content: space-between; gap: 8px;
     }
-    .top-title { font-weight: 800; font-size: 1.1rem; }
+    .top-title { font-weight: 800; font-size: 1rem; flex-grow: 1; text-align: center; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 
-    /* STATS BAR */
+    .btn-header-nav {
+      background: rgba(255, 255, 255, 0.06); border: 1px solid var(--card-border);
+      color: var(--text-muted); padding: 5px 10px; border-radius: 8px; font-weight: 700;
+      font-size: 0.72rem; cursor: pointer; display: flex; align-items: center; gap: 4px; transition: all 0.2s;
+    }
+    .btn-header-nav:active { background: var(--accent-gold); color: #000; }
+
+    /* STATS BAR INTERATTIVA */
     .stats-row {
       display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px;
-      padding: 14px 16px; background: #12141a; border-bottom: 1px solid var(--card-border);
+      padding: 12px 14px; background: #12141a; border-bottom: 1px solid var(--card-border);
     }
-    .stat-box { text-align: center; }
-    .stat-num { font-weight: 800; font-size: 1.1rem; color: #fff; }
-    .stat-label { font-size: 0.68rem; color: var(--text-muted); margin-top: 2px; }
+    .stat-box { text-align: center; cursor: pointer; padding: 4px; border-radius: 8px; transition: background 0.2s; }
+    .stat-box:active, .stat-box.active { background: rgba(255, 255, 255, 0.08); }
+    .stat-num { font-weight: 800; font-size: 1.05rem; color: #fff; }
+    .stat-label { font-size: 0.65rem; color: var(--text-muted); margin-top: 2px; }
 
     /* SWITCHER SEZIONI */
     .main-mode-switcher {
-      display: flex; margin: 14px 16px 10px 16px; background: #16181e;
+      display: flex; margin: 12px 14px 10px 14px; background: #16181e;
       border: 1px solid var(--card-border); border-radius: 12px; padding: 4px; gap: 4px;
     }
     .m-btn {
@@ -60,30 +68,25 @@
 
     /* EDITORI */
     .publishers-grid {
-      display: grid; grid-template-columns: repeat(5, 1fr); gap: 8px; padding: 6px 16px 14px 16px;
+      display: grid; grid-template-columns: repeat(5, 1fr); gap: 8px; padding: 6px 14px 12px 14px;
     }
     .publisher-card {
       background: var(--card-bg); border: 1px solid var(--card-border); border-radius: 12px;
       padding: 10px 6px; text-align: center; cursor: pointer; display: flex; flex-direction: column; align-items: center; justify-content: center;
-      transition: all 0.2s ease; min-height: 56px;
+      transition: all 0.2s ease; min-height: 52px;
     }
     .publisher-card:active, .publisher-card.active { border-color: var(--accent-gold); background: rgba(251, 191, 36, 0.1); }
-    .pub-img { height: 34px; max-width: 95%; object-fit: contain; }
-    .pub-text { font-weight: 800; font-size: 0.8rem; }
+    .pub-img { height: 32px; max-width: 95%; object-fit: contain; }
+    .pub-text { font-weight: 800; font-size: 0.78rem; }
 
     /* RUN CARD ACCORDION */
     .run-card {
       background: var(--card-bg); border: 1px solid var(--card-border);
-      border-radius: 14px; padding: 14px; margin: 0 16px 12px 16px;
+      border-radius: 14px; padding: 14px; margin: 0 14px 12px 14px;
     }
     .run-header-row { display: flex; justify-content: space-between; align-items: center; cursor: pointer; }
-    .run-title { font-weight: 800; font-size: 0.98rem; color: #fff; display: flex; align-items: center; gap: 6px; }
-    .run-meta { font-size: 0.75rem; color: var(--text-muted); margin-top: 2px; }
-    
-    .btn-icon-edit {
-      cursor: pointer; opacity: 0.7; font-size: 0.85rem; padding: 2px 4px; border-radius: 4px;
-      background: rgba(255,255,255,0.05); transition: opacity 0.2s;
-    }
+    .run-title { font-weight: 800; font-size: 0.95rem; color: #fff; display: flex; align-items: center; gap: 6px; }
+    .run-meta { font-size: 0.73rem; color: var(--text-muted); margin-top: 2px; }
 
     .toggle-arrow {
       background: rgba(255,255,255,0.06); border: 1px solid var(--card-border);
@@ -116,7 +119,7 @@
     }
 
     /* DIGITAL TABS */
-    .digital-tabs { display: flex; gap: 8px; padding: 0 16px 14px 16px; overflow-x: auto; }
+    .digital-tabs { display: flex; gap: 8px; padding: 0 14px 12px 14px; overflow-x: auto; }
     .d-tab {
       background: var(--card-bg); border: 1px solid var(--card-border);
       color: var(--text-muted); padding: 6px 14px; border-radius: 20px; font-size: 0.75rem;
@@ -124,12 +127,21 @@
     }
     .d-tab.active { background: var(--accent-blue); color: #fff; border-color: var(--accent-blue); }
 
-    /* EXPENSE CARD */
+    /* ADVANCED EXPENSE CARDS */
     .expense-card {
       background: var(--card-bg); border: 1px solid var(--card-border);
-      border-radius: 14px; padding: 16px; margin: 0 16px 14px 16px;
+      border-radius: 14px; padding: 14px; margin: 0 14px 12px 14px;
     }
-    .chart-container { position: relative; height: 210px; width: 100%; margin: 10px 0; }
+    .expense-header-title { font-weight: 800; font-size: 0.95rem; color: #fff; margin-bottom: 8px; }
+    .chart-container { position: relative; height: 180px; width: 100%; margin: 10px 0; }
+
+    .channel-row { font-size: 0.8rem; color: var(--text-muted); margin-bottom: 6px; line-height: 1.4; }
+    .channel-row b { color: #fff; }
+
+    .saving-badge {
+      background: rgba(34, 197, 94, 0.15); border: 1px solid var(--accent-green);
+      color: #4ade80; padding: 3px 8px; border-radius: 12px; font-size: 0.72rem; font-weight: 800;
+    }
 
     .expense-item {
       display: flex; justify-content: space-between; align-items: center;
@@ -137,7 +149,12 @@
     }
     .expense-item:last-child { border-bottom: none; }
 
-    /* MODALE POPUP */
+    .btn-export {
+      background: rgba(255, 255, 255, 0.08); border: 1px solid var(--card-border); color: #fff;
+      padding: 6px 12px; border-radius: 8px; font-weight: bold; font-size: 0.73rem; cursor: pointer;
+    }
+
+    /* MODALE POPUP CON CONVERTITORE LIRE */
     .modal-overlay {
       display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.85);
       backdrop-filter: blur(8px); z-index: 100; padding: 20px; overflow-y: auto;
@@ -175,18 +192,32 @@
 </head>
 <body>
 
-  <!-- HEADER -->
+  <!-- HEADER CON TASTI D'AZIONE "HOME" E "RESET" -->
   <div class="top-bar">
+    <button class="btn-header-nav" onclick="goHomeHub()">🏠 Home</button>
     <div class="top-title" id="mainHeaderTitle">📖 Collezione Cartacea</div>
-    <div style="font-size:0.8rem; color:var(--accent-gold); font-weight:bold;">V4.0</div>
+    <button class="btn-header-nav" onclick="resetAllFilters()">🔄 Reset</button>
+    <div style="font-size:0.75rem; color:var(--accent-gold); font-weight:800;">V4.2</div>
   </div>
 
-  <!-- STATS BAR -->
+  <!-- STATS BAR INTERATTIVA -->
   <div class="stats-row" id="statsBar">
-    <div class="stat-box"><div class="stat-num" id="st-val1">48</div><div class="stat-label" id="st-lbl1">posseduti</div></div>
-    <div class="stat-box"><div class="stat-num" id="st-val2">1</div><div class="stat-label" id="st-lbl2">in arrivo</div></div>
-    <div class="stat-box"><div class="stat-num" id="st-val3">70</div><div class="stat-label" id="st-lbl3">da prendere</div></div>
-    <div class="stat-box"><div class="stat-num" style="color:var(--accent-gold);" id="st-val4">186,23 €</div><div class="stat-label" id="st-lbl4">spesi</div></div>
+    <div class="stat-box" id="kpi-owned" onclick="toggleKpiFilter('owned')">
+      <div class="stat-num" id="st-val1">59</div>
+      <div class="stat-label" id="st-lbl1">posseduti</div>
+    </div>
+    <div class="stat-box" id="kpi-incoming" onclick="toggleKpiFilter('incoming')">
+      <div class="stat-num" id="st-val2">1</div>
+      <div class="stat-label" id="st-lbl2">in arrivo</div>
+    </div>
+    <div class="stat-box" id="kpi-missing" onclick="toggleKpiFilter('missing')">
+      <div class="stat-num" id="st-val3">88</div>
+      <div class="stat-label" id="st-lbl3">da prendere</div>
+    </div>
+    <div class="stat-box" id="kpi-expenses">
+      <div class="stat-num" style="color:var(--accent-gold);" id="st-val4">232,29 €</div>
+      <div class="stat-label" id="st-lbl4">spesi</div>
+    </div>
   </div>
 
   <!-- SWITCHER SEZIONI -->
@@ -232,50 +263,64 @@
     <div id="digitalRunsContainer"></div>
   </div>
 
-  <!-- VISTA 3: SPESE -->
+  <!-- VISTA 3: SPESE ANALYTICS -->
   <div id="viewExpenses" style="display:none;">
+    <div style="display:flex; justify-content:space-between; align-items:center; padding:0 14px 10px 14px;">
+      <span style="font-weight:800; font-size:1.05rem; color:#fff;">Analisi Spese</span>
+      <button class="btn-export" onclick="exportCSV()">📥 Esporta CSV</button>
+    </div>
+
+    <!-- SCHEDA 1: CANALI D'ACQUISTO -->
     <div class="expense-card">
-      <div style="font-weight:800; font-size:1rem; margin-bottom:10px; color:var(--accent-gold);">📊 Grafico Spesa per Editore</div>
+      <div class="expense-header-title">🛒 Spese per Canale</div>
+      <div class="channel-row"><b>Vinted / Mercatini:</b> 113,33 € <span style="font-size:0.73rem; color:var(--text-muted);">(18 fumetti • prezzi 74,50 € + sped. 26,68 € + comm. 12,15 €)</span></div>
+      <div class="channel-row"><b>Fumetteria:</b> 67,90 € <span style="font-size:0.73rem; color:var(--text-muted);">(19 fumetti)</span></div>
+      <div class="channel-row"><b>Lucca C&G 60 🔴:</b> 51,06 € <span style="font-size:0.73rem; color:var(--text-muted);">(14 fumetti/albi)</span></div>
+      <div class="channel-row"><b>Collezione Storica (Lire ➔ €):</b> 2,06 € <span style="font-size:0.73rem; color:var(--text-muted);">(PK2 #1 a 4.000 L.)</span></div>
+      <div class="channel-row"><b>Regali:</b> 0,00 € <span style="font-size:0.73rem; color:var(--text-muted);">(8 fumetti a costo zero)</span></div>
+    </div>
+
+    <!-- SCHEDA 2: RISPARMIO VS COPERTINA -->
+    <div class="expense-card">
+      <div class="expense-header-title">🏷️ Pagato contro prezzo di copertina</div>
+      <div style="font-size:0.83rem; color:#cbd5e1; line-height:1.4;">
+        Su 38 fumetti con copertina nota: pagato <b>51,79 €</b> (spese incluse) contro <b>86,50 €</b> di copertina, risparmio <b style="color:#4ade80;">34,71 € (40%)</b>.
+      </div>
+    </div>
+
+    <!-- SCHEDA 3: GRAFICO EDITORE -->
+    <div class="expense-card">
+      <div class="expense-header-title">📊 Ripartizione per Editore</div>
       <div class="chart-container">
         <canvas id="expensesPieChart"></canvas>
       </div>
     </div>
 
+    <!-- SCHEDA 4: REGISTRO FUMETTO PER FUMETTO -->
     <div class="expense-card">
-      <div style="font-weight:800; font-size:1rem; margin-bottom:10px;">🧾 Registro Acquisti & Fiere</div>
+      <div class="expense-header-title">🧾 Fumetto per Fumetto</div>
       <div class="expense-item">
         <div>
-          <div style="font-weight:bold; font-size:0.88rem;">L'Uomo Ragno #139 (Corno 1975)</div>
-          <div style="font-size:0.72rem; color:#e11d48; font-weight:bold; display:flex; align-items:center; gap:4px;">
-            <img src="img/logo lucca.png" style="height:14px; border-radius:50%;"> Lucca C&G 60 • 28/08/1975
-          </div>
+          <div style="font-weight:bold; font-size:0.88rem;">Spider-Man: Blue</div>
+          <div style="font-size:0.72rem; color:var(--text-muted);">Vinted • pagato 8,24 € • copertina 28,00 €</div>
         </div>
-        <div style="font-weight:bold; color:var(--accent-gold);" id="price-item-corno">5,00 €</div>
+        <div class="saving-badge">-19,76 €</div>
       </div>
       <div class="expense-item">
         <div>
-          <div style="font-weight:bold; font-size:0.88rem;">L'Uomo Ragno #52 (Panini 1990)</div>
-          <div style="font-size:0.72rem; color:var(--text-muted);">Acquisto Vinted / Mercatino</div>
+          <div style="font-weight:bold; font-size:0.88rem;">PK2 #1 (Ducklair 2001)</div>
+          <div style="font-size:0.72rem; color:var(--text-muted);">Storico • pagato 4.000 L. (2,06 €)</div>
         </div>
-        <div style="font-weight:bold; color:var(--accent-gold);">6,00 €</div>
-      </div>
-      <div class="expense-item">
-        <div>
-          <div style="font-weight:bold; font-size:0.88rem;">Absolute Batman #15-#18</div>
-          <div style="font-size:0.72rem; color:#e11d48; font-weight:bold; display:flex; align-items:center; gap:4px;">
-            <img src="img/logo lucca.png" style="height:14px; border-radius:50%;"> Lucca C&G 60
-          </div>
-        </div>
-        <div style="font-weight:bold; color:var(--accent-gold);">18,00 €</div>
+        <div class="saving-badge">Prezzo Orig.</div>
       </div>
     </div>
   </div>
 
-  <!-- MODALE DETTAGLIO -->
+  <!-- MODALE DETTAGLIO CON CONVERTITORE LIRE -->
   <div class="modal-overlay" id="itemModal">
     <div class="modal-card">
       <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:12px;">
-        <h3 id="m-title" style="font-size:1.1rem; color:#fff;">Title</h3>
+        <h3 id="m-title" style="font-size:1.05rem; color:#fff;">Title</h3>
         <span style="cursor:pointer; font-size:1.2rem; color:#94a3b8;" onclick="closeModal()">✖</span>
       </div>
       <div class="cover-box" id="m-cover"></div>
@@ -283,7 +328,10 @@
 
       <div style="background:#0d0e12; padding:12px; border-radius:10px; border:1px solid var(--card-border);">
         <label style="font-size:0.72rem; color:var(--text-muted);">✏️ Prezzo Pagato (€):</label>
-        <input type="number" id="editPriceInput" class="edit-input-field" value="5.00" step="0.5">
+        <input type="number" id="editPriceInput" class="edit-input-field" value="5.00" step="0.1">
+
+        <label style="font-size:0.72rem; color:var(--accent-gold);">🇮🇹 O Converti da Prezzo in Lire (L.):</label>
+        <input type="number" id="editLireInput" class="edit-input-field" placeholder="Es. 4000" oninput="convertLireToEuro()">
 
         <label style="font-size:0.72rem; color:var(--text-muted);">🎪 Luogo d'Acquisto / Note:</label>
         <input type="text" id="editNotesInput" class="edit-input-field" value="Lucca C&G 60">
@@ -306,12 +354,16 @@
         id: "spidey-corno", title: "L'Uomo Ragno (Editoriale Corno 1975)", publisher: "Marvel", total: 200, owned: [139], luccaItems: [139], authors: "Stan Lee / John Romita Sr.", customCovers: { 139: "img/uomo ragno 139-editoriale corno.png" }, prices: { 139: 5.00 }
       },
       { 
-        id: "spidey-panini-1990", title: "L'Uomo Ragno (Panini 1990)", publisher: "Marvel", total: 100, owned: [52], luccaItems: [], authors: "Todd McFarlane", customCovers: { 52: "img/uomo ragno 52- panini.png" }, prices: { 52: 6.00 }
+        id: "spidey-panini-1990", title: "L'Uomo Ragno (Panini 1990)", publisher: "Marvel", total: 100, owned: [41, 52, 53], luccaItems: [41, 52, 53], authors: "Todd McFarlane / Michelinie", customCovers: { 41: "img/uomo ragno 41- panini.png", 52: "img/uomo ragno 52- panini.png", 53: "img/uomo ragno 53- panini.png" }, prices: { 41: 5.00, 52: 6.00, 53: 5.00 }
       },
+      { id: "pk2", title: "PK2 - Ducklair (2001)", publisher: "PK", total: 18, owned: [1,2,3], luccaItems: [], authors: "Tito Faraci / Artibani", prices: { 1: 2.06, 2: 2.06, 3: 2.06 } },
+      { id: "pkna", title: "PKNA / PKEDA (Paperinik)", publisher: "PK", total: 50, owned: [1,2,3,4,5], luccaItems: [1,2,3,4,5], authors: "Disney Italia", prices: {} },
+      { id: "pk-mito", title: "Paperinik - Il Mito", publisher: "PK", total: 20, owned: [1,2,3,4,5,8,9,10,13,16], luccaItems: [], authors: "Gazzetta dello Sport", prices: {} },
+      { id: "death-note", title: "Death Note", publisher: "Manga", total: 13, owned: [1,2,4,7,12,13], luccaItems: [], authors: "Ohba / Obata", prices: {} },
+      { id: "slam-dunk", title: "Slam Dunk", publisher: "Manga", total: 31, owned: [1,2,3,4,5], luccaItems: [], authors: "Takehiko Inoue", prices: {} },
       { id: "abs-batman", title: "Absolute Batman", publisher: "DC", total: 18, owned: [1,2,3,15,16,17,18], luccaItems: [1,2,3,17,18], authors: "Scott Snyder", prices: {} },
       { id: "abs-sup", title: "Absolute Superman", publisher: "DC", total: 18, owned: [1], luccaItems: [], authors: "Jason Aaron", prices: {} },
-      { id: "abs-ww", title: "Absolute Wonder Woman", publisher: "DC", total: 17, owned: [1,2,3,4,5,6,7,8], luccaItems: [], authors: "Kelly Thompson", prices: {} },
-      { id: "pk-mito", title: "Paperinik - Il Mito", publisher: "PK", total: 20, owned: [1,2,3,4,5,8,9,10,13,16], luccaItems: [], authors: "Gazzetta dello Sport", prices: {} }
+      { id: "abs-ww", title: "Absolute Wonder Woman", publisher: "DC", total: 17, owned: [1,2,3,4,5,6,7,8], luccaItems: [], authors: "Kelly Thompson", prices: {} }
     ];
 
     const DIGITAL_RUNS = [
@@ -336,16 +388,14 @@
 
     let currentMainMode = 'physical';
     let currentPublisherFilter = 'ALL';
+    let currentKpiFilter = 'ALL';
     let currentDigitalCategory = 'reading';
     let chartInstance = null;
     let activeRunId = null;
     let activeNum = null;
 
-    /* TOUCH GESTURES SWIPE (TARATURA SENSIBILITA' & ANGOLO) */
-    let touchStartX = 0;
-    let touchStartY = 0;
-    let touchEndX = 0;
-    let touchEndY = 0;
+    /* TOUCH GESTURES SWIPE */
+    let touchStartX = 0, touchStartY = 0, touchEndX = 0, touchEndY = 0;
 
     document.addEventListener('touchstart', e => {
       touchStartX = e.changedTouches[0].screenX;
@@ -362,13 +412,10 @@
       const diffX = touchEndX - touchStartX;
       const diffY = touchEndY - touchStartY;
 
-      // Filtro Angolo: se lo scorrimento verticale è marcato, ignora lo swipe
       if (Math.abs(diffY) > Math.abs(diffX) * 0.8) return;
 
-      // Soglia di attivazione calibrata a 90px (anti-trigger accidentale)
       if (Math.abs(diffX) > 90) {
         if (currentMainMode === 'digital') {
-          // Swipe nelle sub-categorie digitali
           const catIdx = DIG_CATS.indexOf(currentDigitalCategory);
           if (diffX < 0 && catIdx < DIG_CATS.length - 1) {
             filterDigitalCategory(DIG_CATS[catIdx + 1]);
@@ -379,7 +426,6 @@
           }
         }
 
-        // Swipe tra i tab principali
         const currIdx = MODES.indexOf(currentMainMode);
         if (diffX < 0 && currIdx < MODES.length - 1) {
           switchMainMode(MODES[currIdx + 1]);
@@ -406,6 +452,37 @@
       if (mode === 'physical') renderPhysicalRuns();
       if (mode === 'digital') renderDigitalRuns();
       if (mode === 'expenses') initPieChart();
+    }
+
+    /* TASTI HUB NAV IN ALTO */
+    function goHomeHub() {
+      currentPublisherFilter = 'ALL';
+      currentKpiFilter = 'ALL';
+      document.querySelectorAll('.stat-box').forEach(b => b.classList.remove('active'));
+      document.querySelectorAll('.publisher-card').forEach(c => c.classList.remove('active'));
+      switchMainMode('physical');
+    }
+
+    function resetAllFilters() {
+      currentPublisherFilter = 'ALL';
+      currentKpiFilter = 'ALL';
+      document.querySelectorAll('.stat-box').forEach(b => b.classList.remove('active'));
+      document.querySelectorAll('.publisher-card').forEach(c => c.classList.remove('active'));
+      if (currentMainMode === 'physical') renderPhysicalRuns();
+      if (currentMainMode === 'digital') renderDigitalRuns();
+    }
+
+    /* FILTRI RAPIDI DAI KPI IN ALTO */
+    function toggleKpiFilter(type) {
+      if (currentKpiFilter === type) {
+        currentKpiFilter = 'ALL';
+        document.getElementById('kpi-' + type).classList.remove('active');
+      } else {
+        currentKpiFilter = type;
+        document.querySelectorAll('.stat-box').forEach(b => b.classList.remove('active'));
+        document.getElementById('kpi-' + type).classList.add('active');
+      }
+      renderPhysicalRuns();
     }
 
     function renderPhysicalRuns() {
@@ -478,7 +555,6 @@
       });
     }
 
-    /* LAZY RENDERING TASSELLI ALL'APERTURA DELLA TENDINA */
     function toggleAccordion(runId, mode) {
       const body = document.getElementById('body-' + runId);
       const arrow = document.getElementById('arrow-' + runId);
@@ -492,6 +568,11 @@
           if (mode === 'physical') {
             const isOwned = run.owned.includes(i);
             const isLucca = run.luccaItems.includes(i);
+
+            // Filtri KPI applicati al volo sui tasselli
+            if (currentKpiFilter === 'owned' && !isOwned) continue;
+            if (currentKpiFilter === 'missing' && isOwned) continue;
+
             tilesHtml += `<div class="num-tile ${isOwned ? 'owned' : ''}" onclick="openItemModal('${run.id}', ${i}, 'physical')">${i}${isLucca ? '<div class="lucca-badge"></div>' : ''}</div>`;
           } else {
             const isRead = run.read.includes(i);
@@ -503,6 +584,14 @@
 
       body.classList.toggle('open', !isOpen);
       arrow.classList.toggle('open', !isOpen);
+    }
+
+    function convertLireToEuro() {
+      const lireVal = parseFloat(document.getElementById('editLireInput').value);
+      if (!isNaN(lireVal) && lireVal > 0) {
+        const euroVal = (lireVal / 1936.27).toFixed(2);
+        document.getElementById('editPriceInput').value = euroVal;
+      }
     }
 
     function quickStepDigital(runId) {
@@ -532,7 +621,7 @@
         data: {
           labels: ['DC Comics', 'Marvel (Panini)', 'Ed. Corno (1975)', 'PK Disney'],
           datasets: [{
-            data: [117.07, 64.16, 5.00, 15.00],
+            data: [117.07, 64.16, 5.00, 21.18],
             backgroundColor: ['#3b82f6', '#ef4444', '#fbbf24', '#a855f7'],
             borderWidth: 0
           }]
@@ -547,12 +636,31 @@
       });
     }
 
+    function exportCSV() {
+      let csvContent = "data:text/csv;charset=utf-8,Tipo,Titolo,Numero,Stato,Prezzo,Fonte\n";
+      PHYSICAL_RUNS.forEach(r => {
+        r.owned.forEach(num => {
+          const price = (r.prices && r.prices[num]) ? r.prices[num] : 0;
+          const source = r.luccaItems.includes(num) ? "Lucca C&G 60" : "Altro";
+          csvContent += `Cartaceo,${r.title},${num},Posseduto,${price},${source}\n`;
+        });
+      });
+      const encodedUri = encodeURI(csvContent);
+      const link = document.createElement("a");
+      link.setAttribute("href", encodedUri);
+      link.setAttribute("download", "hobbyverse_spese_backup.csv");
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+    }
+
     function openItemModal(runId, num, mode) {
       activeRunId = runId;
       activeNum = num;
       const run = (mode === 'physical') ? PHYSICAL_RUNS.find(r => r.id === runId) : DIGITAL_RUNS.find(r => r.id === runId);
 
       document.getElementById('m-title').innerText = `${run.title} #${num}`;
+      document.getElementById('editLireInput').value = '';
       const coverBox = document.getElementById('m-cover');
 
       if (run.customCovers && run.customCovers[num]) {
