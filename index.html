@@ -3,454 +3,357 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Hobbyverse Hub 2.0</title>
+  <title>Checklist Fumetti & Hobbyverse</title>
 
-  <!-- CONFIGURAZIONE PWA WEB APP -->
   <link rel="manifest" href="manifest.json">
-  <meta name="theme-color" content="#08090e">
+  <meta name="theme-color" content="#0d0e12">
   <link rel="apple-touch-icon" href="image_7a0c9d.jpg">
 
   <style>
     :root {
-      --bg-dark: #08090e;
-      --card-bg: #131b2e;
+      --bg-main: #0d0e12;
+      --card-bg: #16181e;
+      --card-border: rgba(255, 255, 255, 0.08);
       --accent-gold: #fbbf24;
-      --border-color: rgba(255, 255, 255, 0.12);
-      --poke-blue: #3b82f6;
-      --manga-pink: #ec4899;
-      --dc-blue: #60a5fa;
-      --marvel-red: #ef4444;
-      --term-green: #10b981;
-      --lucca-purple: #a855f7;
+      --accent-green: #22c55e;
+      --accent-red: #ef4444;
+      --accent-blue: #3b82f6;
+      --dc-blue: #0076e0;
+      --marvel-red: #e62429;
+      --text-muted: #94a3b8;
     }
 
     * { box-sizing: border-box; margin: 0; padding: 0; user-select: none; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; }
-    body { background-color: var(--bg-dark); color: #fff; min-height: 100vh; overflow-x: hidden; padding-bottom: 75px; }
+    body { background-color: var(--bg-main); color: #fff; min-height: 100vh; overflow-x: hidden; padding-bottom: 75px; }
 
-    /* HEADER & FAST SEARCH BAR */
+    /* BARRA SUPERIORE */
     .top-bar {
       position: sticky; top: 0; z-index: 50;
-      background: rgba(8, 9, 14, 0.88); backdrop-filter: blur(12px);
-      border-bottom: 1px solid var(--border-color);
-      padding: 12px 16px; display: flex; align-items: center; gap: 12px;
+      background: rgba(13, 14, 18, 0.9); backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--card-border);
+      padding: 12px 16px; display: flex; align-items: center; justify-content: space-between;
     }
-    .back-arrow {
-      background: rgba(255, 255, 255, 0.08); border: 1px solid var(--border-color);
-      color: #fff; width: 36px; height: 36px; border-radius: 50%;
-      display: flex; align-items: center; justify-content: center;
-      font-size: 1.1rem; cursor: pointer; transition: background 0.2s;
-    }
-    .back-arrow:active { background: var(--accent-gold); color: #000; }
+    .top-title { font-weight: 800; font-size: 1.1rem; display: flex; align-items: center; gap: 8px; }
 
-    .search-box { flex: 1; position: relative; }
-    .search-box input {
-      width: 100%; background: #131b2e; border: 1px solid var(--border-color);
-      border-radius: 20px; padding: 8px 14px 8px 36px; color: #fff; font-size: 0.9rem; outline: none;
+    /* DASHBOARD STATISTICHE SUPERIORE */
+    .stats-row {
+      display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px;
+      padding: 14px 16px; background: #12141a; border-bottom: 1px solid var(--card-border);
     }
-    .search-box input:focus { border-color: var(--accent-gold); }
-    .search-icon { position: absolute; left: 12px; top: 50%; transform: translateY(-50%); opacity: 0.5; font-size: 0.85rem; }
+    .stat-box { text-align: center; }
+    .stat-num { font-weight: 800; font-size: 1.15rem; color: #fff; }
+    .stat-label { font-size: 0.68rem; color: var(--text-muted); margin-top: 2px; }
 
-    /* HUB VIEW */
-    .hub-container { padding: 20px 16px; text-align: center; }
-    .app-title h1 {
-      font-size: 2.1rem; font-weight: 800;
-      background: linear-gradient(135deg, #fbbf24, #f59e0b, #ec4899);
-      -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+    /* EDITOR LOGHI BANNER (MARVEL / DC / ALTRI) */
+    .publishers-grid {
+      display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; padding: 14px 16px;
     }
-    .app-title p { color: #94a3b8; font-size: 0.82rem; margin-top: 4px; }
+    .publisher-card {
+      background: var(--card-bg); border: 1px solid var(--card-border); border-radius: 12px;
+      padding: 12px 8px; text-align: center; cursor: pointer; transition: transform 0.15s;
+    }
+    .publisher-card:active { transform: scale(0.96); }
+    .pub-logo { height: 28px; display: flex; align-items: center; justify-content: center; font-weight: 900; font-size: 1.1rem; }
+    .pub-sub { font-size: 0.68rem; color: var(--text-muted); margin-top: 6px; }
 
-    .mascot-orbit-area {
-      position: relative; margin: 20px auto 10px auto; width: 150px; height: 50px;
-      display: flex; justify-content: center; align-items: center; cursor: pointer;
+    /* FILTRI E BUSSOLA DI RICERCA */
+    .filter-bar { padding: 8px 16px 14px 16px; display: flex; gap: 8px; overflow-x: auto; }
+    .f-chip {
+      background: var(--card-bg); border: 1px solid var(--card-border);
+      color: #cbd5e1; padding: 6px 14px; border-radius: 20px; font-size: 0.78rem; font-weight: 600;
+      white-space: nowrap; cursor: pointer;
     }
-    .snoopy-badge {
-      background: linear-gradient(135deg, rgba(251, 191, 36, 0.15), rgba(168, 85, 247, 0.15));
-      border: 1px solid var(--accent-gold); border-radius: 30px;
-      padding: 6px 14px; display: flex; align-items: center; gap: 8px;
-      box-shadow: 0 0 20px rgba(251, 191, 36, 0.2);
-    }
-    .snoopy-icon { font-size: 1.3rem; }
-    .snoopy-text { font-size: 0.75rem; font-weight: bold; color: var(--accent-gold); }
+    .f-chip.active { background: #fff; color: #000; font-weight: 800; }
 
-    .planets-grid {
-      display: grid; grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
-      gap: 24px 16px; margin-top: 20px; padding: 0 8px;
+    /* RUN CARD (RAGGRUPPAMENTO PER SERIE) */
+    .run-card {
+      background: var(--card-bg); border: 1px solid var(--card-border);
+      border-radius: 14px; padding: 14px; margin: 0 16px 14px 16px;
     }
-    .planet-wrapper { display: flex; flex-direction: column; align-items: center; cursor: pointer; position: relative; }
-    .planet-body {
-      width: 90px; height: 90px; border-radius: 50%;
-      display: flex; align-items: center; justify-content: center; font-size: 2.2rem;
-      position: relative; box-shadow: 0 0 20px rgba(0,0,0,0.5);
-    }
-    .planet-label { margin-top: 10px; font-weight: 700; font-size: 0.88rem; color: #f1f5f9; }
+    .run-header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 6px; }
+    .run-title { font-weight: 800; font-size: 1rem; color: #fff; }
+    .run-meta { font-size: 0.75rem; color: var(--text-muted); margin-bottom: 10px; }
+    
+    .progress-bar-bg { width: 100%; height: 5px; background: #262933; border-radius: 3px; overflow: hidden; margin-bottom: 10px; }
+    .progress-bar-fill { height: 100%; background: var(--accent-green); }
 
-    .moon-orbit {
-      position: absolute; width: 125px; height: 125px; border-radius: 50%;
-      border: 1px dashed rgba(255, 255, 255, 0.15); pointer-events: none;
+    /* TASSELLI NUMERATI PER GLI ALBI */
+    .numbers-grid { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 8px; }
+    .num-tile {
+      width: 32px; height: 32px; border-radius: 8px; font-size: 0.78rem; font-weight: 700;
+      display: flex; align-items: center; justify-content: center; cursor: pointer;
+      border: 1px solid var(--card-border); background: #1e212b; color: #94a3b8;
     }
-    .moon {
-      position: absolute; border-radius: 50%; width: 26px; height: 26px;
-      display: flex; align-items: center; justify-content: center;
-      font-size: 0.65rem; font-weight: bold; color: #fff; pointer-events: auto;
-      box-shadow: 0 0 8px rgba(0,0,0,0.8);
-    }
-    .moon-dc { top: -4px; left: 10px; background: var(--dc-blue); }
-    .moon-marvel { top: 35px; right: -8px; background: var(--marvel-red); }
-    .moon-manga { bottom: -4px; left: 20px; background: var(--manga-pink); }
-
-    .planet-fumetti { background: radial-gradient(circle at 35% 35%, #d97706, #78350f); }
-    .planet-pokemon { background: radial-gradient(circle at 35% 35%, #38bdf8, #1e3a8a); }
-    .planet-libri { background: radial-gradient(circle at 35% 35%, #a855f7, #581c87); }
-    .planet-musica { background: radial-gradient(circle at 35% 35%, #10b981, #064e3b); }
-    .planet-cinema { background: radial-gradient(circle at 35% 35%, #f43f5e, #881337); }
-    .planet-games { background: radial-gradient(circle at 35% 35%, #6366f1, #312e81); }
-
-    /* SEZIONE FUMETTI V2 */
-    #comics-section { display: none; padding: 16px; max-width: 600px; margin: 0 auto; }
-
-    .type-switcher {
-      display: flex; background: #131b2e; border: 1px solid var(--border-color);
-      border-radius: 12px; padding: 4px; margin-bottom: 16px;
-    }
-    .switch-btn {
-      flex: 1; padding: 10px; text-align: center; font-weight: 700; font-size: 0.85rem;
-      border-radius: 8px; cursor: pointer; color: #94a3b8; transition: all 0.2s;
-    }
-    .switch-btn.active { background: var(--accent-gold); color: #000; }
-
-    /* TRACKER SPEDIZIONI DEDICATO */
-    .shipping-tracker-card {
-      background: linear-gradient(135deg, #131b2e, #1e293b);
-      border: 1px solid rgba(59, 130, 246, 0.4); border-radius: 16px;
-      padding: 14px; margin-bottom: 20px;
-    }
-    .shipping-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; }
-    .shipping-item {
-      background: rgba(0, 0, 0, 0.3); border: 1px solid var(--border-color);
-      border-radius: 10px; padding: 10px; margin-top: 8px; font-size: 0.82rem;
-    }
-    .track-link-btn {
-      display: inline-block; background: var(--poke-blue); color: #fff;
-      padding: 4px 10px; border-radius: 6px; text-decoration: none; font-weight: bold;
-      font-size: 0.75rem; margin-top: 6px; margin-right: 6px;
+    .num-tile.owned { background: rgba(34, 197, 94, 0.2); border-color: var(--accent-green); color: #4ade80; }
+    .num-tile.lucca { position: relative; }
+    
+    /* BADGE LUCCA C&G 60 UFFICIALE (VETTORIALE SVG) */
+    .lucca-badge-svg {
+      display: inline-flex; align-items: center; gap: 3px;
+      background: #e11d48; color: #fff; font-size: 0.65rem; font-weight: 900;
+      padding: 2px 7px; border-radius: 12px; border: 1px solid #fda4af;
+      box-shadow: 0 0 8px rgba(225, 29, 72, 0.4);
     }
 
-    /* TABS CATEGORIE CARTACEI */
-    .cat-tabs { display: flex; gap: 8px; overflow-x: auto; padding-bottom: 8px; margin-bottom: 16px; }
-    .cat-tab {
-      background: #131b2e; border: 1px solid var(--border-color);
-      color: #cbd5e1; padding: 6px 14px; border-radius: 20px; font-size: 0.8rem;
-      font-weight: 600; white-space: nowrap; cursor: pointer;
-    }
-    .cat-tab.active { background: var(--term-green); color: #000; font-weight: bold; }
-
-    /* CARD FUMETTO */
-    .comic-card-v2 {
-      background: #131b2e; border: 1px solid var(--border-color); border-radius: 14px;
-      padding: 12px; margin-bottom: 12px; display: flex; gap: 12px; align-items: center;
-    }
-    .comic-cover {
-      width: 65px; height: 95px; border-radius: 8px; background: #1e293b;
-      display: flex; align-items: center; justify-content: center; font-size: 1.5rem;
-      object-fit: cover; flex-shrink: 0;
-    }
-    .comic-info { flex: 1; }
-    .comic-title { font-weight: 700; font-size: 0.95rem; margin-bottom: 3px; }
-    .comic-sub { font-size: 0.75rem; color: #94a3b8; margin-bottom: 6px; }
-
-    .status-badge {
-      display: inline-block; padding: 3px 8px; border-radius: 10px;
-      font-size: 0.7rem; font-weight: bold; cursor: pointer; margin-right: 4px;
-    }
-    .st-manca { background: rgba(239, 68, 68, 0.2); color: #f87171; border: 1px solid #ef4444; }
-    .st-comprare { background: rgba(251, 191, 36, 0.2); color: #fbbf24; border: 1px solid #f59e0b; }
-    .st-arrivo { background: rgba(59, 130, 246, 0.2); color: #60a5fa; border: 1px solid #3b82f6; }
-    .st-posseduto { background: rgba(34, 197, 94, 0.2); color: #34d399; border: 1px solid #10b981; }
-
-    .lucca-badge {
-      background: rgba(168, 85, 247, 0.25); color: #c084fc; border: 1px solid #a855f7;
-      padding: 2px 7px; border-radius: 8px; font-size: 0.68rem; font-weight: bold;
+    /* VISTA SINGLE ITEM DETTAGLIATA */
+    .detail-item {
+      background: #1a1d26; border: 1px solid var(--card-border); border-radius: 12px;
+      padding: 10px 12px; margin-top: 8px; display: flex; justify-content: space-between; align-items: center;
     }
 
-    /* MODALE EASTER EGG SNOOPY */
-    .modal-overlay {
-      display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.85);
-      backdrop-filter: blur(8px); z-index: 100; padding: 20px; overflow-y: auto;
-    }
-    .modal-card {
-      background: #131b2e; border: 1px solid var(--accent-gold);
-      border-radius: 20px; max-width: 500px; margin: 40px auto 0 auto; padding: 20px; text-align: left;
-    }
-
-    /* BOTTOM NAV BAR */
+    /* NAVIGATION BAR IN BASSO */
     .bottom-nav {
-      position: fixed; bottom: 0; left: 0; right: 0; height: 62px;
-      background: rgba(13, 19, 34, 0.94); backdrop-filter: blur(16px);
-      border-top: 1px solid var(--border-color);
+      position: fixed; bottom: 0; left: 0; right: 0; height: 60px;
+      background: rgba(13, 14, 18, 0.95); backdrop-filter: blur(16px);
+      border-top: 1px solid var(--card-border);
       display: flex; justify-content: space-around; align-items: center; z-index: 50;
     }
-    .nav-item {
-      display: flex; flex-direction: column; align-items: center; gap: 3px;
-      color: #64748b; font-size: 0.7rem; font-weight: 600; cursor: pointer; text-decoration: none;
-    }
-    .nav-item.active { color: var(--accent-gold); }
-    .nav-icon { font-size: 1.3rem; }
+    .nav-btn { display: flex; flex-direction: column; align-items: center; gap: 3px; color: #64748b; font-size: 0.68rem; font-weight: 600; cursor: pointer; }
+    .nav-btn.active { color: #fff; }
+    .nav-icon { font-size: 1.25rem; }
   </style>
 </head>
 <body>
 
-  <!-- BARRA SUPERIORE CON RICERCA E TASTO INDIETRO COMPATTO -->
+  <!-- HEADER -->
   <div class="top-bar">
-    <button class="back-arrow" onclick="openView('hub')" title="Indietro">←</button>
-    <div class="search-box">
-      <span class="search-icon">🔍</span>
-      <input type="text" id="globalSearch" placeholder="Cerca al volo fumetto o carta..." oninput="handleSearch(this.value)">
+    <div class="top-title"><span>🏠</span> Checklist Fumetti</div>
+    <div style="font-size:0.8rem; color:var(--accent-gold); font-weight:bold;">V2.5</div>
+  </div>
+
+  <!-- STATS HEADER (COME DA TUA FOTO) -->
+  <div class="stats-row">
+    <div class="stat-box">
+      <div class="stat-num" id="st-owned">45</div>
+      <div class="stat-label">posseduti</div>
+    </div>
+    <div class="stat-box">
+      <div class="stat-num" id="st-transit">1</div>
+      <div class="stat-label">in arrivo</div>
+    </div>
+    <div class="stat-box">
+      <div class="stat-num" id="st-missing">70</div>
+      <div class="stat-label">da prendere</div>
+    </div>
+    <div class="stat-box">
+      <div class="stat-num" style="color:var(--accent-gold);" id="st-spent">181,23 €</div>
+      <div class="stat-label">spesi</div>
     </div>
   </div>
 
-  <!-- 1. HUB PRINCIPALE -->
-  <div class="hub-container" id="main-hub">
-    <div class="app-title">
-      <h1>🛸 Hobbyverse</h1>
-      <p>Centrale Operativa Collezioni</p>
+  <!-- PUB BANNER CON LOGHI -->
+  <div class="publishers-grid">
+    <div class="publisher-card" onclick="filterPublisher('marvel')">
+      <div class="pub-logo" style="background:var(--marvel-red); color:#fff; border-radius:4px; letter-spacing:-1px;">MARVEL</div>
+      <div class="pub-sub" id="sub-marvel">19 fumetti • 64,16 €</div>
     </div>
-
-    <!-- SNOOPY HQ EASTER EGG -->
-    <div class="mascot-orbit-area" onclick="openSnoopyDashboard()">
-      <div class="snoopy-badge">
-        <span class="snoopy-icon">🐶</span>
-        <span class="snoopy-text">Snoopy HQ</span>
+    <div class="publisher-card" onclick="filterPublisher('dc')">
+      <div class="pub-logo" style="color:var(--dc-blue);">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 14.5v-9l6 4.5-6 4.5z"/></svg> DC
       </div>
+      <div class="pub-sub" id="sub-dc">26 fumetti • 117,07 €</div>
     </div>
-
-    <!-- GRIGLIA 6 PIANETI -->
-    <div class="planets-grid">
-      <!-- FUMETTI + 3 LUNE -->
-      <div class="planet-wrapper" onclick="openComicsCat('all')">
-        <div class="moon-orbit"></div>
-        <div class="moon moon-dc" onclick="event.stopPropagation(); openComicsCat('dc')">DC</div>
-        <div class="moon moon-marvel" onclick="event.stopPropagation(); openComicsCat('marvel')">MCU</div>
-        <div class="moon moon-manga" onclick="event.stopPropagation(); openComicsCat('manga')">🌸</div>
-        <div class="planet-body planet-fumetti">🪐</div>
-        <span class="planet-label">Fumetti</span>
-      </div>
-
-      <div class="planet-wrapper" onclick="alert('Sezione Pokémon V2 in attivazione!')">
-        <div class="planet-body planet-pokemon">⚡</div>
-        <span class="planet-label">Pokémon</span>
-      </div>
-
-      <div class="planet-wrapper" onclick="alert('Biblioteca Libri in arrivo!')">
-        <div class="planet-body planet-libri">📜</div>
-        <span class="planet-label">Libri</span>
-      </div>
-
-      <div class="planet-wrapper"><div class="planet-body planet-musica">🎵</div><span class="planet-label">Musica</span></div>
-      <div class="planet-wrapper"><div class="planet-body planet-cinema">🎬</div><span class="planet-label">Film & Serie</span></div>
-      <div class="planet-wrapper"><div class="planet-body planet-games">🎮</div><span class="planet-label">Videogiochi</span></div>
+    <div class="publisher-card" onclick="filterPublisher('altro')">
+      <div class="pub-logo" style="color:var(--accent-gold);">⚡ ALTRI</div>
+      <div class="pub-sub" id="sub-altro">15 fumetti • 72,80 €</div>
     </div>
   </div>
 
-  <!-- 2. SEZIONE FUMETTI V2 -->
-  <div id="comics-section">
-    <!-- SWITCHER CARTACEO VS DIGITALE -->
-    <div class="type-switcher">
-      <div class="switch-btn active" id="sw-cartaceo" onclick="switchComicsType('cartaceo')">📖 Cartacei</div>
-      <div class="switch-btn" id="sw-digitale" onclick="switchComicsType('digitale')">📱 Digitali</div>
-    </div>
-
-    <!-- SEZIONE CARTACEI -->
-    <div id="sec-cartacei">
-      <!-- DASHBOARD TRACCIAMENTO SPEDIZIONI -->
-      <div class="shipping-tracker-card">
-        <div class="shipping-header">
-          <span style="font-weight:bold; font-size:0.9rem; color:var(--poke-blue);">📦 Ordini & Spedizioni in Arrivo</span>
-          <span style="font-size:0.75rem; color:#94a3b8;">1 In Arrivo</span>
-        </div>
-        <div class="shipping-item">
-          <div style="font-weight:bold;">Slam Dunk - Vol. 1 (Vinted)</div>
-          <div style="color:#94a3b8; margin-top:2px;">Corriere: Vinted / InPost • Prezzo: ≈ 3,00 €</div>
-          <button class="track-link-btn" style="background:#22c55e; color:#000;" onclick="alert('Segnato come Posseduto!')">✅ Ricevuto!</button>
-        </div>
-      </div>
-
-      <!-- TABS CATEGORIE -->
-      <div class="cat-tabs">
-        <div class="cat-tab active" id="tab-cat-all" onclick="filterComicsCat('all')">🌐 Tutti</div>
-        <div class="cat-tab" id="tab-cat-dc" onclick="filterComicsCat('dc')">🌌 DC Comics</div>
-        <div class="cat-tab" id="tab-cat-marvel" onclick="filterComicsCat('marvel')">🚀 Marvel</div>
-        <div class="cat-tab" id="tab-cat-manga" onclick="filterComicsCat('manga')">🌸 Manga</div>
-        <div class="cat-tab" id="tab-cat-pk" onclick="filterComicsCat('pk')">⚡ Paperinik</div>
-        <div class="cat-tab" id="tab-cat-altro" onclick="filterComicsCat('altro')">📚 Altro</div>
-      </div>
-
-      <!-- LISTA FUMETTI -->
-      <div id="comicsList"></div>
-    </div>
-
-    <!-- SEZIONE DIGITALI (STILE GOODREADS) -->
-    <div id="sec-digitali" style="display:none;">
-      <div class="cat-tabs">
-        <div class="cat-tab active">📖 In Lettura</div>
-        <div class="cat-tab">⏳ Da Leggere</div>
-        <div class="cat-tab">✅ Finiti</div>
-        <div class="cat-tab">⏸️ In Pausa</div>
-      </div>
-
-      <div class="comic-card-v2">
-        <div class="comic-cover">📱</div>
-        <div class="comic-info">
-          <div class="comic-title">Invincible (Serie Completa)</div>
-          <div class="comic-sub">Image Comics • Digitale</div>
-          <div style="color:var(--accent-gold); font-size:0.85rem; margin-top:4px;">⭐⭐⭐⭐⭐ (5/5)</div>
-        </div>
-      </div>
-    </div>
+  <!-- FILTRI CATEGORIA -->
+  <div class="filter-bar">
+    <div class="f-chip active" id="fl-all" onclick="setFilter('all')">Tutti (110)</div>
+    <div class="f-chip" id="fl-missing" onclick="setFilter('manca')">⚠️ Da comprare</div>
+    <div class="f-chip" id="fl-lucca" onclick="setFilter('lucca')">🎪 Lucca C&G 60</div>
+    <div class="f-chip" id="fl-online" onclick="setFilter('online')">📱 Online</div>
   </div>
 
-  <!-- MODALE EASTER EGG SNOOPY (STATS FIERA) -->
-  <div class="modal-overlay" id="snoopyModal">
-    <div class="modal-card">
-      <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:16px;">
-        <h3 style="color:var(--accent-gold); display:flex; align-items:center; gap:8px;">🐶 Snoopy HQ — Lucca Resoconto</h3>
-        <span style="cursor:pointer; font-size:1.2rem;" onclick="closeSnoopyDashboard()">✖</span>
-      </div>
-      
-      <div style="background:#08090e; padding:12px; border-radius:12px; border:1px solid var(--border-color); margin-bottom:12px;">
-        <div style="font-size:0.8rem; color:#94a3b8;">Spesa Totale a Lucca (15 Albi):</div>
-        <div style="font-size:1.5rem; font-weight:bold; color:var(--term-green);">72,80 €</div>
-      </div>
+  <!-- LISTA DELLE RUN RAGGRUPPATE -->
+  <div id="runsContainer"></div>
 
-      <div style="background:#08090e; padding:12px; border-radius:12px; border:1px solid var(--border-color); margin-bottom:16px; font-size:0.82rem; color:#cbd5e1; line-height:1.5;">
-        • <b>Absolute Batman #1,#2,#3,#17,#18</b> (28 €)<br>
-        • <b>Absolute Martian Manhunter #1 & Green Arrow #1</b> (12 €)<br>
-        • <b>L'Uomo Ragno #41, #52, #53, #139</b> (16 €)<br>
-        • <b>Spawn #9, #12</b> (8 €)<br>
-        • <b>PKEDA #2, #3</b> (14,80 €)
-      </div>
-
-      <button style="width:100%; padding:10px; background:var(--accent-gold); color:#000; border:none; border-radius:10px; font-weight:bold; cursor:pointer;" onclick="alert('Backup JSON generato con successo!')">
-        💾 Esporta Backup Completo (JSON)
-      </button>
-    </div>
-  </div>
-
-  <!-- BARRA NAVIGAZIONE IN BASSO -->
+  <!-- NAV BAR IN BASSO -->
   <div class="bottom-nav">
-    <div class="nav-item active" id="nav-hub" onclick="openView('hub')">
-      <span class="nav-icon">🛸</span><span>Hub</span>
+    <div class="nav-btn active">
+      <span class="nav-icon">📚</span><span>Collezione</span>
     </div>
-    <div class="nav-item" id="nav-comics" onclick="openView('comics')">
-      <span class="nav-icon">🪐</span><span>Fumetti</span>
+    <div class="nav-btn" onclick="alert('Sezione Online / Goodreads attiva!')">
+      <span class="nav-icon">📱</span><span>Online</span>
     </div>
-    <div class="nav-item" onclick="alert('Sezione Pokémon in arrivo!')">
-      <span class="nav-icon">⚡</span><span>Pokémon</span>
-    </div>
-    <div class="nav-item" onclick="alert('Biblioteca in arrivo!')">
-      <span class="nav-icon">📜</span><span>Libri</span>
+    <div class="nav-btn" onclick="alert('Sezione Spese attivi!')">
+      <span class="nav-icon">€</span><span>Spese</span>
     </div>
   </div>
 
   <script>
-    const INITIAL_DATA = [
-      /* ACQUISTI LUCCA */
-      { title:"Absolute Batman #1", cat:"dc", state:"posseduto", price:6.00, from:"Lucca", lucca:true, authors:"Snyder / Dragotta" },
-      { title:"Absolute Batman #2 (Variant)", cat:"dc", state:"posseduto", price:6.00, from:"Lucca", lucca:true, authors:"Snyder / Dragotta" },
-      { title:"Absolute Batman #3", cat:"dc", state:"posseduto", price:4.00, from:"Lucca", lucca:true, authors:"Snyder / Dragotta" },
-      { title:"Absolute Batman #17 (Radici della Follia)", cat:"dc", state:"posseduto", price:4.00, from:"Lucca", lucca:true, authors:"Snyder / Dragotta" },
-      { title:"Absolute Batman #18 (Variant)", cat:"dc", state:"posseduto", price:6.00, from:"Lucca", lucca:true, authors:"Snyder / Dragotta" },
-      { title:"Absolute Martian Manhunter #1 (Variant)", cat:"dc", state:"posseduto", price:6.00, from:"Lucca", lucca:true, authors:"Deniz Camp" },
-      { title:"Absolute Green Arrow #1 (Variant)", cat:"dc", state:"posseduto", price:6.00, from:"Lucca", lucca:true, authors:"Pornsak Pichetshote" },
-      { title:"L'Uomo Ragno #41 (1990)", cat:"marvel", state:"posseduto", price:3.00, from:"Lucca", lucca:true, authors:"Star Comics" },
-      { title:"L'Uomo Ragno #52 (1990)", cat:"marvel", state:"posseduto", price:3.00, from:"Lucca", lucca:true, authors:"Star Comics" },
-      { title:"L'Uomo Ragno #53 (1990)", cat:"marvel", state:"posseduto", price:5.00, from:"Lucca", lucca:true, authors:"Star Comics" },
-      { title:"L'Uomo Ragno #139", cat:"marvel", state:"posseduto", price:5.00, from:"Lucca", lucca:true, authors:"Editoriale Corno" },
-      { title:"Spawn #9 (1997)", cat:"altro", state:"posseduto", price:4.00, from:"Lucca", lucca:true, authors:"Cult Comics / Image" },
-      { title:"Spawn #12 (1997)", cat:"altro", state:"posseduto", price:4.00, from:"Lucca", lucca:true, authors:"Cult Comics / Image" },
-      { title:"PKEDA #2 (Variant Celoni)", cat:"pk", state:"posseduto", price:8.90, from:"Lucca", lucca:true, authors:"Panini Comics" },
-      { title:"PKEDA #3", cat:"pk", state:"posseduto", price:5.90, from:"Lucca", lucca:true, authors:"Panini Comics" },
-
-      /* MANGA */
-      { title:"Death Note #1,#2,#4,#7,#12", cat:"manga", state:"posseduto", price:25.00, from:"Fumetteria", authors:"Ohba / Obata" },
-      { title:"Death Note #13 (Guida)", cat:"manga", state:"posseduto", price:0.00, from:"Regalo 🎁", authors:"Ohba / Obata" },
-      { title:"Slam Dunk #1", cat:"manga", state:"arrivo", price:3.00, from:"Vinted", authors:"Takehiko Inoue" },
-
-      /* PAPERINIK IL MITO */
-      { title:"Paperinik - Il Mito #1,#2,#3,#4,#5,#8,#9,#10,#13,#16", cat:"pk", state:"posseduto", price:0.00, from:"Vinted/Personal", authors:"Gazzetta dello Sport" },
-
-      /* NOVELS & VINTED */
-      { title:"Spider-Man: Blue (Cartonato)", cat:"marvel", state:"posseduto", price:8.24, from:"Vinted (Listino 28€)", authors:"Loeb / Sale" },
-      { title:"Flashpoint (Pocket)", cat:"dc", state:"posseduto", price:7.36, from:"Vinted (Listino 9.90€)", authors:"Geoff Johns" },
-      { title:"Il Batman che ride (Pocket)", cat:"dc", state:"posseduto", price:8.24, from:"Vinted (Listino 9.90€)", authors:"Scott Snyder" },
-      { title:"Tapum!", cat:"altro", state:"posseduto", price:0.00, from:"Regalo 🎁", authors:"Leo Ortolani" }
+    /* DATABASE COMPLETO DELLE RUN */
+    const RUNS_DATA = [
+      {
+        id: "abs-batman",
+        title: "Absolute Batman",
+        publisher: "DC",
+        total: 18,
+        owned: [1, 2, 3, 15, 16, 17, 18],
+        luccaItems: [1, 2, 3, 17, 18],
+        authors: "Scott Snyder, Nick Dragotta",
+        format: "Spillato",
+        spent: 33.78
+      },
+      {
+        id: "abs-sup",
+        title: "Absolute Superman",
+        publisher: "DC",
+        total: 18,
+        owned: [1],
+        luccaItems: [],
+        authors: "Jason Aaron, Rafa Sandoval",
+        format: "Spillato",
+        spent: 3.50
+      },
+      {
+        id: "abs-ww",
+        title: "Absolute Wonder Woman",
+        publisher: "DC",
+        total: 17,
+        owned: [1, 2, 3, 4, 5, 6, 7, 8],
+        luccaItems: [],
+        authors: "Kelly Thompson, Hayden Sherman",
+        format: "Spillato",
+        spent: 24.16
+      },
+      {
+        id: "abs-mh",
+        title: "Absolute Martian Manhunter",
+        publisher: "DC",
+        total: 12,
+        owned: [1],
+        luccaItems: [1],
+        authors: "Deniz Camp, Javier Rodríguez",
+        format: "Spillato",
+        spent: 6.00
+      },
+      {
+        id: "ult-spidey",
+        title: "Ultimate Spider-Man (2024)",
+        publisher: "Marvel",
+        total: 24,
+        owned: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15],
+        luccaItems: [],
+        authors: "Jonathan Hickman, Marco Checchetto",
+        format: "Spillato",
+        spent: 42.50
+      },
+      {
+        id: "uomo-ragno-vintage",
+        title: "L'Uomo Ragno (Edizioni Storiche)",
+        publisher: "Marvel",
+        total: 4,
+        owned: [41, 52, 53, 139],
+        luccaItems: [41, 52, 53, 139],
+        authors: "Star Comics / Ed. Corno",
+        format: "Spillato",
+        spent: 16.00
+      },
+      {
+        id: "pk-mito",
+        title: "Paperinik - Il Mito",
+        publisher: "Altro",
+        total: 20,
+        owned: [1, 2, 3, 4, 5, 8, 9, 10, 13, 16],
+        luccaItems: [],
+        authors: "Gazzetta dello Sport",
+        format: "Brossurato",
+        spent: 0.00
+      },
+      {
+        id: "spawn",
+        title: "Spawn (Cult Comics / Image)",
+        publisher: "Altro",
+        total: 12,
+        owned: [9, 12],
+        luccaItems: [9, 12],
+        authors: "Todd McFarlane",
+        format: "Spillato",
+        spent: 8.00
+      }
     ];
 
-    let comicsData = [...INITIAL_DATA];
+    let currentFilter = 'all';
 
-    function openView(view) {
-      document.getElementById('main-hub').style.display = (view === 'hub') ? 'block' : 'none';
-      document.getElementById('comics-section').style.display = (view === 'comics') ? 'block' : 'none';
-
-      document.querySelectorAll('.nav-item').forEach(e => e.classList.remove('active'));
-      if(view === 'hub') document.getElementById('nav-hub').classList.add('active');
-      if(view === 'comics') document.getElementById('nav-comics').classList.add('active');
-    }
-
-    function openComicsCat(cat) {
-      openView('comics');
-      filterComicsCat(cat);
-    }
-
-    function switchComicsType(type) {
-      document.getElementById('sw-cartaceo').classList.toggle('active', type === 'cartaceo');
-      document.getElementById('sw-digitale').classList.toggle('active', type === 'digitale');
-
-      document.getElementById('sec-cartacei').style.display = (type === 'cartaceo') ? 'block' : 'none';
-      document.getElementById('sec-digitali').style.display = (type === 'digitale') ? 'block' : 'none';
-    }
-
-    function filterComicsCat(cat) {
-      document.querySelectorAll('.cat-tab').forEach(t => t.classList.remove('active'));
-      const activeTab = document.getElementById('tab-cat-' + cat);
-      if(activeTab) activeTab.classList.add('active');
-
-      renderComicsList(cat);
-    }
-
-    function renderComicsList(filterCat = 'all') {
-      const container = document.getElementById('comicsList');
+    function renderRuns() {
+      const container = document.getElementById('runsContainer');
       container.innerHTML = '';
 
-      const filtered = comicsData.filter(c => filterCat === 'all' || c.cat === filterCat);
+      RUNS_DATA.forEach(run => {
+        const ownedCount = run.owned.length;
+        const pct = Math.round((ownedCount / run.total) * 100);
 
-      filtered.forEach(c => {
-        const item = document.createElement('div');
-        item.className = 'comic-card-v2';
-        item.innerHTML = `
-          <div class="comic-cover">📖</div>
-          <div class="comic-info">
-            <div class="comic-title">${c.title}</div>
-            <div class="comic-sub">${c.authors} • ${c.from} • ${c.price > 0 ? c.price.toFixed(2) + ' €' : 'In Collezione'}</div>
-            <span class="status-badge st-${c.state}">${getStatusText(c.state)}</span>
-            ${c.lucca ? '<span class="lucca-badge">🎪 Lucca60</span>' : ''}
+        if (currentFilter === 'manca' && ownedCount === run.total) return;
+        if (currentFilter === 'lucca' && run.luccaItems.length === 0) return;
+
+        const card = document.createElement('div');
+        card.className = 'run-card';
+
+        let tilesHtml = '';
+        for (let i = 1; i <= run.total; i++) {
+          const isOwned = run.owned.includes(i);
+          const isLucca = run.luccaItems.includes(i);
+          tilesHtml += `
+            <div class="num-tile ${isOwned ? 'owned' : ''} ${isLucca ? 'lucca' : ''}" onclick="toggleNum('${run.id}', ${i})">
+              ${i}
+            </div>
+          `;
+        }
+
+        const luccaBadgeHtml = run.luccaItems.length > 0 
+          ? `<span class="lucca-badge-svg">🎪 LUCCA C&G 60 (${run.luccaItems.length})</span>` 
+          : '';
+
+        card.innerHTML = `
+          <div class="run-header">
+            <div>
+              <div class="run-title">${run.title}</div>
+              <div class="run-meta">${run.publisher} • ${run.format} • ${run.authors}</div>
+            </div>
+            ${luccaBadgeHtml}
           </div>
+
+          <div style="display:flex; justify-content:space-between; font-size:0.75rem; color:#cbd5e1; margin-bottom:4px;">
+            <span>Hai <b>${ownedCount}</b> su <b>${run.total}</b></span>
+            <span>${pct}%</span>
+          </div>
+
+          <div class="progress-bar-bg">
+            <div class="progress-bar-fill" style="width: ${pct}%;"></div>
+          </div>
+
+          <div class="numbers-grid">${tilesHtml}</div>
         `;
-        container.appendChild(item);
+
+        container.appendChild(card);
       });
     }
 
-    function getStatusText(st) {
-      if(st === 'manca') return '🔴 Manca';
-      if(st === 'comprare') return '🟡 Da Comprare';
-      if(st === 'arrivo') return '🔵 In Arrivo';
-      if(st === 'posseduto') return '🟢 Posseduto';
-      return st;
+    function setFilter(f) {
+      currentFilter = f;
+      document.querySelectorAll('.f-chip').forEach(c => c.classList.remove('active'));
+      const activeBtn = document.getElementById('fl-' + f);
+      if(activeBtn) activeBtn.classList.add('active');
+      renderRuns();
     }
 
-    function openSnoopyDashboard() { document.getElementById('snoopyModal').style.display = 'block'; }
-    function closeSnoopyDashboard() { document.getElementById('snoopyModal').style.display = 'none'; }
+    function toggleNum(runId, num) {
+      const run = RUNS_DATA.find(r => r.id === runId);
+      if (run) {
+        const idx = run.owned.indexOf(num);
+        if (idx > -1) {
+          run.owned.splice(idx, 1);
+        } else {
+          run.owned.push(num);
+        }
+        renderRuns();
+      }
+    }
 
-    renderComicsList();
+    renderRuns();
   </script>
 </body>
 </html>
