@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Checklist Fumetti V2.8 - Online Edition</title>
+  <title>Checklist Fumetti V2.9 - Test Generale</title>
 
   <link rel="manifest" href="manifest.json">
   <meta name="theme-color" content="#0d0e12">
@@ -16,8 +16,10 @@
       --card-border: rgba(255, 255, 255, 0.08);
       --accent-gold: #fbbf24;
       --accent-green: #22c55e;
+      --accent-red: #ef4444;
       --accent-blue: #3b82f6;
       --accent-purple: #a855f7;
+      --manga-pink: #ec4899;
       --text-muted: #94a3b8;
     }
 
@@ -42,18 +44,56 @@
     .stat-num { font-weight: 800; font-size: 1.1rem; color: #fff; }
     .stat-label { font-size: 0.68rem; color: var(--text-muted); margin-top: 2px; }
 
-    /* SWITCHER CARTACEO VS ONLINE */
-    .view-switcher {
+    /* SWITCHER VISTA PRINCIPALE (CARTACEO VS DIGITALE) */
+    .main-mode-switcher {
       display: flex; margin: 14px 16px 10px 16px; background: #16181e;
       border: 1px solid var(--card-border); border-radius: 12px; padding: 4px;
     }
-    .v-btn {
-      flex: 1; padding: 8px; text-align: center; font-weight: 800; font-size: 0.8rem;
+    .m-btn {
+      flex: 1; padding: 10px; text-align: center; font-weight: 800; font-size: 0.82rem;
       border-radius: 8px; cursor: pointer; color: var(--text-muted); transition: all 0.2s;
     }
-    .v-btn.active { background: #fff; color: #000; }
+    .m-btn.active { background: #fff; color: #000; }
 
-    /* TABS STATO LETTURA ONLINE */
+    /* GRIGLIA EDITORI */
+    .publishers-grid {
+      display: grid; grid-template-columns: repeat(5, 1fr); gap: 6px; padding: 6px 16px 14px 16px;
+    }
+    .publisher-card {
+      background: var(--card-bg); border: 1px solid var(--card-border); border-radius: 10px;
+      padding: 8px 2px; text-align: center; cursor: pointer; display: flex; flex-direction: column; align-items: center; justify-content: center;
+      transition: all 0.2s ease; min-height: 44px;
+    }
+    .publisher-card:active, .publisher-card.active { border-color: var(--accent-gold); background: rgba(251, 191, 36, 0.1); }
+    .pub-img { height: 22px; max-width: 90%; object-fit: contain; }
+    .pub-text { font-weight: 800; font-size: 0.72rem; }
+
+    /* RUN CARD */
+    .run-card {
+      background: var(--card-bg); border: 1px solid var(--card-border);
+      border-radius: 14px; padding: 14px; margin: 0 16px 14px 16px;
+    }
+    .run-title { font-weight: 800; font-size: 1rem; color: #fff; }
+    .run-meta { font-size: 0.75rem; color: var(--text-muted); margin-bottom: 10px; }
+    
+    .progress-bar-bg { width: 100%; height: 5px; background: #262933; border-radius: 3px; overflow: hidden; margin-bottom: 12px; }
+    .progress-bar-fill { height: 100%; background: var(--accent-green); }
+
+    /* TASSELLI NUMERATI */
+    .numbers-grid { display: flex; flex-wrap: wrap; gap: 6px; }
+    .num-tile {
+      width: 34px; height: 34px; border-radius: 8px; font-size: 0.8rem; font-weight: 700;
+      display: flex; align-items: center; justify-content: center; cursor: pointer; position: relative;
+      border: 1px solid var(--card-border); background: #1e212b; color: #94a3b8;
+    }
+    .num-tile.owned { background: rgba(34, 197, 94, 0.2); border-color: var(--accent-green); color: #4ade80; }
+    .num-tile.read { border-color: var(--accent-blue); }
+    .num-tile .lucca-dot {
+      position: absolute; top: 2px; right: 2px; width: 6px; height: 6px;
+      background: #e11d48; border-radius: 50%; box-shadow: 0 0 4px #e11d48;
+    }
+
+    /* CARD DIGITALE GOODREADS */
     .digital-tabs { display: flex; gap: 8px; padding: 0 16px 14px 16px; overflow-x: auto; }
     .d-tab {
       background: var(--card-bg); border: 1px solid var(--card-border);
@@ -62,19 +102,44 @@
     }
     .d-tab.active { background: var(--accent-blue); color: #fff; border-color: var(--accent-blue); }
 
-    /* CARD FUMETTO ONLINE */
-    .digital-card {
+    .digital-item-card {
       background: var(--card-bg); border: 1px solid var(--card-border);
-      border-radius: 14px; padding: 12px; margin: 0 16px 10px 16px;
-      display: flex; align-items: center; justify-content: space-between; gap: 12px;
+      border-radius: 12px; padding: 12px; margin: 0 16px 10px 16px;
+      display: flex; justify-content: space-between; align-items: center;
     }
-    .digital-title { font-weight: 800; font-size: 0.9rem; color: #fff; }
-    .digital-meta { font-size: 0.72rem; color: var(--text-muted); margin-top: 2px; }
 
-    .btn-step {
-      background: rgba(59, 130, 246, 0.2); border: 1px solid var(--accent-blue);
-      color: #60a5fa; padding: 6px 12px; border-radius: 8px; font-weight: 800;
-      font-size: 0.75rem; cursor: pointer;
+    /* MODALE CON SELETTORE COVER IT / USA */
+    .modal-overlay {
+      display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.85);
+      backdrop-filter: blur(8px); z-index: 100; padding: 20px; overflow-y: auto;
+    }
+    .modal-card {
+      background: #16181e; border: 1px solid var(--card-border);
+      border-radius: 20px; max-width: 440px; margin: 20px auto 0 auto; padding: 20px;
+    }
+
+    .cover-switcher {
+      display: flex; justify-content: center; gap: 6px; margin-bottom: 12px;
+    }
+    .cover-btn {
+      padding: 4px 10px; border-radius: 12px; font-size: 0.72rem; font-weight: bold;
+      background: rgba(255,255,255,0.06); border: 1px solid var(--card-border); color: var(--text-muted); cursor: pointer;
+    }
+    .cover-btn.active { background: var(--accent-gold); color: #000; border-color: var(--accent-gold); }
+
+    .cover-box {
+      width: 140px; height: 210px; border-radius: 10px; background: #262933; margin: 0 auto 12px auto;
+      display: flex; align-items: center; justify-content: center; font-size: 3rem; box-shadow: 0 8px 24px rgba(0,0,0,0.6);
+      background-size: cover; background-position: center;
+    }
+
+    .btn-buy {
+      width: 100%; padding: 12px; border-radius: 10px; font-weight: bold; border: none;
+      cursor: pointer; background: var(--accent-green); color: #000; font-size: 0.95rem; margin-top: 12px;
+    }
+    .btn-remove {
+      width: 100%; padding: 10px; border-radius: 10px; font-weight: bold; border: 1px solid var(--accent-red);
+      background: transparent; color: var(--accent-red); font-size: 0.85rem; margin-top: 8px; cursor: pointer;
     }
 
     /* BOTTOM NAV */
@@ -92,106 +157,211 @@
 
   <!-- HEADER -->
   <div class="top-bar">
-    <div class="top-title" id="pageTitle">📱 Letture Online / Digitali</div>
-    <div style="font-size:0.8rem; color:var(--accent-gold); font-weight:bold;">V2.8</div>
+    <div class="top-title" id="mainHeaderTitle">📖 Collezione Cartacea</div>
+    <div style="font-size:0.8rem; color:var(--accent-gold); font-weight:bold;">V2.9</div>
   </div>
 
-  <!-- STATS HEADER -->
-  <div class="stats-row">
-    <div class="stat-box"><div class="stat-num" id="st-reading">13</div><div class="stat-label">in lettura</div></div>
-    <div class="stat-box"><div class="stat-num" id="st-later">22</div><div class="stat-label">da leggere</div></div>
-    <div class="stat-box"><div class="stat-num" id="st-finished">22</div><div class="stat-label">finiti</div></div>
-    <div class="stat-box"><div class="stat-num" style="color:var(--accent-gold);" id="st-fav">1</div><div class="stat-label">preferiti</div></div>
+  <!-- STATS -->
+  <div class="stats-row" id="statsBar">
+    <div class="stat-box"><div class="stat-num" id="st-owned">45</div><div class="stat-label">posseduti</div></div>
+    <div class="stat-box"><div class="stat-num" id="st-transit">1</div><div class="stat-label">in arrivo</div></div>
+    <div class="stat-box"><div class="stat-num" id="st-missing">70</div><div class="stat-label">da prendere</div></div>
+    <div class="stat-box"><div class="stat-num" style="color:var(--accent-gold);" id="st-spent">181,23 €</div><div class="stat-label">spesi</div></div>
   </div>
 
-  <!-- SWITCHER VISTA -->
-  <div class="view-switcher">
-    <div class="v-btn active" id="btnModeDigital" onclick="switchMode('digital')">📱 Online / Digitali</div>
-    <div class="v-btn" id="btnModePhysical" onclick="switchMode('physical')">📖 Cartacei (In Arrivo)</div>
+  <!-- SWITCHER CARTACEO VS ONLINE -->
+  <div class="main-mode-switcher">
+    <div class="m-btn active" id="btnModePhysical" onclick="switchMainMode('physical')">📖 Cartacei</div>
+    <div class="m-btn" id="btnModeDigital" onclick="switchMainMode('digital')">📱 Digitali (Online)</div>
   </div>
 
-  <!-- SEZIONE DIGITALI -->
-  <div id="secDigital">
+  <!-- VISTA CARTACEO -->
+  <div id="viewPhysical">
+    <div class="publishers-grid">
+      <div class="publisher-card" id="btn-pub-DC" onclick="filterPublisher('DC')">
+        <img src="img/dc.png" class="pub-img" alt="DC" onerror="this.style.display='none'; this.nextElementSibling.style.display='block';">
+        <span class="pub-text" style="display:none; color:#3b82f6;">DC</span>
+      </div>
+      <div class="publisher-card" id="btn-pub-Marvel" onclick="filterPublisher('Marvel')">
+        <img src="img/marvel.png" class="pub-img" alt="Marvel" onerror="this.style.display='none'; this.nextElementSibling.style.display='block';">
+        <span class="pub-text" style="display:none; color:#ef4444;">MARVEL</span>
+      </div>
+      <div class="publisher-card" id="btn-pub-Manga" onclick="filterPublisher('Manga')">
+        <span class="pub-text" style="color:var(--manga-pink);">🌸 MANGA</span>
+      </div>
+      <div class="publisher-card" id="btn-pub-PK" onclick="filterPublisher('PK')">
+        <img src="img/pk.png" class="pub-img" alt="PK" onerror="this.style.display='none'; this.nextElementSibling.style.display='block';">
+        <span class="pub-text" style="display:none; color:#facc15;">PK</span>
+      </div>
+      <div class="publisher-card" id="btn-pub-Altro" onclick="filterPublisher('Altro')">
+        <span class="pub-text" style="color:var(--text-muted);">📚 ALTO</span>
+      </div>
+    </div>
+
+    <div id="runsContainer"></div>
+  </div>
+
+  <!-- VISTA DIGITALE -->
+  <div id="viewDigital" style="display:none;">
     <div class="digital-tabs">
-      <div class="d-tab active" id="tab-reading" onclick="filterDigital('reading')">📖 In Lettura (13)</div>
-      <div class="d-tab" id="tab-later" onclick="filterDigital('later')">⏳ Da Leggere (22)</div>
-      <div class="d-tab" id="tab-finished" onclick="filterDigital('finished')">✅ Finiti (22)</div>
-      <div class="d-tab" id="tab-fav" onclick="filterDigital('favorites')">⭐ Preferiti (1)</div>
+      <div class="d-tab active" id="tab-reading" onclick="filterDigitalTab('reading')">📖 In Lettura (13)</div>
+      <div class="d-tab" id="tab-later" onclick="filterDigitalTab('later')">⏳ Da Leggere (22)</div>
+      <div class="d-tab" id="tab-finished" onclick="filterDigitalTab('finished')">✅ Finiti (22)</div>
+      <div class="d-tab" id="tab-fav" onclick="filterDigitalTab('favorites')">⭐ Preferiti (1)</div>
     </div>
 
     <div id="digitalListContainer"></div>
   </div>
 
-  <!-- SEZIONE CARTACEI (PLACEHOLDER PRONTO) -->
-  <div id="secPhysical" style="display:none; padding:20px; text-align:center; color:var(--text-muted); font-size:0.85rem;">
-    📦 Spazio riservato alla collezione cartacea.<br>I volumi fisici e tascabili verranno caricati qui a breve!
+  <!-- MODALE ALBO CON SWITCH COPERTINA IT/USA -->
+  <div class="modal-overlay" id="itemModal">
+    <div class="modal-card">
+      <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:12px;">
+        <h3 id="m-title" style="font-size:1.1rem; color:#fff;">Title</h3>
+        <span style="cursor:pointer; font-size:1.2rem; color:#94a3b8;" onclick="closeModal()">✖</span>
+      </div>
+
+      <!-- SWITCH COPERTINA IT / USA -->
+      <div class="cover-switcher">
+        <div class="cover-btn active" id="btnCoverIT" onclick="toggleCoverLang('IT')">🇮🇹 Cover Italia</div>
+        <div class="cover-btn" id="btnCoverUSA" onclick="toggleCoverLang('USA')">🇺🇸 Cover USA</div>
+      </div>
+
+      <div class="cover-box" id="m-cover">📖</div>
+      <div id="m-status-text" style="text-align:center; font-size:0.85rem; margin-bottom:12px;"></div>
+
+      <div id="buyForm" style="background:#0d0e12; padding:12px; border-radius:10px; border:1px solid var(--card-border);">
+        <label style="font-size:0.72rem; color:var(--text-muted);">Prezzo Pagato (€):</label>
+        <input type="number" id="buyPrice" value="4.00" step="0.5" style="width:100%; padding:8px; margin-top:4px; margin-bottom:8px; background:#16181e; border:1px solid var(--card-border); color:#fff; border-radius:6px;">
+        
+        <label style="display:flex; align-items:center; gap:8px; font-size:0.78rem; color:#c084fc; cursor:pointer;">
+          <input type="checkbox" id="buyLucca"> Acquistato a Lucca C&G 60 🎪
+        </label>
+      </div>
+
+      <button class="btn-buy" id="btnAction" onclick="submitAcquisition()">🛒 Segna come Comprato</button>
+      <button class="btn-remove" id="btnRemove" style="display:none;" onclick="markAsMissing()">🔴 Rimuovi dai Posseduti</button>
+    </div>
   </div>
 
   <!-- BOTTOM NAV -->
   <div class="bottom-nav">
-    <div class="nav-btn active"><span>📱 Digitali</span></div>
-    <div class="nav-btn" onclick="alert('Sezione Cartacei attiva!')"><span>📚 Cartacei</span></div>
+    <div class="nav-btn active" id="navComics" onclick="switchMainMode('physical')"><span>📚 Fumetti</span></div>
+    <div class="nav-btn" id="navDigital" onclick="switchMainMode('digital')"><span>📱 Online</span></div>
+    <div class="nav-btn" onclick="alert('Dashboard spese attiva!')"><span>€ Spese</span></div>
   </div>
 
   <script>
-    /* DATABASE COMPLETO DELLE LETTURE ONLINE */
+    const RUNS_DATA = [
+      { id: "abs-batman", title: "Absolute Batman", publisher: "DC", total: 18, owned: [1,2,3,15,16,17,18], luccaItems: [1,2,3,17,18], authors: "Scott Snyder" },
+      { id: "abs-sup", title: "Absolute Superman", publisher: "DC", total: 18, owned: [1], luccaItems: [], authors: "Jason Aaron" },
+      { id: "abs-ww", title: "Absolute Wonder Woman", publisher: "DC", total: 17, owned: [1,2,3,4,5,6,7,8], luccaItems: [], authors: "Kelly Thompson" },
+      { id: "ult-spidey", title: "Ultimate Spider-Man (2024)", publisher: "Marvel", total: 24, owned: [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15], luccaItems: [], authors: "Jonathan Hickman" },
+      { id: "death-note", title: "Death Note", publisher: "Manga", total: 13, owned: [1,2,4,7,12,13], luccaItems: [], authors: "Ohba / Obata" },
+      { id: "pk-mito", title: "Paperinik - Il Mito", publisher: "PK", total: 20, owned: [1,2,3,4,5,8,9,10,13,16], luccaItems: [], authors: "Gazzetta dello Sport" },
+      { id: "spawn", title: "Spawn", publisher: "Altro", total: 12, owned: [9,12], luccaItems: [9,12], authors: "Todd McFarlane" }
+    ];
+
     const ONLINE_DATA = {
-      reading: [
-        "Poison Ivy (2022-)", "Black Cat (2025-)", "Zatanna (2026-)", 
-        "The Amazing Spider-Man (2025-)", "Absolute Catwoman (2026-)", 
-        "Fantastic Four (2025-)", "Absolute Wonder Woman (2024-)", 
-        "The Amazing Spider-Man: Spider-Versity (2026-)", "Wonder Woman (2023-)", 
-        "Batman (2025-)", "Absolute Superman (2024-)", "Absolute Green Arrow (2026-)", 
-        "Absolute Batman (2024-)"
-      ],
-      later: [
-        "Ghost in the Shell (1995)", "Wonder Woman (1987-2006)", "DC Comics Essentials: Batman Year One", 
-        "Batman: Under The Hood", "Spider-Gwen: Smash", "Spider-Man: The Clone Saga", 
-        "Amazing Spider-Man - Renew Your Vows (2016)", "Something is Killing the Children", 
-        "Uncanny X-Men (2024-)", "Spawn (1992-)", "The Boys (2006-2012)", 
-        "Spider-Man/Black Cat: The Evil That Men Do", "The Amazing Spider-Man (1963-2018)", 
-        "Superior Spider-Man (2019)", "Spider-Man: Life Story", "Absolute Green Lantern (2025-)", 
-        "Batman (2016-2026)", "Absolute Martian Manhunter (2025-2026)", "Superior Spider-Man (2013-2014)", 
-        "Absolute Flash (2025-)", "Ultimate Spider-Man: Incursion", "Secret Wars (2015-2016)"
-      ],
-      finished: [
-        "Batman: Bad Seeds - Sunrise (2026-)", "Venom (2025-2026)", "Queen in Black (2026)", 
-        "Batman of Two Worlds (2026)", "Amazing Spider-Man: Renew Your Vows (2015)", 
-        "Mary Jane: Homecoming", "Spider-Man Loves Mary Jane Season 2", "Spider-Man Loves Mary Jane", 
-        "Mary Jane: Face It, Tiger", "DC / Marvel: Superman / Spider-Man", "Ultimate Spider-Man (2024-)", 
-        "Spider-Man: Reign 2", "Mary Jane and Black Cat", "Spider-Man: Reign", 
-        "Absolute Batman: Ark M Special", "Absolute Evil (2025)", "The Amazing Spider-Man (2018-2022)", 
-        "Ultimate Fallout (2011)", "All-New Spider-Gwen: Ghost-Spider", 
-        "Spider-Man: Kraven's Last Hunt", "Spider-Man: Blue", "Ultimate Spider-Man (2000-2011)"
-      ],
-      favorites: [
-        "Invincible (2003)"
-      ]
+      reading: ["Poison Ivy (2022-)", "Black Cat (2025-)", "Zatanna (2026-)", "The Amazing Spider-Man (2025-)", "Absolute Catwoman (2026-)", "Fantastic Four (2025-)", "Absolute Wonder Woman (2024-)", "The Amazing Spider-Man: Spider-Versity (2026-)", "Wonder Woman (2023-)", "Batman (2025-)", "Absolute Superman (2024-)", "Absolute Green Arrow (2026-)", "Absolute Batman (2024-)"],
+      later: ["Ghost in the Shell (1995)", "Wonder Woman (1987-2006)", "DC Comics Essentials: Batman Year One", "Batman: Under The Hood", "Spider-Gwen: Smash", "Spider-Man: The Clone Saga", "Amazing Spider-Man - Renew Your Vows (2016)", "Something is Killing the Children", "Uncanny X-Men (2024-)", "Spawn (1992-)", "The Boys (2006-2012)", "Spider-Man/Black Cat: The Evil That Men Do", "The Amazing Spider-Man (1963-2018)", "Superior Spider-Man (2019)", "Spider-Man: Life Story", "Absolute Green Lantern (2025-)", "Batman (2016-2026)", "Absolute Martian Manhunter (2025-2026)", "Superior Spider-Man (2013-2014)", "Absolute Flash (2025-)", "Ultimate Spider-Man: Incursion", "Secret Wars (2015-2016)"],
+      finished: ["Batman: Bad Seeds - Sunrise (2026-)", "Venom (2025-2026)", "Queen in Black (2026)", "Batman of Two Worlds (2026)", "Amazing Spider-Man: Renew Your Vows (2015)", "Mary Jane: Homecoming", "Spider-Man Loves Mary Jane Season 2", "Spider-Man Loves Mary Jane", "Mary Jane: Face It, Tiger", "DC / Marvel: Superman / Spider-Man", "Ultimate Spider-Man (2024-)", "Spider-Man: Reign 2", "Mary Jane and Black Cat", "Spider-Man: Reign", "Absolute Batman: Ark M Special", "Absolute Evil (2025)", "The Amazing Spider-Man (2018-2022)", "Ultimate Fallout (2011)", "All-New Spider-Gwen: Ghost-Spider", "Spider-Man: Kraven's Last Hunt", "Spider-Man: Blue", "Ultimate Spider-Man (2000-2011)"],
+      favorites: ["Invincible (2003)"]
     };
 
+    let currentPublisherFilter = 'ALL';
     let currentDigitalTab = 'reading';
+    let activeRun = null;
+    let activeNum = null;
+    let currentCoverLang = 'IT';
 
-    function renderDigitalList() {
-      const container = document.getElementById('digitalListContainer');
+    function switchMainMode(mode) {
+      document.getElementById('viewPhysical').style.display = (mode === 'physical') ? 'block' : 'none';
+      document.getElementById('viewDigital').style.display = (mode === 'digital') ? 'block' : 'none';
+
+      document.getElementById('btnModePhysical').classList.toggle('active', mode === 'physical');
+      document.getElementById('btnModeDigital').classList.toggle('active', mode === 'digital');
+
+      document.getElementById('navComics').classList.toggle('active', mode === 'physical');
+      document.getElementById('navDigital').classList.toggle('active', mode === 'digital');
+
+      document.getElementById('mainHeaderTitle').innerText = (mode === 'physical') ? '📖 Collezione Cartacea' : '📱 Letture Online / Digitali';
+
+      if (mode === 'digital') renderDigitalList();
+    }
+
+    function renderRuns() {
+      const container = document.getElementById('runsContainer');
       container.innerHTML = '';
 
-      const items = ONLINE_DATA[currentDigitalTab] || [];
+      const filteredRuns = RUNS_DATA.filter(run => {
+        if (currentPublisherFilter === 'ALL') return true;
+        return run.publisher === currentPublisherFilter;
+      });
 
-      items.forEach(title => {
+      filteredRuns.forEach(run => {
+        const ownedCount = run.owned.length;
+        const pct = Math.round((ownedCount / run.total) * 100);
+
         const card = document.createElement('div');
-        card.className = 'digital-card';
+        card.className = 'run-card';
+
+        let tilesHtml = '';
+        for (let i = 1; i <= run.total; i++) {
+          const isOwned = run.owned.includes(i);
+          const isLucca = run.luccaItems.includes(i);
+          tilesHtml += `
+            <div class="num-tile ${isOwned ? 'owned' : ''}" onclick="openItemModal('${run.id}', ${i})">
+              ${i}
+              ${isLucca ? '<div class="lucca-dot"></div>' : ''}
+            </div>
+          `;
+        }
+
         card.innerHTML = `
-          <div>
-            <div class="digital-title">${title}</div>
-            <div class="digital-meta">Digitale • ${getTabLabel(currentDigitalTab)}</div>
+          <div class="run-title">${run.title}</div>
+          <div class="run-meta">${run.publisher} • ${run.authors}</div>
+          <div style="display:flex; justify-content:space-between; font-size:0.75rem; color:#cbd5e1; margin-bottom:4px;">
+            <span>Hai <b>${ownedCount}</b> su <b>${run.total}</b></span>
+            <span>${pct}%</span>
           </div>
-          ${currentDigitalTab === 'reading' ? '<button class="btn-step" onclick="alert(\'Avanzamento letto!\')">+1 Ch</button>' : ''}
+          <div class="progress-bar-bg"><div class="progress-bar-fill" style="width: ${pct}%;"></div></div>
+          <div class="numbers-grid">${tilesHtml}</div>
         `;
         container.appendChild(card);
       });
     }
 
-    function filterDigital(tab) {
+    function renderDigitalList() {
+      const container = document.getElementById('digitalListContainer');
+      container.innerHTML = '';
+      const items = ONLINE_DATA[currentDigitalTab] || [];
+
+      items.forEach(title => {
+        const card = document.createElement('div');
+        card.className = 'digital-item-card';
+        card.innerHTML = `
+          <div>
+            <div style="font-weight:800; font-size:0.88rem; color:#fff;">${title}</div>
+            <div style="font-size:0.72rem; color:var(--text-muted); margin-top:2px;">Digitale • 📱 Online</div>
+          </div>
+          ${currentDigitalTab === 'reading' ? '<button style="background:rgba(59,130,246,0.2); border:1px solid #3b82f6; color:#60a5fa; padding:4px 10px; border-radius:6px; font-weight:bold; font-size:0.75rem;" onclick="alert(\'Avanzamento registrato!\')">+1 Ch</button>' : ''}
+        `;
+        container.appendChild(card);
+      });
+    }
+
+    function filterPublisher(pub) {
+      currentPublisherFilter = (currentPublisherFilter === pub) ? 'ALL' : pub;
+      document.querySelectorAll('.publisher-card').forEach(c => c.classList.remove('active'));
+      if (currentPublisherFilter !== 'ALL') {
+        const activeBtn = document.getElementById('btn-pub-' + currentPublisherFilter);
+        if (activeBtn) activeBtn.classList.add('active');
+      }
+      renderRuns();
+    }
+
+    function filterDigitalTab(tab) {
       currentDigitalTab = tab;
       document.querySelectorAll('.d-tab').forEach(t => t.classList.remove('active'));
       const activeTab = document.getElementById('tab-' + tab);
@@ -199,23 +369,68 @@
       renderDigitalList();
     }
 
-    function switchMode(mode) {
-      document.getElementById('secDigital').style.display = (mode === 'digital') ? 'block' : 'none';
-      document.getElementById('secPhysical').style.display = (mode === 'physical') ? 'block' : 'none';
+    function openItemModal(runId, num) {
+      activeRun = RUNS_DATA.find(r => r.id === runId);
+      activeNum = num;
 
-      document.getElementById('btnModeDigital').classList.toggle('active', mode === 'digital');
-      document.getElementById('btnModePhysical').classList.toggle('active', mode === 'physical');
+      const isOwned = activeRun.owned.includes(num);
+      const isLucca = activeRun.luccaItems.includes(num);
+
+      document.getElementById('m-title').innerText = `${activeRun.title} #${num}`;
+      
+      const stText = document.getElementById('m-status-text');
+      const buyForm = document.getElementById('buyForm');
+      const btnAction = document.getElementById('btnAction');
+      const btnRemove = document.getElementById('btnRemove');
+
+      if(isOwned) {
+        stText.innerHTML = `<span style="color:var(--accent-green); font-weight:bold;">🟢 In Collezione</span> ${isLucca ? '• 🎪 Lucca60' : ''}`;
+        buyForm.style.display = 'none';
+        btnAction.style.display = 'none';
+        btnRemove.style.display = 'block';
+      } else {
+        stText.innerHTML = `<span style="color:var(--accent-red); font-weight:bold;">🔴 Ti Manca</span>`;
+        buyForm.style.display = 'block';
+        btnAction.style.display = 'block';
+        btnRemove.style.display = 'none';
+      }
+
+      toggleCoverLang('IT');
+      document.getElementById('itemModal').style.display = 'block';
     }
 
-    function getTabLabel(tab) {
-      if(tab === 'reading') return '📖 In Lettura';
-      if(tab === 'later') return '⏳ Da Leggere';
-      if(tab === 'finished') return '✅ Completato';
-      if(tab === 'favorites') return '⭐ Preferito';
-      return '';
+    function toggleCoverLang(lang) {
+      currentCoverLang = lang;
+      document.getElementById('btnCoverIT').classList.toggle('active', lang === 'IT');
+      document.getElementById('btnCoverUSA').classList.toggle('active', lang === 'USA');
+
+      const coverBox = document.getElementById('m-cover');
+      coverBox.innerText = (lang === 'IT') ? '🇮🇹 📖' : '🇺🇸 📱';
     }
 
-    renderDigitalList();
+    function submitAcquisition() {
+      if(!activeRun || !activeNum) return;
+      if(!activeRun.owned.includes(activeNum)) {
+        activeRun.owned.push(activeNum);
+        if(document.getElementById('buyLucca').checked) {
+          if(!activeRun.luccaItems.includes(activeNum)) activeRun.luccaItems.push(activeNum);
+        }
+      }
+      closeModal();
+      renderRuns();
+    }
+
+    function markAsMissing() {
+      if(!activeRun || !activeNum) return;
+      activeRun.owned = activeRun.owned.filter(n => n !== activeNum);
+      activeRun.luccaItems = activeRun.luccaItems.filter(n => n !== activeNum);
+      closeModal();
+      renderRuns();
+    }
+
+    function closeModal() { document.getElementById('itemModal').style.display = 'none'; }
+
+    renderRuns();
   </script>
 </body>
 </html>
