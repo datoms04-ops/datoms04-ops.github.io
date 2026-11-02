@@ -3,11 +3,14 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Hobbyverse 3.2 - Spese & Vintage</title>
+  <title>Hobbyverse 3.3 - Chart & Accordion</title>
 
   <link rel="manifest" href="manifest.json">
   <meta name="theme-color" content="#0d0e12">
   <link rel="apple-touch-icon" href="image_7a0c9d.jpg">
+
+  <!-- Chart.js per i Grafici Interattivi -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
   <style>
     :root {
@@ -43,7 +46,7 @@
     .stat-num { font-weight: 800; font-size: 1.1rem; color: #fff; }
     .stat-label { font-size: 0.68rem; color: var(--text-muted); margin-top: 2px; }
 
-    /* SWITCHER VISTA PRINCIPALE */
+    /* SWITCHER SEZIONI */
     .main-mode-switcher {
       display: flex; margin: 14px 16px 10px 16px; background: #16181e;
       border: 1px solid var(--card-border); border-radius: 12px; padding: 4px; gap: 4px;
@@ -54,7 +57,7 @@
     }
     .m-btn.active { background: #fff; color: #000; }
 
-    /* EDITORI */
+    /* BANNER EDITORI */
     .publishers-grid {
       display: grid; grid-template-columns: repeat(5, 1fr); gap: 8px; padding: 6px 16px 14px 16px;
     }
@@ -67,15 +70,25 @@
     .pub-img { height: 34px; max-width: 95%; object-fit: contain; }
     .pub-text { font-weight: 800; font-size: 0.8rem; }
 
-    /* RUN CARD */
+    /* RUN CARD ACCORDION (TENDINA) */
     .run-card {
       background: var(--card-bg); border: 1px solid var(--card-border);
-      border-radius: 14px; padding: 14px; margin: 0 16px 14px 16px;
+      border-radius: 14px; padding: 14px; margin: 0 16px 12px 16px;
     }
-    .run-header-row { display: flex; justify-content: space-between; align-items: flex-start; }
-    .run-title { font-weight: 800; font-size: 1rem; color: #fff; }
-    .run-meta { font-size: 0.75rem; color: var(--text-muted); margin-bottom: 10px; }
+    .run-header-row { display: flex; justify-content: space-between; align-items: center; cursor: pointer; }
+    .run-title { font-weight: 800; font-size: 0.98rem; color: #fff; }
+    .run-meta { font-size: 0.75rem; color: var(--text-muted); margin-top: 2px; }
     
+    .toggle-arrow {
+      background: rgba(255,255,255,0.06); border: 1px solid var(--card-border);
+      width: 28px; height: 28px; border-radius: 50%; display: flex; align-items: center; justify-content: center;
+      font-size: 0.75rem; color: var(--accent-gold); transition: transform 0.2s;
+    }
+    .toggle-arrow.open { transform: rotate(180deg); }
+
+    .run-body { display: none; margin-top: 12px; }
+    .run-body.open { display: block; }
+
     .progress-bar-bg { width: 100%; height: 5px; background: #262933; border-radius: 3px; overflow: hidden; margin-bottom: 12px; }
     .progress-bar-fill { height: 100%; background: var(--accent-green); }
 
@@ -87,23 +100,27 @@
       border: 1px solid var(--card-border); background: #1e212b; color: #94a3b8;
     }
     .num-tile.owned { background: rgba(34, 197, 94, 0.2); border-color: var(--accent-green); color: #4ade80; }
+    
+    /* BOLLINO ROSSO LUCCA 60 */
     .num-tile .lucca-dot {
-      position: absolute; top: 2px; right: 2px; width: 6px; height: 6px;
-      background: #e11d48; border-radius: 50%; box-shadow: 0 0 4px #e11d48;
+      position: absolute; top: 2px; right: 2px; width: 7px; height: 7px;
+      background: #e11d48; border-radius: 50%; box-shadow: 0 0 5px #e11d48;
     }
 
     /* EXPENSE CARD */
     .expense-card {
       background: var(--card-bg); border: 1px solid var(--card-border);
-      border-radius: 14px; padding: 14px; margin: 0 16px 14px 16px;
+      border-radius: 14px; padding: 16px; margin: 0 16px 14px 16px;
     }
+    .chart-container { position: relative; height: 210px; width: 100%; margin: 10px 0; }
+
     .expense-item {
       display: flex; justify-content: space-between; align-items: center;
       padding: 10px 0; border-bottom: 1px solid var(--card-border);
     }
     .expense-item:last-child { border-bottom: none; }
 
-    /* MODALE */
+    /* MODALE POPUP */
     .modal-overlay {
       display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.85);
       backdrop-filter: blur(8px); z-index: 100; padding: 20px; overflow-y: auto;
@@ -134,7 +151,7 @@
   <!-- HEADER -->
   <div class="top-bar">
     <div class="top-title" id="mainHeaderTitle">📖 Collezione Cartacea</div>
-    <div style="font-size:0.8rem; color:var(--accent-gold); font-weight:bold;">V3.2</div>
+    <div style="font-size:0.8rem; color:var(--accent-gold); font-weight:bold;">V3.3</div>
   </div>
 
   <!-- STATS BAR -->
@@ -152,8 +169,9 @@
     <div class="m-btn" id="btnModeExpenses" onclick="switchMainMode('expenses')">€ Spese</div>
   </div>
 
-  <!-- VISTA CARTACEO -->
+  <!-- VISTA 1: CARTACEO -->
   <div id="viewPhysical">
+    <!-- EDITORI (CORRETTO "ALTRO") -->
     <div class="publishers-grid">
       <div class="publisher-card" id="btn-pub-DC" onclick="filterPublisher('DC')">
         <img src="img/dc.png" class="pub-img" alt="DC" onerror="this.style.display='none'; this.nextElementSibling.style.display='block';">
@@ -171,49 +189,53 @@
         <span class="pub-text" style="display:none; color:#facc15;">PK</span>
       </div>
       <div class="publisher-card" id="btn-pub-Altro" onclick="filterPublisher('Altro')">
-        <span class="pub-text" style="color:var(--text-muted);">📚 ALTO</span>
+        <span class="pub-text" style="color:var(--text-muted);">📚 ALTRO</span>
       </div>
     </div>
     <div id="physicalRunsContainer"></div>
   </div>
 
-  <!-- VISTA DIGITALE -->
-  <div id="viewDigital" style="display:none; padding:20px; text-align:center; color:var(--text-muted);">
-    📱 Sezione Letture Online attiva
+  <!-- VISTA 2: DIGITALE -->
+  <div id="viewDigital" style="display:none;">
+    <div id="digitalRunsContainer"></div>
   </div>
 
-  <!-- VISTA SPESE -->
+  <!-- VISTA 3: SPESE CON GRAFICO A TORTA INTERATTIVO -->
   <div id="viewExpenses" style="display:none;">
     <div class="expense-card">
-      <div style="font-weight:800; font-size:1rem; margin-bottom:10px; color:var(--accent-gold);">📊 Spesa per Editore</div>
-      <div style="margin-bottom:8px; font-size:0.8rem; color:#cbd5e1;">DC Comics: <b>117,07 €</b></div>
-      <div class="progress-bar-bg"><div class="progress-bar-fill" style="width: 57%; background:var(--accent-blue);"></div></div>
-      <div style="margin-bottom:8px; font-size:0.8rem; color:#cbd5e1; margin-top:10px;">Marvel Comics (Panini): <b>64,16 €</b></div>
-      <div class="progress-bar-bg"><div class="progress-bar-fill" style="width: 31%; background:var(--accent-red);"></div></div>
-      <div style="margin-bottom:8px; font-size:0.8rem; color:#cbd5e1; margin-top:10px;">Editoriale Corno (Vintage 1975): <b>22,00 €</b></div>
-      <div class="progress-bar-bg"><div class="progress-bar-fill" style="width: 12%; background:var(--accent-gold);"></div></div>
+      <div style="font-weight:800; font-size:1rem; margin-bottom:10px; color:var(--accent-gold);">📊 Grafico Spesa per Editore</div>
+      <div class="chart-container">
+        <canvas id="expensesPieChart"></canvas>
+      </div>
     </div>
 
     <div class="expense-card">
-      <div style="font-weight:800; font-size:1rem; margin-bottom:10px;">🧾 Registro Acquisti Vintage & Fiera</div>
+      <div style="font-weight:800; font-size:1rem; margin-bottom:10px;">🧾 Registro Acquisti & Fiere</div>
       <div class="expense-item">
         <div>
           <div style="font-weight:bold; font-size:0.88rem;">L'Uomo Ragno #139 (Corno 1975)</div>
-          <div style="font-size:0.72rem; color:#c084fc;">Acquistato a Lucca C&G 60 🎪 • 28/08/1975</div>
+          <div style="font-size:0.72rem; color:#e11d48; font-weight:bold;">Lucca C&G 60 🔴 • 28/08/1975</div>
         </div>
         <div style="font-weight:bold; color:var(--accent-gold);">22,00 €</div>
       </div>
       <div class="expense-item">
         <div>
           <div style="font-weight:bold; font-size:0.88rem;">L'Uomo Ragno #52 (Panini 1990)</div>
-          <div style="font-size:0.72rem; color:var(--text-muted);">Acquisto Mercatino / Vinted</div>
+          <div style="font-size:0.72rem; color:var(--text-muted);">Acquisto Vinted / Mercatino</div>
         </div>
         <div style="font-weight:bold; color:var(--accent-gold);">6,00 €</div>
+      </div>
+      <div class="expense-item">
+        <div>
+          <div style="font-weight:bold; font-size:0.88rem;">Absolute Batman #15-#18</div>
+          <div style="font-size:0.72rem; color:#e11d48; font-weight:bold;">Lucca C&G 60 🔴</div>
+        </div>
+        <div style="font-weight:bold; color:var(--accent-gold);">18,00 €</div>
       </div>
     </div>
   </div>
 
-  <!-- MODALE -->
+  <!-- MODALE DETTAGLIO -->
   <div class="modal-overlay" id="itemModal">
     <div class="modal-card">
       <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:12px;">
@@ -235,30 +257,20 @@
   <script>
     const PHYSICAL_RUNS = [
       { 
-        id: "spidey-corno", 
-        title: "L'Uomo Ragno (Editoriale Corno 1975)", 
-        publisher: "Marvel", 
-        total: 200, 
-        owned: [139], 
-        luccaItems: [139], 
-        authors: "Stan Lee / John Romita Sr.",
-        customCovers: { 139: "img/uomo ragno 139-editoriale corno.png" }
+        id: "spidey-corno", title: "L'Uomo Ragno (Editoriale Corno 1975)", publisher: "Marvel", total: 200, owned: [139], luccaItems: [139], authors: "Stan Lee / John Romita Sr.", customCovers: { 139: "img/uomo ragno 139-editoriale corno.png" }
       },
       { 
-        id: "spidey-panini-1990", 
-        title: "L'Uomo Ragno (Panini 1990)", 
-        publisher: "Marvel", 
-        total: 100, 
-        owned: [52], 
-        luccaItems: [], 
-        authors: "Todd McFarlane / David Michelinie",
-        customCovers: { 52: "img/uomo ragno 52- panini.png" }
+        id: "spidey-panini-1990", title: "L'Uomo Ragno (Panini 1990)", publisher: "Marvel", total: 100, owned: [52], luccaItems: [], authors: "Todd McFarlane", customCovers: { 52: "img/uomo ragno 52- panini.png" }
       },
-      { id: "abs-batman", title: "Absolute Batman", publisher: "DC", total: 18, owned: [1,2,3,15,16,17,18], luccaItems: [1,2,3,17,18], authors: "Scott Snyder" }
+      { id: "abs-batman", title: "Absolute Batman", publisher: "DC", total: 18, owned: [1,2,3,15,16,17,18], luccaItems: [1,2,3,17,18], authors: "Scott Snyder" },
+      { id: "abs-sup", title: "Absolute Superman", publisher: "DC", total: 18, owned: [1], luccaItems: [], authors: "Jason Aaron" },
+      { id: "abs-ww", title: "Absolute Wonder Woman", publisher: "DC", total: 17, owned: [1,2,3,4,5,6,7,8], luccaItems: [], authors: "Kelly Thompson" },
+      { id: "pk-mito", title: "Paperinik - Il Mito", publisher: "PK", total: 20, owned: [1,2,3,4,5,8,9,10,13,16], luccaItems: [], authors: "Gazzetta dello Sport" }
     ];
 
     let currentMainMode = 'physical';
     let currentPublisherFilter = 'ALL';
+    let chartInstance = null;
 
     function switchMainMode(mode) {
       currentMainMode = mode;
@@ -275,6 +287,7 @@
       document.getElementById('navExpenses').classList.toggle('active', mode === 'expenses');
 
       if (mode === 'physical') renderPhysicalRuns();
+      if (mode === 'expenses') initPieChart();
     }
 
     function renderPhysicalRuns() {
@@ -296,12 +309,55 @@
         }
 
         card.innerHTML = `
-          <div class="run-header-row"><div><div class="run-title">${run.title}</div><div class="run-meta">${run.publisher} • ${run.authors}</div></div></div>
-          <div style="display:flex; justify-content:space-between; font-size:0.75rem; color:#cbd5e1; margin-bottom:4px;"><span>Posseduti <b>${ownedCount}</b> su <b>${run.total}</b></span><span>${pct}%</span></div>
-          <div class="progress-bar-bg"><div class="progress-bar-fill" style="width: ${pct}%;"></div></div>
-          <div class="numbers-grid">${tilesHtml}</div>
+          <div class="run-header-row" onclick="toggleAccordion('${run.id}')">
+            <div>
+              <div class="run-title">${run.title}</div>
+              <div class="run-meta">${run.publisher} • ${run.authors}</div>
+            </div>
+            <div class="toggle-arrow" id="arrow-${run.id}">▼</div>
+          </div>
+          <div class="run-body" id="body-${run.id}">
+            <div style="display:flex; justify-content:space-between; font-size:0.75rem; color:#cbd5e1; margin-bottom:4px; margin-top:8px;">
+              <span>Posseduti <b>${ownedCount}</b> su <b>${run.total}</b></span><span>${pct}%</span>
+            </div>
+            <div class="progress-bar-bg"><div class="progress-bar-fill" style="width: ${pct}%;"></div></div>
+            <div class="numbers-grid">${tilesHtml}</div>
+          </div>
         `;
         container.appendChild(card);
+      });
+    }
+
+    function toggleAccordion(runId) {
+      const body = document.getElementById('body-' + runId);
+      const arrow = document.getElementById('arrow-' + runId);
+      const isOpen = body.classList.contains('open');
+
+      body.classList.toggle('open', !isOpen);
+      arrow.classList.toggle('open', !isOpen);
+    }
+
+    function initPieChart() {
+      if (chartInstance) chartInstance.destroy();
+      const ctx = document.getElementById('expensesPieChart').getContext('2d');
+
+      chartInstance = new Chart(ctx, {
+        type: 'doughnut',
+        data: {
+          labels: ['DC Comics', 'Marvel (Panini)', 'Ed. Corno (1975)', 'PK Disney'],
+          datasets: [{
+            data: [117.07, 64.16, 22.00, 15.00],
+            backgroundColor: ['#3b82f6', '#ef4444', '#fbbf24', '#facc15'],
+            borderWidth: 0
+          }]
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          plugins: {
+            legend: { position: 'bottom', labels: { color: '#94a3b8', font: { size: 11 } } }
+          }
+        }
       });
     }
 
@@ -322,7 +378,7 @@
       }
 
       document.getElementById('m-status-text').innerHTML = isOwned 
-        ? `<span style="color:var(--accent-green); font-weight:bold;">🟢 In Collezione</span> ${isLucca ? '• 🎪 Lucca60' : ''}`
+        ? `<span style="color:var(--accent-green); font-weight:bold;">🟢 In Collezione</span> ${isLucca ? '• Lucca60 🔴' : ''}`
         : `<span style="color:var(--accent-red); font-weight:bold;">🔴 Ti Manca</span>`;
 
       document.getElementById('itemModal').style.display = 'block';
