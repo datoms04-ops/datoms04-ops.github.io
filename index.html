@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <title>Hobbyverse 5.4 - Ultimate Collector Edition</title>
+  <title>Hobbyverse 6.0 - Universal PWA</title>
 
   <link rel="manifest" href="manifest.json">
   <meta name="theme-color" content="#0d0e12">
@@ -22,12 +22,28 @@
       --accent-red: #ef4444;
       --accent-blue: #3b82f6;
       --accent-pk: #a855f7;
-      --manga-pink: #ec4899;
       --text-muted: #94a3b8;
     }
 
     * { box-sizing: border-box; margin: 0; padding: 0; user-select: none; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; }
     body { background-color: var(--bg-main); color: #fff; min-height: 100vh; overflow-x: hidden; padding-bottom: 85px; touch-action: pan-y; }
+
+    /* ONBOARDING & AUTH OVERLAY */
+    .auth-overlay {
+      position: fixed; inset: 0; background: #0d0e12; z-index: 200;
+      display: flex; flex-direction: column; justify-content: center; align-items: center; padding: 24px; text-align: center;
+    }
+    .auth-title { font-size: 2.2rem; font-weight: 900; margin-bottom: 8px; color: #fff; }
+    .auth-subtitle { font-size: 0.9rem; color: var(--text-muted); margin-bottom: 30px; line-height: 1.4; }
+    
+    .btn-auth-primary {
+      width: 100%; padding: 14px; border-radius: 14px; font-weight: 800; border: none;
+      background: var(--accent-gold); color: #000; font-size: 0.95rem; cursor: pointer; margin-bottom: 10px;
+    }
+    .btn-auth-secondary {
+      width: 100%; padding: 14px; border-radius: 14px; font-weight: 700; border: 1px solid var(--card-border);
+      background: rgba(255,255,255,0.05); color: #fff; font-size: 0.9rem; cursor: pointer;
+    }
 
     /* HEADER NATIVO */
     .app-header {
@@ -45,9 +61,8 @@
       width: 100%; padding: 8px 14px; background: #16181e; border: 1px solid var(--card-border);
       border-radius: 12px; color: #fff; font-size: 0.85rem; outline: none;
     }
-    .search-input::placeholder { color: var(--text-muted); }
 
-    /* DASHBOARD STRISCIA COMPATTA INTERATTIVA */
+    /* DASHBOARD STRISCIA COMPATTA */
     .hero-stats-bar {
       display: flex; justify-content: space-between; align-items: center;
       background: #12141a; border-bottom: 1px solid var(--card-border);
@@ -60,21 +75,20 @@
     }
     .kpi-pill-btn.active { border-color: var(--accent-gold); color: var(--accent-gold); background: rgba(251, 191, 36, 0.1); }
 
-    /* SWITCHER SEZIONI PRINCIPALI */
-    .main-mode-switcher {
+    /* SWITCHER TAB INVENTARIO (CARTACEI / ONLINE) */
+    .sub-tab-switcher {
       display: flex; margin: 10px 16px; background: #16181e;
       border: 1px solid var(--card-border); border-radius: 14px; padding: 4px; gap: 4px;
     }
-    .m-btn {
-      flex: 1; padding: 10px 4px; text-align: center; font-weight: 800; font-size: 0.78rem;
+    .sub-btn {
+      flex: 1; padding: 8px 4px; text-align: center; font-weight: 800; font-size: 0.78rem;
       border-radius: 10px; cursor: pointer; color: var(--text-muted); transition: all 0.2s ease;
     }
-    .m-btn.active { background: #fff; color: #000; box-shadow: 0 2px 8px rgba(0,0,0,0.4); }
+    .sub-btn.active { background: #fff; color: #000; box-shadow: 0 2px 8px rgba(0,0,0,0.4); }
 
-    /* PILLOLE EDITORI SCORREVOLI (VISIBILI SOLO SUI CARTACEI) */
+    /* PILLOLE EDITORI / CATEGORIE (ORIZZONTALI) */
     .chips-scroll-container {
-      display: flex; gap: 8px; padding: 0 16px 10px 16px; overflow-x: auto;
-      scrollbar-width: none;
+      display: flex; gap: 8px; padding: 0 16px 10px 16px; overflow-x: auto; scrollbar-width: none;
     }
     .chips-scroll-container::-webkit-scrollbar { display: none; }
     
@@ -108,7 +122,7 @@
     .progress-bar-fill { height: 100%; background: var(--accent-green); }
     .progress-bar-fill.digital { background: var(--accent-blue); }
 
-    /* TASSELLI NUMERATI GLASSMORPHISM CON FIX VARIANT */
+    /* TASSELLI NUMERATI */
     .numbers-grid { display: flex; flex-wrap: wrap; gap: 6px; }
     .num-tile {
       width: 34px; height: 34px; border-radius: 10px; font-size: 0.8rem; font-weight: 700;
@@ -118,7 +132,6 @@
     .num-tile:active { transform: scale(0.92); }
     .num-tile.owned { background: rgba(34, 197, 94, 0.2); border-color: var(--accent-green); color: #4ade80; }
     .num-tile.read { background: rgba(59, 130, 246, 0.2); border-color: var(--accent-blue); color: #60a5fa; }
-    .num-tile.variant-tile { border-color: var(--accent-gold); }
     
     .num-tile .lucca-badge {
       position: absolute; top: -3px; right: -3px; width: 14px; height: 14px;
@@ -138,7 +151,7 @@
     }
     .d-tab.active { background: var(--accent-blue); color: #fff; border-color: var(--accent-blue); }
 
-    /* ADVANCED EXPENSE CARDS */
+    /* EXPENSE CARDS */
     .expense-card {
       background: var(--card-bg); border: 1px solid var(--card-border);
       border-radius: 16px; padding: 16px; margin: 0 16px 12px 16px;
@@ -148,17 +161,6 @@
 
     .channel-row { font-size: 0.8rem; color: var(--text-muted); margin-bottom: 6px; line-height: 1.4; }
     .channel-row b { color: #fff; }
-
-    .saving-badge {
-      background: rgba(34, 197, 94, 0.15); border: 1px solid var(--accent-green);
-      color: #4ade80; padding: 3px 8px; border-radius: 12px; font-size: 0.72rem; font-weight: 800;
-    }
-
-    .expense-item {
-      display: flex; justify-content: space-between; align-items: center;
-      padding: 10px 0; border-bottom: 1px solid var(--card-border);
-    }
-    .expense-item:last-child { border-bottom: none; }
 
     .btn-wa-share {
       background: rgba(34, 197, 94, 0.15); border: 1px solid var(--accent-green); color: #4ade80;
@@ -176,7 +178,7 @@
     }
     .fab-add:active { transform: scale(0.9); }
 
-    /* BOTTOM SHEET MODAL */
+    /* BOTTOM SHEET MODAL SMART */
     .modal-overlay {
       display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.8);
       backdrop-filter: blur(8px); z-index: 100; align-items: flex-end;
@@ -191,8 +193,8 @@
     @keyframes slideUp { from { transform: translateY(100%); } to { transform: translateY(0); } }
 
     .cover-box {
-      width: 130px; height: 190px; border-radius: 12px; background: #262933; margin: 0 auto 12px auto;
-      display: flex; align-items: center; justify-content: center; font-size: 3rem; box-shadow: 0 8px 24px rgba(0,0,0,0.6);
+      width: 120px; height: 175px; border-radius: 12px; background: #262933; margin: 0 auto 12px auto;
+      display: flex; align-items: center; justify-content: center; font-size: 2.8rem; box-shadow: 0 8px 24px rgba(0,0,0,0.6);
       background-size: cover; background-position: center;
     }
 
@@ -206,7 +208,7 @@
       background: var(--accent-gold); color: #000; cursor: pointer; margin-top: 10px; font-size: 0.9rem;
     }
 
-    /* BOTTOM NAV NATIVA */
+    /* BOTTOM NAV NATIVA SENZA DOPPIONI */
     .bottom-nav {
       position: fixed; bottom: 0; left: 0; right: 0; height: 62px;
       background: rgba(13, 14, 18, 0.95); backdrop-filter: blur(16px);
@@ -219,10 +221,19 @@
 </head>
 <body>
 
+  <!-- ONBOARDING & AUTH SPLASH SCREEN -->
+  <div class="auth-overlay" id="authOverlay">
+    <div style="font-size:3.5rem; margin-bottom:10px;">📖</div>
+    <div class="auth-title">Hobbyverse</div>
+    <div class="auth-subtitle">La tua collezione di fumetti, le tue letture online e il tracciamento delle tue spese in un'unica app.</div>
+    <button class="btn-auth-primary" onclick="enterApp('demo')">🚀 Prova come Ospite / Demo</button>
+    <button class="btn-auth-secondary" onclick="enterApp('login')">🔑 Accedi al tuo Account</button>
+  </div>
+
   <!-- HEADER NATIVO -->
   <div class="app-header">
     <div class="app-title">📖 Hobbyverse</div>
-    <div class="version-badge">V5.4 Ultimate</div>
+    <div class="version-badge">V6.0 Universal</div>
   </div>
 
   <!-- BARRA RICERCA GLOBALE -->
@@ -230,56 +241,73 @@
     <input type="text" id="globalSearchInput" class="search-input" placeholder="🔍 Cerca una serie, autore o albo..." oninput="handleGlobalSearch()">
   </div>
 
-  <!-- DASHBOARD STRISCIA COMPATTA INTERATTIVA -->
+  <!-- DASHBOARD STRISCIA COMPATTA -->
   <div class="hero-stats-bar">
     <span>Posseduti: <b id="st-val1">115</b></span>
     <span class="kpi-pill-btn" id="btn-hunt-mode" onclick="toggleHuntingMode()">🎯 Mancanti: <b id="st-val3">105</b></span>
     <span>Spesa: <b style="color:var(--accent-gold);" id="st-val4">263,55 €</b></span>
   </div>
 
-  <!-- SWITCHER SEZIONI PRINCIPALI -->
-  <div class="main-mode-switcher">
-    <div class="m-btn active" id="btnModePhysical" onclick="switchMainMode('physical')">📖 Cartacei</div>
-    <div class="m-btn" id="btnModeDigital" onclick="switchMainMode('digital')">📱 Online</div>
-    <div class="m-btn" id="btnModeExpenses" onclick="switchMainMode('expenses')">€ Spese</div>
-  </div>
-
-  <!-- PILLOLE EDITORI (VISIBILI SOLO SUI CARTACEI) -->
-  <div class="chips-scroll-container" id="chipsContainer">
-    <div class="chip-item active" onclick="filterPublisher('ALL', this)">🌟 Tutti</div>
-    <div class="chip-item" onclick="filterPublisher('DC', this)">🔵 DC Comics</div>
-    <div class="chip-item" onclick="filterPublisher('Marvel', this)">🔴 Marvel</div>
-    <div class="chip-item" onclick="filterPublisher('Manga', this)">🌸 Manga</div>
-    <div class="chip-item" onclick="filterPublisher('PK', this)">💜 PK Disney</div>
-    <div class="chip-item" onclick="filterPublisher('Altro', this)">📚 Altro</div>
-  </div>
-
-  <!-- VISTA 1: CARTACEO -->
-  <div id="viewPhysical">
-    <div style="display:flex; padding:0 16px 8px 16px;">
-      <button class="btn-wa-share" onclick="shareMissingWhatsApp()">📲 Condividi Mancolista WhatsApp</button>
+  <!-- SCHERMATA 1: HOME DASHBOARD -->
+  <div id="viewHome" style="display:block; padding:16px;">
+    <div class="expense-card" style="margin:0 0 12px 0;">
+      <div style="font-size:1.1rem; font-weight:800; margin-bottom:4px;">👋 Benvenuto in Hobbyverse!</div>
+      <div style="font-size:0.8rem; color:var(--text-muted);">Esplora il tuo inventario, gestisci le mancoliste per le fiere o registra i tuoi nuovi acquisti.</div>
     </div>
-    <div id="physicalRunsContainer"></div>
-  </div>
-
-  <!-- VISTA 2: DIGITALE (3 CATEGORIE UNIFICATE) -->
-  <div id="viewDigital" style="display:none;">
-    <div class="digital-tabs" id="digitalTabsContainer">
-      <div class="d-tab active" id="tab-reading" onclick="filterDigitalCategory('reading')">📖 In Lettura</div>
-      <div class="d-tab" id="tab-later" onclick="filterDigitalCategory('later')">⏳ Da Leggere</div>
-      <div class="d-tab" id="tab-finished" onclick="filterDigitalCategory('finished')">✅ Finiti & ⭐</div>
+    <div class="expense-card" style="margin:0 0 12px 0;">
+      <div class="expense-header-title">⚡ Accesso Rapido</div>
+      <div style="display:flex; gap:8px; margin-top:8px;">
+        <button class="btn-auth-primary" style="font-size:0.8rem; padding:10px;" onclick="switchBottomNav('inventory')">📦 Vai all'Inventario</button>
+        <button class="btn-auth-secondary" style="font-size:0.8rem; padding:10px;" onclick="openAddModal()">➕ Nuovo Acquisto</button>
+      </div>
     </div>
-    <div id="digitalRunsContainer"></div>
   </div>
 
-  <!-- VISTA 3: SPESE ANALYTICS -->
-  <div id="viewExpenses" style="display:none;">
+  <!-- SCHERMATA 2: INVENTARIO (CARTACEI & ONLINE) -->
+  <div id="viewInventory" style="display:none;">
+    <!-- SWITCHER SUB-TAB (CARTACEI / ONLINE) -->
+    <div class="sub-tab-switcher">
+      <div class="sub-btn active" id="btnSubPhysical" onclick="switchSubTab('physical')">📖 Cartacei</div>
+      <div class="sub-btn" id="btnSubDigital" onclick="switchSubTab('digital')">📱 Online</div>
+    </div>
+
+    <!-- PILLOLE EDITORI / CATEGORIE -->
+    <div class="chips-scroll-container" id="chipsContainer">
+      <div class="chip-item active" onclick="filterPublisher('ALL', this)">🌟 Tutti</div>
+      <div class="chip-item" onclick="filterPublisher('DC', this)">🔵 DC Comics</div>
+      <div class="chip-item" onclick="filterPublisher('Marvel', this)">🔴 Marvel</div>
+      <div class="chip-item" onclick="filterPublisher('Manga', this)">🌸 Manga</div>
+      <div class="chip-item" onclick="filterPublisher('PK', this)">💜 PK Disney</div>
+      <div class="chip-item" onclick="filterPublisher('Altro', this)">📚 Altro</div>
+    </div>
+
+    <!-- VISTA CARTACEI -->
+    <div id="subViewPhysical">
+      <div style="display:flex; padding:0 16px 8px 16px;">
+        <button class="btn-wa-share" onclick="shareMissingWhatsApp()">📲 Condividi Mancolista WhatsApp</button>
+      </div>
+      <div id="physicalRunsContainer"></div>
+    </div>
+
+    <!-- VISTA ONLINE -->
+    <div id="subViewDigital" style="display:none;">
+      <div class="digital-tabs" id="digitalTabsContainer">
+        <div class="d-tab active" id="tab-reading" onclick="filterDigitalCategory('reading')">📖 In Lettura</div>
+        <div class="d-tab" id="tab-later" onclick="filterDigitalCategory('later')">⏳ Da Leggere</div>
+        <div class="d-tab" id="tab-finished" onclick="filterDigitalCategory('finished')">✅ Finiti & ⭐</div>
+      </div>
+      <div id="digitalRunsContainer"></div>
+    </div>
+  </div>
+
+  <!-- SCHERMATA 3: SPESE ANALYTICS -->
+  <div id="viewExpenses" style="display:none; padding-top:10px;">
     <div class="expense-card">
       <div class="expense-header-title">🛒 Spese per Canale d'Acquisto</div>
       <div class="channel-row"><b>Vinted / Online:</b> 128,33 € <span style="font-size:0.73rem; color:var(--text-muted);">(19 volumi)</span></div>
       <div class="channel-row"><b>Fumetteria:</b> 67,90 € <span style="font-size:0.73rem; color:var(--text-muted);">(19 fumetti)</span></div>
-      <div class="channel-row"><b>Lucca C&G 60 🔴:</b> 51,06 € <span style="font-size:0.73rem; color:var(--text-muted);">(14 albi speciali)</span></div>
-      <div class="channel-row"><b>Regali:</b> 0,00 € <span style="font-size:0.73rem; color:var(--text-muted);">(8 fumetti a costo 0 €)</span></div>
+      <div class="channel-row"><b>Lucca C&G 60 🔴:</b> 47,06 € <span style="font-size:0.73rem; color:var(--text-muted);">(14 albi)</span></div>
+      <div class="channel-row"><b>Regali:</b> 0,00 € <span style="font-size:0.73rem; color:var(--text-muted);">(9 fumetti compreso Tapum!)</span></div>
     </div>
 
     <div class="expense-card">
@@ -288,39 +316,60 @@
         <canvas id="expensesPieChart"></canvas>
       </div>
     </div>
+  </div>
 
-    <div class="expense-card">
-      <div class="expense-header-title">🧾 Ultimi Arrivi & Variant</div>
-      <div class="expense-item">
-        <div>
-          <div style="font-weight:bold; font-size:0.88rem;">PKEDA #2 (Variant Cover Celoni)</div>
-          <div style="font-size:0.72rem; color:var(--text-muted);">🎪 Lucca C&G 60 • Edizione Variant</div>
-        </div>
-        <div class="saving-badge" style="background:rgba(251, 191, 36, 0.15); border-color:var(--accent-gold); color:var(--accent-gold);">🎨 Variant</div>
-      </div>
-      <div class="expense-item">
-        <div>
-          <div style="font-weight:bold; font-size:0.88rem;">Batman: Le grandi storie</div>
-          <div style="font-size:0.72rem; color:var(--text-muted);">🛍️ Online • pagato 15,00 € (Listino 30,00 €)</div>
-        </div>
-        <div class="saving-badge">-15,00 €</div>
-      </div>
+  <!-- SCHERMATA 4: PROFILO & IMPOSTAZIONI -->
+  <div id="viewProfile" style="display:none; padding:16px;">
+    <div class="expense-card" style="margin:0 0 12px 0; text-align:center;">
+      <div style="font-size:2.5rem; margin-bottom:6px;">👤</div>
+      <div style="font-weight:bold; font-size:1.1rem;" id="userNameProfile">Utente Demo / Ospite</div>
+      <div style="font-size:0.75rem; color:var(--text-muted); margin-top:2px;">Profilo attivo</div>
+    </div>
+
+    <div class="expense-card" style="margin:0;">
+      <div class="expense-header-title">⚙️ Gestione Dati</div>
+      <button class="btn-auth-secondary" style="margin-top:8px;" onclick="exportDataJSON()">💾 Esporta Backup File (JSON)</button>
+      <button class="btn-auth-secondary" style="margin-top:8px; border-color:rgba(239, 68, 68, 0.4); color:var(--accent-red);" onclick="resetAppDemo()">🚪 Esci / Sconnetti</button>
     </div>
   </div>
 
-  <!-- FLOATING ACTION BUTTON -->
+  <!-- FLOATING ACTION BUTTON (SUPER FORM) -->
   <div class="fab-add" onclick="openAddModal()">➕</div>
 
-  <!-- BOTTOM SHEET MODAL SMART -->
+  <!-- BOTTOM SHEET MODAL SUPER FORM -->
   <div class="modal-overlay" id="itemModal">
     <div class="bottom-sheet">
       <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:12px;">
-        <h3 id="m-title" style="font-size:1.05rem; color:#fff;">Gestisci Acquisto</h3>
+        <h3 id="m-title" style="font-size:1.05rem; color:#fff;">➕ Nuovo Acquisto / Fumetto</h3>
         <span style="cursor:pointer; font-size:1.4rem; color:#94a3b8;" onclick="closeModal()">✖</span>
       </div>
-      <div class="cover-box" id="m-cover"></div>
+      <div class="cover-box" id="m-cover">🛍️</div>
       
       <div style="background:#0d0e12; padding:12px; border-radius:12px; border:1px solid var(--card-border);">
+        <label style="font-size:0.72rem; color:var(--text-muted);">📦 Tipologia:</label>
+        <select id="itemTypeSelect" class="edit-select-field">
+          <option value="physical">📖 Cartaceo</option>
+          <option value="digital">📱 Online / Digitale</option>
+        </select>
+
+        <label style="font-size:0.72rem; color:var(--text-muted);">🏷️ Editore / Categoria:</label>
+        <select id="itemCategorySelect" class="edit-select-field">
+          <option value="DC">🔵 DC Comics</option>
+          <option value="Marvel">🔴 Marvel</option>
+          <option value="Manga">🌸 Manga</option>
+          <option value="PK">💜 PK Disney</option>
+          <option value="Altro">📚 Altro (es. Tapum! / Indie)</option>
+        </select>
+
+        <label style="font-size:0.72rem; color:var(--text-muted);">📐 Formato / Edizione:</label>
+        <select id="itemFormatSelect" class="edit-select-field">
+          <option value="Spillato">Spillato (Albo mensile)</option>
+          <option value="Paperback">Paperback / Brossurato (TPB)</option>
+          <option value="Hardcover">Hardcover (Cartonato)</option>
+          <option value="Pocket">Pocket / Tascabile</option>
+          <option value="Tankobon">Manga / Tankobon</option>
+        </select>
+
         <label style="font-size:0.72rem; color:var(--text-muted);">🎪 Luogo / Canale d'Acquisto:</label>
         <select id="sourceTypeSelect" class="edit-select-field" onchange="toggleSourceFields()">
           <option value="fumetteria">🏪 Fumetteria</option>
@@ -328,11 +377,12 @@
           <option value="lucca">🎪 Lucca C&G / Fiera</option>
           <option value="regalo">🎁 Regalo (Costo 0 €)</option>
           <option value="gia_posseduto">📜 Già Posseduto (Storico)</option>
+          <option value="altro">🌐 Altro Canale</option>
         </select>
 
         <div id="singlePriceGroup">
           <label style="font-size:0.72rem; color:var(--text-muted);">✏️ Prezzo Pagato (€):</label>
-          <input type="number" id="editPriceInput" class="edit-input-field" value="5.00" step="0.01">
+          <input type="number" id="editPriceInput" class="edit-input-field" value="0.00" step="0.01">
         </div>
 
         <div id="vintedGroup" style="display:none; background:#16181e; padding:8px; border-radius:8px; border:1px solid var(--card-border); margin-bottom:10px;">
@@ -344,37 +394,29 @@
           <input type="number" id="vintedFee" class="edit-input-field" placeholder="Es. 0.00" oninput="calcVintedTotal()">
         </div>
 
-        <!-- OPZIONE VARIANT COVER -->
-        <div style="margin-bottom:10px; display:flex; align-items:center; gap:8px;">
-          <input type="checkbox" id="isVariantCheckbox" style="accent-color:var(--accent-gold);">
-          <label for="isVariantCheckbox" style="font-size:0.8rem; color:var(--accent-gold); font-weight:bold;">🎨 È un'Edizione Variant / Speciale</label>
-        </div>
-
-        <!-- CONVERTITORE LIRE ATTIVO SOLO PER PK2 -->
-        <div id="lireContainer" style="display:none; border-top:1px dashed var(--card-border); padding-top:8px; margin-top:8px;">
-          <label style="font-size:0.72rem; color:var(--accent-gold);">🇮🇹 Converti da Prezzo in Lire (L.) [PK2]:</label>
-          <input type="number" id="editLireInput" class="edit-input-field" placeholder="Es. 4000" oninput="convertLireToEuro()">
-        </div>
+        <label style="font-size:0.72rem; color:var(--accent-gold);">💰 Prezzo di Rivendita Stimato (€):</label>
+        <input type="number" id="editResaleInput" class="edit-input-field" placeholder="Es. 10.00" step="0.01">
 
         <label style="font-size:0.72rem; color:var(--text-muted);">📝 Note Aggiuntive / Edizione:</label>
         <input type="text" id="editNotesInput" class="edit-input-field" placeholder="Es. Variant Cover Fabio Celoni">
       </div>
 
-      <button class="btn-save-modal" onclick="saveItemChanges()">💾 Salva Modifiche</button>
+      <button class="btn-save-modal" onclick="saveItemChanges()">💾 Salva Acquisto</button>
     </div>
   </div>
 
-  <!-- BOTTOM NAV NATIVA -->
+  <!-- BOTTOM NAV NATIVA RIORGANIZZATA -->
   <div class="bottom-nav">
-    <div class="nav-btn active" id="navComics" onclick="switchMainMode('physical')"><span>📚 Fumetti</span></div>
-    <div class="nav-btn" id="navDigital" onclick="switchMainMode('digital')"><span>📱 Online</span></div>
-    <div class="nav-btn" id="navExpenses" onclick="switchMainMode('expenses')"><span>€ Spese</span></div>
+    <div class="nav-btn active" id="navHome" onclick="switchBottomNav('home')"><span>🏠 Home</span></div>
+    <div class="nav-btn" id="navInventory" onclick="switchBottomNav('inventory')"><span>📦 Inventario</span></div>
+    <div class="nav-btn" id="navExpenses" onclick="switchBottomNav('expenses')"><span>📊 Spese</span></div>
+    <div class="nav-btn" id="navProfile" onclick="switchBottomNav('profile')"><span>👤 Profilo</span></div>
   </div>
 
   <script>
     const PHYSICAL_RUNS = [
       { id: "spidey-corno", title: "L'Uomo Ragno (Editoriale Corno 1975)", publisher: "Marvel", total: 200, owned: [139], luccaItems: [139], authors: "Stan Lee / John Romita Sr.", prices: { 139: 5.00 } },
-      { id: "spidey-panini-1990", title: "L'Uomo Ragno (Panini 1990)", publisher: "Marvel", total: 100, owned: [41, 52, 53], luccaItems: [41, 52, 53], authors: "Todd McFarlane", prices: { 41: 5.00, 52: 6.00, 53: 5.00 } },
+      { id: "spidey-panini-1990", title: "L'Uomo Ragno (Panini 1990)", publisher: "Marvel", total: 100, owned: [41, 52, 53], luccaItems: [41, 52, 53], authors: "Todd McFarlane", prices: { 41: 3.00, 52: 5.00, 53: 3.00 } },
       { id: "ult-spidey-2024", title: "Ultimate Spider-Man (2024)", publisher: "Marvel", total: 24, owned: [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15], luccaItems: [], authors: "Jonathan Hickman", prices: {} },
       { id: "spidey-blue", title: "Spider-Man: Blue", publisher: "Marvel", total: 1, owned: [1], luccaItems: [], authors: "Jeph Loeb / Tim Sale", prices: { 1: 8.24 } },
       { id: "spidey-verse", title: "Spider-Man: Spider-Verse", publisher: "Marvel", total: 1, owned: [1], luccaItems: [], authors: "Dan Slott", prices: { 1: 9.90 } },
@@ -399,45 +441,66 @@
 
       { id: "pk2", title: "PK2 - Ducklair (2001 + Speciale)", publisher: "PK", total: 19, owned: [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19], luccaItems: [], authors: "Faraci / Artibani", prices: {} },
       { id: "pkeda", title: "PKEDA (Paperinik Elite)", publisher: "PK", total: 10, owned: [2, 3], luccaItems: [2, 3], variants: [2], authors: "Disney / Celoni", prices: {} },
-      { id: "pkna", title: "PKNA", publisher: "PK", total: 50, owned: [], luccaItems: [], authors: "Disney Italia", prices: {} },
-      { id: "pk-mito", title: "Paperinik - Il Mito", publisher: "PK", total: 20, owned: [1,2,3,4,5,8,9,10,13,16], luccaItems: [], authors: "Gazzetta dello Sport", prices: {} },
-
-      { id: "death-note", title: "Death Note", publisher: "Manga", total: 13, owned: [1,2,4,7,12,13], luccaItems: [], authors: "Ohba / Obata", prices: {} },
-      { id: "slam-dunk", title: "Slam Dunk", publisher: "Manga", total: 31, owned: [], luccaItems: [], authors: "Takehiko Inoue", prices: {} }
+      { id: "tapum-ortolani", title: "Tapum! (Storie di guerra)", publisher: "Altro", total: 1, owned: [1], luccaItems: [], authors: "Leo Ortolani", prices: { 1: 0.00 } },
+      { id: "death-note", title: "Death Note", publisher: "Manga", total: 13, owned: [1,2,4,7,12,13], luccaItems: [], authors: "Ohba / Obata", prices: {} }
     ];
 
     const DIGITAL_RUNS = [
-      { id: "dig-abs-batman", title: "Absolute Batman (2024-)", publisher: "DC", category: "reading", total: 24, read: [1,2,3,4,5], authors: "Scott Snyder" },
+      { id: "dig-abs-batman", title: "Absolute Batman (2024-)", publisher: "DC", category: "reading", total: 24, read: Array.from({length: 25}, (_, i) => i + 1), authors: "Scott Snyder" },
       { id: "dig-abs-sup", title: "Absolute Superman (2024-)", publisher: "DC", category: "reading", total: 24, read: [1,2], authors: "Jason Aaron" },
       { id: "dig-invincible", title: "Invincible (2003)", publisher: "Altro", category: "finished", isFavorite: true, total: 144, read: Array.from({length: 144}, (_, i) => i + 1), authors: "Robert Kirkman" }
     ];
 
-    const MODES = ['physical', 'digital', 'expenses'];
-    const DIG_CATS = ['reading', 'later', 'finished'];
-
-    let currentMainMode = 'physical';
+    let activeSubTab = 'physical';
     let currentPublisherFilter = 'ALL';
     let currentDigitalCategory = 'reading';
     let isHuntingMode = false;
     let searchQuery = '';
     let chartInstance = null;
-    let isSwiping = false;
 
-    /* RICERCA GLOBALE */
+    function enterApp(mode) {
+      document.getElementById('authOverlay').style.display = 'none';
+      if(mode === 'demo') {
+        document.getElementById('userNameProfile').innerText = "Utente Demo / Ospite";
+      }
+    }
+
+    function switchBottomNav(tab) {
+      ['Home', 'Inventory', 'Expenses', 'Profile'].forEach(t => {
+        const v = document.getElementById('view' + t);
+        const n = document.getElementById('nav' + t);
+        if (v) v.style.display = (t.toLowerCase() === tab) ? 'block' : 'none';
+        if (n) n.classList.toggle('active', t.toLowerCase() === tab);
+      });
+
+      if (tab === 'inventory') renderPhysicalRuns();
+      if (tab === 'expenses') initPieChart();
+    }
+
+    function switchSubTab(sub) {
+      activeSubTab = sub;
+      document.getElementById('subViewPhysical').style.display = (sub === 'physical') ? 'block' : 'none';
+      document.getElementById('subViewDigital').style.display = (sub === 'digital') ? 'block' : 'none';
+
+      document.getElementById('btnSubPhysical').classList.toggle('active', sub === 'physical');
+      document.getElementById('btnSubDigital').classList.toggle('active', sub === 'digital');
+
+      if (sub === 'physical') renderPhysicalRuns();
+      if (sub === 'digital') renderDigitalRuns();
+    }
+
     function handleGlobalSearch() {
       searchQuery = document.getElementById('globalSearchInput').value.toLowerCase();
       renderPhysicalRuns();
-      if (currentMainMode === 'digital') renderDigitalRuns();
+      if (activeSubTab === 'digital') renderDigitalRuns();
     }
 
-    /* MODALITÀ CACCIATORE / MANCOLISTA */
     function toggleHuntingMode() {
       isHuntingMode = !isHuntingMode;
       document.getElementById('btn-hunt-mode').classList.toggle('active', isHuntingMode);
       renderPhysicalRuns();
     }
 
-    /* CONDIVISIONE MANCOLISTA WHATSAPP */
     function shareMissingWhatsApp() {
       let text = "📚 *LA MIA MANCOLISTA FUMETTI* 📚\n\n";
       PHYSICAL_RUNS.forEach(run => {
@@ -445,33 +508,9 @@
         for (let i = 1; i <= run.total; i++) {
           if (!run.owned.includes(i)) missing.push("#" + i);
         }
-        if (missing.length > 0) {
-          text += `• *${run.title}*: ${missing.join(", ")}\n`;
-        }
+        if (missing.length > 0) text += `• *${run.title}*: ${missing.join(", ")}\n`;
       });
-      const encoded = encodeURIComponent(text);
-      window.open(`https://api.whatsapp.com/send?text=${encoded}`, '_blank');
-    }
-
-    function switchMainMode(mode) {
-      currentMainMode = mode;
-      document.getElementById('viewPhysical').style.display = (mode === 'physical') ? 'block' : 'none';
-      document.getElementById('viewDigital').style.display = (mode === 'digital') ? 'block' : 'none';
-      document.getElementById('viewExpenses').style.display = (mode === 'expenses') ? 'block' : 'none';
-
-      document.getElementById('chipsContainer').style.display = (mode === 'physical') ? 'flex' : 'none';
-
-      document.getElementById('btnModePhysical').classList.toggle('active', mode === 'physical');
-      document.getElementById('btnModeDigital').classList.toggle('active', mode === 'digital');
-      document.getElementById('btnModeExpenses').classList.toggle('active', mode === 'expenses');
-
-      document.getElementById('navComics').classList.toggle('active', mode === 'physical');
-      document.getElementById('navDigital').classList.toggle('active', mode === 'digital');
-      document.getElementById('navExpenses').classList.toggle('active', mode === 'expenses');
-
-      if (mode === 'physical') renderPhysicalRuns();
-      if (mode === 'digital') renderDigitalRuns();
-      if (mode === 'expenses') initPieChart();
+      window.open(`https://api.whatsapp.com/send?text=${encodeURIComponent(text)}`, '_blank');
     }
 
     function toggleSourceFields() {
@@ -492,7 +531,8 @@
       currentPublisherFilter = pub;
       document.querySelectorAll('.chip-item').forEach(c => c.classList.remove('active'));
       el.classList.add('active');
-      renderPhysicalRuns();
+      if (activeSubTab === 'physical') renderPhysicalRuns();
+      if (activeSubTab === 'digital') renderDigitalRuns();
     }
 
     function renderPhysicalRuns() {
@@ -535,7 +575,7 @@
     function renderDigitalRuns() {
       const container = document.getElementById('digitalRunsContainer');
       container.innerHTML = '';
-      const filtered = DIGITAL_RUNS.filter(r => r.category === currentDigitalCategory && (searchQuery === '' || r.title.toLowerCase().includes(searchQuery)));
+      const filtered = DIGITAL_RUNS.filter(r => r.category === currentDigitalCategory && (currentPublisherFilter === 'ALL' || r.publisher === currentPublisherFilter) && (searchQuery === '' || r.title.toLowerCase().includes(searchQuery)));
 
       filtered.forEach(run => {
         const readCount = run.read.length;
@@ -580,7 +620,7 @@
 
             if (isHuntingMode && isOwned) continue;
 
-            tilesHtml += `<div class="num-tile ${isOwned ? 'owned' : ''} ${isVariant ? 'variant-tile' : ''}" onclick="openItemModal('${run.id}', ${i}, 'physical')">
+            tilesHtml += `<div class="num-tile ${isOwned ? 'owned' : ''}" onclick="openItemModal('${run.id}', ${i}, 'physical')">
               ${i}
               ${isLucca ? '<div class="lucca-badge"></div>' : ''}
               ${isVariant ? '<div class="variant-star">★</div>' : ''}
@@ -595,13 +635,6 @@
 
       body.classList.toggle('open', !isOpen);
       arrow.classList.toggle('open', !isOpen);
-    }
-
-    function convertLireToEuro() {
-      const lireVal = parseFloat(document.getElementById('editLireInput').value);
-      if (!isNaN(lireVal) && lireVal > 0) {
-        document.getElementById('editPriceInput').value = (lireVal / 1936.27).toFixed(2);
-      }
     }
 
     function filterDigitalCategory(cat) {
@@ -621,7 +654,7 @@
         data: {
           labels: ['Vinted / Online', 'Fumetteria', 'Lucca C&G 60', 'Regali'],
           datasets: [{
-            data: [128.33, 67.90, 51.06, 0.00],
+            data: [128.33, 67.90, 47.06, 0.00],
             backgroundColor: ['#3b82f6', '#ef4444', '#fbbf24', '#22c55e'],
             borderWidth: 0
           }]
@@ -631,31 +664,30 @@
     }
 
     function openItemModal(runId, num, mode) {
-      const run = (mode === 'physical') ? PHYSICAL_RUNS.find(r => r.id === runId) : DIGITAL_RUNS.find(r => r.id === runId);
-
-      document.getElementById('m-title').innerText = `${run.title} #${num}`;
-      document.getElementById('editLireInput').value = '';
-      document.getElementById('lireContainer').style.display = (runId === 'pk2') ? 'block' : 'none';
-      document.getElementById('isVariantCheckbox').checked = (run.variants && run.variants.includes(num));
-
-      const coverBox = document.getElementById('m-cover');
-      coverBox.style.backgroundImage = 'none';
-      coverBox.innerText = (mode === 'physical') ? '📖' : '📱';
-
+      document.getElementById('m-title').innerText = "✏️ Dettaglio Volume";
       document.getElementById('itemModal').classList.add('open');
     }
 
     function openAddModal() {
-      document.getElementById('m-title').innerText = "➕ Aggiungi Nuovo Acquisto";
-      document.getElementById('m-cover').innerText = "🛍️";
-      document.getElementById('lireContainer').style.display = 'none';
-      document.getElementById('isVariantCheckbox').checked = false;
+      document.getElementById('m-title').innerText = "➕ Nuovo Acquisto / Fumetto";
       document.getElementById('itemModal').classList.add('open');
     }
 
     function closeModal() { document.getElementById('itemModal').classList.remove('open'); }
 
-    renderPhysicalRuns();
+    function exportDataJSON() {
+      const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(PHYSICAL_RUNS));
+      const downloadAnchor = document.createElement('a');
+      downloadAnchor.setAttribute("href", dataStr);
+      downloadAnchor.setAttribute("download", "hobbyverse_backup.json");
+      document.body.appendChild(downloadAnchor);
+      downloadAnchor.click();
+      downloadAnchor.remove();
+    }
+
+    function resetAppDemo() {
+      document.getElementById('authOverlay').style.display = 'flex';
+    }
   </script>
 </body>
 </html>
