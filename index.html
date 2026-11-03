@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <title>Hobbyverse 6.0 - Universal PWA</title>
+  <title>Hobbyverse 6.1 - Master PWA</title>
 
   <link rel="manifest" href="manifest.json">
   <meta name="theme-color" content="#0d0e12">
@@ -34,11 +34,11 @@
       display: flex; flex-direction: column; justify-content: center; align-items: center; padding: 24px; text-align: center;
     }
     .auth-title { font-size: 2.2rem; font-weight: 900; margin-bottom: 8px; color: #fff; }
-    .auth-subtitle { font-size: 0.9rem; color: var(--text-muted); margin-bottom: 30px; line-height: 1.4; }
+    .auth-subtitle { font-size: 0.88rem; color: var(--text-muted); margin-bottom: 28px; line-height: 1.4; }
     
     .btn-auth-primary {
       width: 100%; padding: 14px; border-radius: 14px; font-weight: 800; border: none;
-      background: var(--accent-gold); color: #000; font-size: 0.95rem; cursor: pointer; margin-bottom: 10px;
+      background: var(--accent-gold); color: #000; font-size: 0.95rem; cursor: pointer; margin-bottom: 12px;
     }
     .btn-auth-secondary {
       width: 100%; padding: 14px; border-radius: 14px; font-weight: 700; border: 1px solid var(--card-border);
@@ -75,7 +75,7 @@
     }
     .kpi-pill-btn.active { border-color: var(--accent-gold); color: var(--accent-gold); background: rgba(251, 191, 36, 0.1); }
 
-    /* SWITCHER TAB INVENTARIO (CARTACEI / ONLINE) */
+    /* SWITCHER TAB INVENTARIO */
     .sub-tab-switcher {
       display: flex; margin: 10px 16px; background: #16181e;
       border: 1px solid var(--card-border); border-radius: 14px; padding: 4px; gap: 4px;
@@ -86,7 +86,7 @@
     }
     .sub-btn.active { background: #fff; color: #000; box-shadow: 0 2px 8px rgba(0,0,0,0.4); }
 
-    /* PILLOLE EDITORI / CATEGORIE (ORIZZONTALI) */
+    /* PILLOLE EDITORI */
     .chips-scroll-container {
       display: flex; gap: 8px; padding: 0 16px 10px 16px; overflow-x: auto; scrollbar-width: none;
     }
@@ -151,7 +151,7 @@
     }
     .d-tab.active { background: var(--accent-blue); color: #fff; border-color: var(--accent-blue); }
 
-    /* EXPENSE CARDS */
+    /* EXPENSE CARDS & ANALYTICS PRO */
     .expense-card {
       background: var(--card-bg); border: 1px solid var(--card-border);
       border-radius: 16px; padding: 16px; margin: 0 16px 12px 16px;
@@ -161,6 +161,11 @@
 
     .channel-row { font-size: 0.8rem; color: var(--text-muted); margin-bottom: 6px; line-height: 1.4; }
     .channel-row b { color: #fff; }
+
+    .kpi-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 12px; }
+    .kpi-box { background: #12141a; border: 1px solid var(--card-border); border-radius: 12px; padding: 12px; }
+    .kpi-val { font-size: 1.2rem; font-weight: 900; color: #fff; margin-top: 4px; }
+    .kpi-lbl { font-size: 0.7rem; color: var(--text-muted); }
 
     .btn-wa-share {
       background: rgba(34, 197, 94, 0.15); border: 1px solid var(--accent-green); color: #4ade80;
@@ -208,7 +213,7 @@
       background: var(--accent-gold); color: #000; cursor: pointer; margin-top: 10px; font-size: 0.9rem;
     }
 
-    /* BOTTOM NAV NATIVA SENZA DOPPIONI */
+    /* BOTTOM NAV NATIVA */
     .bottom-nav {
       position: fixed; bottom: 0; left: 0; right: 0; height: 62px;
       background: rgba(13, 14, 18, 0.95); backdrop-filter: blur(16px);
@@ -225,15 +230,15 @@
   <div class="auth-overlay" id="authOverlay">
     <div style="font-size:3.5rem; margin-bottom:10px;">📖</div>
     <div class="auth-title">Hobbyverse</div>
-    <div class="auth-subtitle">La tua collezione di fumetti, le tue letture online e il tracciamento delle tue spese in un'unica app.</div>
-    <button class="btn-auth-primary" onclick="enterApp('demo')">🚀 Prova come Ospite / Demo</button>
-    <button class="btn-auth-secondary" onclick="enterApp('login')">🔑 Accedi al tuo Account</button>
+    <div class="auth-subtitle">Scegli come accedere per iniziare la consultazione.</div>
+    <button class="btn-auth-primary" onclick="enterApp('owner')">🔑 Accedi come Proprietario</button>
+    <button class="btn-auth-secondary" onclick="enterApp('demo')">🚀 Prova come Ospite (Demo)</button>
   </div>
 
   <!-- HEADER NATIVO -->
   <div class="app-header">
     <div class="app-title">📖 Hobbyverse</div>
-    <div class="version-badge">V6.0 Universal</div>
+    <div class="version-badge" id="appVersionBadge">V6.1 Master</div>
   </div>
 
   <!-- BARRA RICERCA GLOBALE -->
@@ -243,16 +248,16 @@
 
   <!-- DASHBOARD STRISCIA COMPATTA -->
   <div class="hero-stats-bar">
-    <span>Posseduti: <b id="st-val1">115</b></span>
+    <span>Posseduti: <b id="st-val1">49</b></span>
     <span class="kpi-pill-btn" id="btn-hunt-mode" onclick="toggleHuntingMode()">🎯 Mancanti: <b id="st-val3">105</b></span>
-    <span>Spesa: <b style="color:var(--accent-gold);" id="st-val4">263,55 €</b></span>
+    <span>Spesa: <b style="color:var(--accent-gold);" id="st-val4">248,55 €</b></span>
   </div>
 
   <!-- SCHERMATA 1: HOME DASHBOARD -->
   <div id="viewHome" style="display:block; padding:16px;">
     <div class="expense-card" style="margin:0 0 12px 0;">
-      <div style="font-size:1.1rem; font-weight:800; margin-bottom:4px;">👋 Benvenuto in Hobbyverse!</div>
-      <div style="font-size:0.8rem; color:var(--text-muted);">Esplora il tuo inventario, gestisci le mancoliste per le fiere o registra i tuoi nuovi acquisti.</div>
+      <div style="font-size:1.1rem; font-weight:800; margin-bottom:4px;" id="welcomeHomeTitle">👋 Benvenuto in Hobbyverse!</div>
+      <div style="font-size:0.8rem; color:var(--text-muted);" id="welcomeHomeSubtitle">Esplora la collezione completa, gestisci le tue letture e traccia i costi.</div>
     </div>
     <div class="expense-card" style="margin:0 0 12px 0;">
       <div class="expense-header-title">⚡ Accesso Rapido</div>
@@ -265,13 +270,13 @@
 
   <!-- SCHERMATA 2: INVENTARIO (CARTACEI & ONLINE) -->
   <div id="viewInventory" style="display:none;">
-    <!-- SWITCHER SUB-TAB (CARTACEI / ONLINE) -->
+    <!-- SWITCHER SUB-TAB -->
     <div class="sub-tab-switcher">
       <div class="sub-btn active" id="btnSubPhysical" onclick="switchSubTab('physical')">📖 Cartacei</div>
       <div class="sub-btn" id="btnSubDigital" onclick="switchSubTab('digital')">📱 Online</div>
     </div>
 
-    <!-- PILLOLE EDITORI / CATEGORIE -->
+    <!-- PILLOLE EDITORI -->
     <div class="chips-scroll-container" id="chipsContainer">
       <div class="chip-item active" onclick="filterPublisher('ALL', this)">🌟 Tutti</div>
       <div class="chip-item" onclick="filterPublisher('DC', this)">🔵 DC Comics</div>
@@ -300,13 +305,24 @@
     </div>
   </div>
 
-  <!-- SCHERMATA 3: SPESE ANALYTICS -->
+  <!-- SCHERMATA 3: SPESE ANALYTICS PRO -->
   <div id="viewExpenses" style="display:none; padding-top:10px;">
+    <div class="kpi-grid" style="margin:0 16px 12px 16px;">
+      <div class="kpi-box">
+        <div class="kpi-lbl">Valore Stimato</div>
+        <div class="kpi-val" style="color:var(--accent-green);">410,00 €</div>
+      </div>
+      <div class="kpi-box">
+        <div class="kpi-lbl">Risparmio Netto</div>
+        <div class="kpi-val" style="color:var(--accent-gold);">-146,45 €</div>
+      </div>
+    </div>
+
     <div class="expense-card">
       <div class="expense-header-title">🛒 Spese per Canale d'Acquisto</div>
       <div class="channel-row"><b>Vinted / Online:</b> 128,33 € <span style="font-size:0.73rem; color:var(--text-muted);">(19 volumi)</span></div>
       <div class="channel-row"><b>Fumetteria:</b> 67,90 € <span style="font-size:0.73rem; color:var(--text-muted);">(19 fumetti)</span></div>
-      <div class="channel-row"><b>Lucca C&G 60 🔴:</b> 47,06 € <span style="font-size:0.73rem; color:var(--text-muted);">(14 albi)</span></div>
+      <div class="channel-row"><b>Lucca C&G 60 🔴:</b> 47,06 € <span style="font-size:0.73rem; color:var(--text-muted);">(14 albi, Panini a 3€ e 5€)</span></div>
       <div class="channel-row"><b>Regali:</b> 0,00 € <span style="font-size:0.73rem; color:var(--text-muted);">(9 fumetti compreso Tapum!)</span></div>
     </div>
 
@@ -322,25 +338,25 @@
   <div id="viewProfile" style="display:none; padding:16px;">
     <div class="expense-card" style="margin:0 0 12px 0; text-align:center;">
       <div style="font-size:2.5rem; margin-bottom:6px;">👤</div>
-      <div style="font-weight:bold; font-size:1.1rem;" id="userNameProfile">Utente Demo / Ospite</div>
-      <div style="font-size:0.75rem; color:var(--text-muted); margin-top:2px;">Profilo attivo</div>
+      <div style="font-weight:bold; font-size:1.1rem;" id="userNameProfile">Proprietario</div>
+      <div style="font-size:0.75rem; color:var(--text-muted); margin-top:2px;" id="userRoleProfile">Profilo Completo</div>
     </div>
 
     <div class="expense-card" style="margin:0;">
       <div class="expense-header-title">⚙️ Gestione Dati</div>
-      <button class="btn-auth-secondary" style="margin-top:8px;" onclick="exportDataJSON()">💾 Esporta Backup File (JSON)</button>
-      <button class="btn-auth-secondary" style="margin-top:8px; border-color:rgba(239, 68, 68, 0.4); color:var(--accent-red);" onclick="resetAppDemo()">🚪 Esci / Sconnetti</button>
+      <button class="btn-auth-secondary" style="margin-top:8px;" onclick="exportDataJSON()">💾 Esporta Backup (JSON)</button>
+      <button class="btn-auth-secondary" style="margin-top:8px; border-color:rgba(239, 68, 68, 0.4); color:var(--accent-red);" onclick="resetAppDemo()">🚪 Cambia Modalità Accesso</button>
     </div>
   </div>
 
-  <!-- FLOATING ACTION BUTTON (SUPER FORM) -->
+  <!-- FLOATING ACTION BUTTON -->
   <div class="fab-add" onclick="openAddModal()">➕</div>
 
-  <!-- BOTTOM SHEET MODAL SUPER FORM -->
+  <!-- BOTTOM SHEET MODAL -->
   <div class="modal-overlay" id="itemModal">
     <div class="bottom-sheet">
       <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:12px;">
-        <h3 id="m-title" style="font-size:1.05rem; color:#fff;">➕ Nuovo Acquisto / Fumetto</h3>
+        <h3 id="m-title" style="font-size:1.05rem; color:#fff;">➕ Nuovo Acquisto</h3>
         <span style="cursor:pointer; font-size:1.4rem; color:#94a3b8;" onclick="closeModal()">✖</span>
       </div>
       <div class="cover-box" id="m-cover">🛍️</div>
@@ -358,26 +374,16 @@
           <option value="Marvel">🔴 Marvel</option>
           <option value="Manga">🌸 Manga</option>
           <option value="PK">💜 PK Disney</option>
-          <option value="Altro">📚 Altro (es. Tapum! / Indie)</option>
+          <option value="Altro">📚 Altro (es. Tapum!)</option>
         </select>
 
-        <label style="font-size:0.72rem; color:var(--text-muted);">📐 Formato / Edizione:</label>
-        <select id="itemFormatSelect" class="edit-select-field">
-          <option value="Spillato">Spillato (Albo mensile)</option>
-          <option value="Paperback">Paperback / Brossurato (TPB)</option>
-          <option value="Hardcover">Hardcover (Cartonato)</option>
-          <option value="Pocket">Pocket / Tascabile</option>
-          <option value="Tankobon">Manga / Tankobon</option>
-        </select>
-
-        <label style="font-size:0.72rem; color:var(--text-muted);">🎪 Luogo / Canale d'Acquisto:</label>
+        <label style="font-size:0.72rem; color:var(--text-muted);">🎪 Canale d'Acquisto:</label>
         <select id="sourceTypeSelect" class="edit-select-field" onchange="toggleSourceFields()">
           <option value="fumetteria">🏪 Fumetteria</option>
           <option value="vinted">🛍️ Vinted / Mercatino Online</option>
           <option value="lucca">🎪 Lucca C&G / Fiera</option>
           <option value="regalo">🎁 Regalo (Costo 0 €)</option>
           <option value="gia_posseduto">📜 Già Posseduto (Storico)</option>
-          <option value="altro">🌐 Altro Canale</option>
         </select>
 
         <div id="singlePriceGroup">
@@ -394,18 +400,15 @@
           <input type="number" id="vintedFee" class="edit-input-field" placeholder="Es. 0.00" oninput="calcVintedTotal()">
         </div>
 
-        <label style="font-size:0.72rem; color:var(--accent-gold);">💰 Prezzo di Rivendita Stimato (€):</label>
-        <input type="number" id="editResaleInput" class="edit-input-field" placeholder="Es. 10.00" step="0.01">
-
-        <label style="font-size:0.72rem; color:var(--text-muted);">📝 Note Aggiuntive / Edizione:</label>
-        <input type="text" id="editNotesInput" class="edit-input-field" placeholder="Es. Variant Cover Fabio Celoni">
+        <label style="font-size:0.72rem; color:var(--text-muted);">📝 Note Aggiuntive:</label>
+        <input type="text" id="editNotesInput" class="edit-input-field" placeholder="Es. Variant Cover">
       </div>
 
       <button class="btn-save-modal" onclick="saveItemChanges()">💾 Salva Acquisto</button>
     </div>
   </div>
 
-  <!-- BOTTOM NAV NATIVA RIORGANIZZATA -->
+  <!-- BOTTOM NAV NATIVA -->
   <div class="bottom-nav">
     <div class="nav-btn active" id="navHome" onclick="switchBottomNav('home')"><span>🏠 Home</span></div>
     <div class="nav-btn" id="navInventory" onclick="switchBottomNav('inventory')"><span>📦 Inventario</span></div>
@@ -414,7 +417,8 @@
   </div>
 
   <script>
-    const PHYSICAL_RUNS = [
+    // DATABASE FISICO COMPLETO
+    const OWNER_PHYSICAL_RUNS = [
       { id: "spidey-corno", title: "L'Uomo Ragno (Editoriale Corno 1975)", publisher: "Marvel", total: 200, owned: [139], luccaItems: [139], authors: "Stan Lee / John Romita Sr.", prices: { 139: 5.00 } },
       { id: "spidey-panini-1990", title: "L'Uomo Ragno (Panini 1990)", publisher: "Marvel", total: 100, owned: [41, 52, 53], luccaItems: [41, 52, 53], authors: "Todd McFarlane", prices: { 41: 3.00, 52: 5.00, 53: 3.00 } },
       { id: "ult-spidey-2024", title: "Ultimate Spider-Man (2024)", publisher: "Marvel", total: 24, owned: [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15], luccaItems: [], authors: "Jonathan Hickman", prices: {} },
@@ -445,11 +449,35 @@
       { id: "death-note", title: "Death Note", publisher: "Manga", total: 13, owned: [1,2,4,7,12,13], luccaItems: [], authors: "Ohba / Obata", prices: {} }
     ];
 
-    const DIGITAL_RUNS = [
-      { id: "dig-abs-batman", title: "Absolute Batman (2024-)", publisher: "DC", category: "reading", total: 24, read: Array.from({length: 25}, (_, i) => i + 1), authors: "Scott Snyder" },
-      { id: "dig-abs-sup", title: "Absolute Superman (2024-)", publisher: "DC", category: "reading", total: 24, read: [1,2], authors: "Jason Aaron" },
-      { id: "dig-invincible", title: "Invincible (2003)", publisher: "Altro", category: "finished", isFavorite: true, total: 144, read: Array.from({length: 144}, (_, i) => i + 1), authors: "Robert Kirkman" }
+    // DATABASE DIGITALE COMPLETO (DAL CSV)
+    const OWNER_DIGITAL_RUNS = [
+      { id: "d1", title: "Absolute Batman (2024-)", publisher: "DC", category: "reading", total: 25, read: Array.from({length: 25}, (_, i) => i + 1), authors: "Scott Snyder" },
+      { id: "d2", title: "Absolute Superman (2024-)", publisher: "DC", category: "reading", total: 10, read: Array.from({length: 10}, (_, i) => i + 1), authors: "Jason Aaron" },
+      { id: "d3", title: "Absolute Wonder Woman (2024-)", publisher: "DC", category: "reading", total: 10, read: Array.from({length: 10}, (_, i) => i + 1), authors: "Kelly Thompson" },
+      { id: "d4", title: "Black Cat (2025-)", publisher: "Marvel", category: "reading", total: 5, read: [1,2,3,4,5], authors: "Marvel Comics" },
+      { id: "d5", title: "Zatanna (2026-)", publisher: "DC", category: "reading", total: 6, read: [1,2,3,4,5,6], authors: "DC Comics" },
+      { id: "d6", title: "The Amazing Spider-Man (2025-)", publisher: "Marvel", category: "reading", total: 12, read: Array.from({length: 12}, (_, i) => i + 1), authors: "Marvel Comics" },
+      { id: "d7", title: "Absolute Catwoman (2026-)", publisher: "DC", category: "reading", total: 6, read: [1, 2], authors: "DC Comics" },
+      { id: "d8", title: "Fantastic Four (2025-)", publisher: "Marvel", category: "reading", total: 8, read: Array.from({length: 8}, (_, i) => i + 1), authors: "Marvel Comics" },
+      { id: "d9", title: "Poison Ivy (2022-)", publisher: "DC", category: "reading", total: 49, read: [1], authors: "G. Willow Wilson" },
+      { id: "d10", title: "Ghost in the Shell (1995)", publisher: "Altro", category: "later", total: 1, read: [], authors: "Dark Horse" },
+      { id: "d11", title: "Batman: Under The Hood (2005)", publisher: "DC", category: "later", total: 1, read: [], authors: "Judd Winick" },
+      { id: "d12", title: "Invincible (2003)", publisher: "Altro", category: "finished", isFavorite: true, total: 144, read: Array.from({length: 144}, (_, i) => i + 1), authors: "Robert Kirkman" },
+      { id: "d13", title: "Ultimate Spider-Man (2000-2011)", publisher: "Marvel", category: "finished", total: 160, read: Array.from({length: 160}, (_, i) => i + 1), authors: "Brian M. Bendis" }
     ];
+
+    // DATABASE DEMO PER OSPITE
+    const DEMO_PHYSICAL_RUNS = [
+      { id: "spidey-demo", title: "Ultimate Spider-Man (2024)", publisher: "Marvel", total: 24, owned: [1,2,3,4,5], luccaItems: [], authors: "Jonathan Hickman", prices: {} },
+      { id: "batman-demo", title: "Absolute Batman", publisher: "DC", total: 18, owned: [1,2,3], luccaItems: [1,2], authors: "Scott Snyder", prices: {} }
+    ];
+
+    const DEMO_DIGITAL_RUNS = [
+      { id: "d-demo1", title: "Invincible (2003)", publisher: "Altro", category: "finished", isFavorite: true, total: 144, read: Array.from({length: 144}, (_, i) => i + 1), authors: "Robert Kirkman" }
+    ];
+
+    let currentPhysical = [];
+    let currentDigital = [];
 
     let activeSubTab = 'physical';
     let currentPublisherFilter = 'ALL';
@@ -460,9 +488,18 @@
 
     function enterApp(mode) {
       document.getElementById('authOverlay').style.display = 'none';
-      if(mode === 'demo') {
-        document.getElementById('userNameProfile').innerText = "Utente Demo / Ospite";
+      if (mode === 'owner') {
+        currentPhysical = OWNER_PHYSICAL_RUNS;
+        currentDigital = OWNER_DIGITAL_RUNS;
+        document.getElementById('userNameProfile').innerText = "Proprietario";
+        document.getElementById('userRoleProfile').innerText = "Profilo Completo";
+      } else {
+        currentPhysical = DEMO_PHYSICAL_RUNS;
+        currentDigital = DEMO_DIGITAL_RUNS;
+        document.getElementById('userNameProfile').innerText = "Utente Ospite (Demo)";
+        document.getElementById('userRoleProfile').innerText = "Modalità Test Sandbox";
       }
+      renderPhysicalRuns();
     }
 
     function switchBottomNav(tab) {
@@ -503,7 +540,7 @@
 
     function shareMissingWhatsApp() {
       let text = "📚 *LA MIA MANCOLISTA FUMETTI* 📚\n\n";
-      PHYSICAL_RUNS.forEach(run => {
+      currentPhysical.forEach(run => {
         let missing = [];
         for (let i = 1; i <= run.total; i++) {
           if (!run.owned.includes(i)) missing.push("#" + i);
@@ -511,20 +548,6 @@
         if (missing.length > 0) text += `• *${run.title}*: ${missing.join(", ")}\n`;
       });
       window.open(`https://api.whatsapp.com/send?text=${encodeURIComponent(text)}`, '_blank');
-    }
-
-    function toggleSourceFields() {
-      const src = document.getElementById('sourceTypeSelect').value;
-      document.getElementById('vintedGroup').style.display = (src === 'vinted') ? 'block' : 'none';
-      document.getElementById('singlePriceGroup').style.display = (src === 'vinted') ? 'none' : 'block';
-      if(src === 'regalo') document.getElementById('editPriceInput').value = '0.00';
-    }
-
-    function calcVintedTotal() {
-      const obj = parseFloat(document.getElementById('vintedObj').value) || 0;
-      const ship = parseFloat(document.getElementById('vintedShip').value) || 0;
-      const fee = parseFloat(document.getElementById('vintedFee').value) || 0;
-      document.getElementById('editPriceInput').value = (obj + ship + fee).toFixed(2);
     }
 
     function filterPublisher(pub, el) {
@@ -539,7 +562,7 @@
       const container = document.getElementById('physicalRunsContainer');
       container.innerHTML = '';
 
-      const filtered = PHYSICAL_RUNS.filter(r => {
+      const filtered = currentPhysical.filter(r => {
         const matchesPub = (currentPublisherFilter === 'ALL' || r.publisher === currentPublisherFilter);
         const matchesSearch = (searchQuery === '' || r.title.toLowerCase().includes(searchQuery) || r.authors.toLowerCase().includes(searchQuery));
         const matchesHunt = (!isHuntingMode || r.owned.length < r.total);
@@ -575,7 +598,7 @@
     function renderDigitalRuns() {
       const container = document.getElementById('digitalRunsContainer');
       container.innerHTML = '';
-      const filtered = DIGITAL_RUNS.filter(r => r.category === currentDigitalCategory && (currentPublisherFilter === 'ALL' || r.publisher === currentPublisherFilter) && (searchQuery === '' || r.title.toLowerCase().includes(searchQuery)));
+      const filtered = currentDigital.filter(r => r.category === currentDigitalCategory && (currentPublisherFilter === 'ALL' || r.publisher === currentPublisherFilter) && (searchQuery === '' || r.title.toLowerCase().includes(searchQuery)));
 
       filtered.forEach(run => {
         const readCount = run.read.length;
@@ -610,7 +633,7 @@
       const isOpen = body.classList.contains('open');
 
       if (!isOpen && grid.children.length === 0) {
-        const run = (mode === 'physical') ? PHYSICAL_RUNS.find(r => r.id === runId) : DIGITAL_RUNS.find(r => r.id === runId);
+        const run = (mode === 'physical') ? currentPhysical.find(r => r.id === runId) : currentDigital.find(r => r.id === runId);
         let tilesHtml = '';
         for (let i = 1; i <= run.total; i++) {
           if (mode === 'physical') {
@@ -669,14 +692,14 @@
     }
 
     function openAddModal() {
-      document.getElementById('m-title').innerText = "➕ Nuovo Acquisto / Fumetto";
+      document.getElementById('m-title').innerText = "➕ Nuovo Acquisto";
       document.getElementById('itemModal').classList.add('open');
     }
 
     function closeModal() { document.getElementById('itemModal').classList.remove('open'); }
 
     function exportDataJSON() {
-      const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(PHYSICAL_RUNS));
+      const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(currentPhysical));
       const downloadAnchor = document.createElement('a');
       downloadAnchor.setAttribute("href", dataStr);
       downloadAnchor.setAttribute("download", "hobbyverse_backup.json");
