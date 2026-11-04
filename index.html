@@ -44,7 +44,7 @@
       background: rgba(255,255,255,0.05); color: #fff; font-size: 0.9rem; cursor: pointer;
     }
 
-    /* HEADER NATIVO CON BADGE NUMERICO VERSIOINE */
+    /* HEADER NATIVO */
     .app-header {
       position: sticky; top: 0; z-index: 50;
       background: rgba(13, 14, 18, 0.92); backdrop-filter: blur(16px);
@@ -182,7 +182,7 @@
     }
     .fab-add:active { transform: scale(0.9); }
 
-    /* BOTTOM SHEET MODAL SMART */
+    /* BOTTOM SHEET MODAL */
     .modal-overlay {
       display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.8);
       backdrop-filter: blur(8px); z-index: 100; align-items: flex-end;
@@ -196,11 +196,17 @@
     }
     @keyframes slideUp { from { transform: translateY(100%); } to { transform: translateY(0); } }
 
-    .cover-box {
-      width: 120px; height: 175px; border-radius: 12px; background: #262933; margin: 0 auto 12px auto;
-      display: flex; align-items: center; justify-content: center; font-size: 0.9rem; color: var(--text-muted);
-      box-shadow: 0 8px 24px rgba(0,0,0,0.6); background-size: cover; background-position: center; border: 1px solid var(--card-border);
+    .cover-box-large {
+      width: 140px; height: 210px; border-radius: 14px; background: #262933; margin: 0 auto 16px auto;
+      display: flex; align-items: center; justify-content: center; font-size: 0.85rem; color: var(--text-muted);
+      box-shadow: 0 10px 30px rgba(0,0,0,0.7); background-size: cover; background-position: center; border: 1px solid var(--card-border);
     }
+
+    .info-row {
+      display: flex; justify-content: space-between; padding: 10px 0; border-bottom: 1px solid rgba(255,255,255,0.06); font-size: 0.85rem;
+    }
+    .info-label { color: var(--text-muted); font-weight: 600; }
+    .info-val { color: #fff; font-weight: 700; text-align: right; }
 
     .edit-input-field, .edit-select-field {
       width: 100%; padding: 10px; background: #12141a; border: 1px solid var(--card-border);
@@ -209,7 +215,7 @@
 
     .btn-save-modal {
       width: 100%; padding: 12px; border-radius: 10px; font-weight: bold; border: none;
-      background: var(--accent-gold); color: #000; cursor: pointer; margin-top: 10px; font-size: 0.9rem;
+      background: var(--accent-gold); color: #000; cursor: pointer; margin-top: 14px; font-size: 0.9rem;
     }
 
     /* BOTTOM NAV NATIVA CON ICONE SVG STILIZZATE */
@@ -239,7 +245,7 @@
   <!-- HEADER NATIVO CON BADGE VERSIOINE PULITO -->
   <div class="app-header">
     <div class="app-title">📖 Hobbyverse</div>
-    <div class="version-badge">v6.2</div>
+    <div class="version-badge">v6.3</div>
   </div>
 
   <!-- BARRA RICERCA GLOBALE -->
@@ -353,59 +359,63 @@
   <!-- FLOATING ACTION BUTTON -->
   <div class="fab-add" onclick="openAddModal()">➕</div>
 
-  <!-- BOTTOM SHEET MODAL -->
+  <!-- BOTTOM SHEET MODAL (SCHEDA DETTAGLIO ALBO & FORM ACQUISTO SEPARATI) -->
   <div class="modal-overlay" id="itemModal">
     <div class="bottom-sheet">
-      <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:12px;">
-        <h3 id="m-title" style="font-size:1.05rem; color:#fff;">Dettaglio Volume</h3>
+      <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:14px;">
+        <h3 id="m-title" style="font-size:1.1rem; color:#fff;">Dettaglio Volume</h3>
         <span style="cursor:pointer; font-size:1.4rem; color:#94a3b8;" onclick="closeModal()">✖</span>
       </div>
-      <div class="cover-box" id="m-cover">Copertina</div>
-      
-      <div style="background:#0d0e12; padding:12px; border-radius:12px; border:1px solid var(--card-border);">
-        <label style="font-size:0.72rem; color:var(--text-muted);">📦 Tipologia:</label>
-        <select id="itemTypeSelect" class="edit-select-field">
-          <option value="physical">📖 Cartaceo</option>
-          <option value="digital">📱 Online / Digitale</option>
-        </select>
 
-        <label style="font-size:0.72rem; color:var(--text-muted);">🏷️ Editore / Categoria:</label>
-        <select id="itemCategorySelect" class="edit-select-field">
-          <option value="DC">🔵 DC Comics</option>
-          <option value="Marvel">🔴 Marvel</option>
-          <option value="Manga">🌸 Manga</option>
-          <option value="PK">💜 PK Disney</option>
-          <option value="Altro">📚 Altro (es. Tapum!)</option>
-        </select>
+      <div class="cover-box-large" id="m-cover">Copertina</div>
 
-        <label style="font-size:0.72rem; color:var(--text-muted);">🎪 Canale d'Acquisto:</label>
-        <select id="sourceTypeSelect" class="edit-select-field" onchange="toggleSourceFields()">
-          <option value="fumetteria">🏪 Fumetteria</option>
-          <option value="vinted">🛍️ Vinted / Mercatino Online</option>
-          <option value="lucca">🎪 Lucca C&G / Fiera</option>
-          <option value="regalo">🎁 Regalo (Costo 0 €)</option>
-          <option value="gia_posseduto">📜 Già Posseduto (Storico)</option>
-        </select>
-
-        <div id="singlePriceGroup">
-          <label style="font-size:0.72rem; color:var(--text-muted);">✏️ Prezzo Pagato (€):</label>
-          <input type="number" id="editPriceInput" class="edit-input-field" value="0.00" step="0.01">
+      <!-- VISTA 1: DETTAGLIO SCHEDA FUMETTO ESSENZIALE -->
+      <div id="modalViewDetail">
+        <div style="background:#0d0e12; padding:14px; border-radius:14px; border:1px solid var(--card-border);">
+          <div class="info-row"><span class="info-label">🏛️ Casa Editrice:</span><span class="info-val" id="infoPublisher">-</span></div>
+          <div class="info-row"><span class="info-label">✍️ Autori:</span><span class="info-val" id="infoAuthors">-</span></div>
+          <div class="info-row"><span class="info-label">📅 Anno / Edizione:</span><span class="info-val" id="infoYear">-</span></div>
+          <div class="info-row"><span class="info-label">STATUS Possesso / Lettura:</span><span class="info-val" id="infoStatus" style="color:var(--accent-green);">-</span></div>
+          <div class="info-row" id="infoPriceRow"><span class="info-label">💰 Prezzo Pagato:</span><span class="info-val" id="infoPrice" style="color:var(--accent-gold);">-</span></div>
         </div>
-
-        <div id="vintedGroup" style="display:none; background:#16181e; padding:8px; border-radius:8px; border:1px solid var(--card-border); margin-bottom:10px;">
-          <label style="font-size:0.7rem; color:var(--accent-gold);">Prezzo Oggetto (€):</label>
-          <input type="number" id="vintedObj" class="edit-input-field" placeholder="Es. 15.00" oninput="calcVintedTotal()">
-          <label style="font-size:0.7rem; color:var(--accent-gold);">Spedizione (€):</label>
-          <input type="number" id="vintedShip" class="edit-input-field" placeholder="Es. 0.00" oninput="calcVintedTotal()">
-          <label style="font-size:0.7rem; color:var(--accent-gold);">Commissioni (€):</label>
-          <input type="number" id="vintedFee" class="edit-input-field" placeholder="Es. 0.00" oninput="calcVintedTotal()">
-        </div>
-
-        <label style="font-size:0.72rem; color:var(--text-muted);">📝 Note Aggiuntive:</label>
-        <input type="text" id="editNotesInput" class="edit-input-field" placeholder="Es. Variant Cover">
+        <button class="btn-save-modal" onclick="closeModal()">Chiudi Scheda</button>
       </div>
 
-      <button class="btn-save-modal" onclick="saveItemChanges()">💾 Salva Acquisto</button>
+      <!-- VISTA 2: FORM NUOVO ACQUISTO -->
+      <div id="modalViewForm" style="display:none;">
+        <div style="background:#0d0e12; padding:12px; border-radius:12px; border:1px solid var(--card-border);">
+          <label style="font-size:0.72rem; color:var(--text-muted);">📦 Tipologia:</label>
+          <select id="itemTypeSelect" class="edit-select-field">
+            <option value="physical">📖 Cartaceo</option>
+            <option value="digital">📱 Online / Digitale</option>
+          </select>
+
+          <label style="font-size:0.72rem; color:var(--text-muted);">🏷️ Editore / Categoria:</label>
+          <select id="itemCategorySelect" class="edit-select-field">
+            <option value="DC">🔵 DC Comics</option>
+            <option value="Marvel">🔴 Marvel</option>
+            <option value="Manga">🌸 Manga</option>
+            <option value="PK">💜 PK Disney</option>
+            <option value="Altro">📚 Altro</option>
+          </select>
+
+          <label style="font-size:0.72rem; color:var(--text-muted);">🎪 Canale d'Acquisto:</label>
+          <select id="sourceTypeSelect" class="edit-select-field">
+            <option value="fumetteria">🏪 Fumetteria</option>
+            <option value="vinted">🛍️ Vinted / Mercatino Online</option>
+            <option value="lucca">🎪 Lucca C&G / Fiera</option>
+            <option value="regalo">🎁 Regalo (Costo 0 €)</option>
+          </select>
+
+          <label style="font-size:0.72rem; color:var(--text-muted);">✏️ Prezzo Pagato (€):</label>
+          <input type="number" id="editPriceInput" class="edit-input-field" value="0.00" step="0.01">
+
+          <label style="font-size:0.72rem; color:var(--text-muted);">📝 Note Aggiuntive:</label>
+          <input type="text" id="editNotesInput" class="edit-input-field" placeholder="Es. Variant Cover">
+        </div>
+
+        <button class="btn-save-modal" onclick="closeModal()">💾 Salva Acquisto</button>
+      </div>
     </div>
   </div>
 
@@ -430,7 +440,7 @@
   </div>
 
   <script>
-    // MAPPA CUSTOM PER LE COPERTINE LOCALI (FORMATO: uomo ragno numero-editore.png)
+    // MAPPA COPERTINE LOCALI SENZA SPAZI ANOMALI
     const CUSTOM_COVERS = {
       "spidey-corno-139": "img/uomo ragno 139-corno.png",
       "spidey-panini-1990-41": "img/uomo ragno 41-panini.png",
@@ -439,65 +449,55 @@
     };
 
     const OWNER_PHYSICAL_RUNS = [
-      { id: "spidey-corno", title: "L'Uomo Ragno (Editoriale Corno 1975)", publisher: "Marvel", total: 200, owned: [139], luccaItems: [139], authors: "Stan Lee / John Romita Sr.", prices: { 139: 5.00 } },
-      { id: "spidey-panini-1990", title: "L'Uomo Ragno (Panini 1990)", publisher: "Marvel", total: 100, owned: [41, 52, 53], luccaItems: [41, 52, 53], authors: "Todd McFarlane", prices: { 41: 3.00, 52: 5.00, 53: 3.00 } },
-      { id: "ult-spidey-2024", title: "Ultimate Spider-Man (2024)", publisher: "Marvel", total: 24, owned: [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15], luccaItems: [], authors: "Jonathan Hickman", prices: {} },
-      { id: "spidey-blue", title: "Spider-Man: Blue", publisher: "Marvel", total: 1, owned: [1], luccaItems: [], authors: "Jeph Loeb / Tim Sale", prices: { 1: 8.24 } },
-      { id: "spidey-verse", title: "Spider-Man: Spider-Verse", publisher: "Marvel", total: 1, owned: [1], luccaItems: [], authors: "Dan Slott", prices: { 1: 9.90 } },
-      { id: "x-men-2000", title: "Gli Incredibili X-Men #2", publisher: "Marvel", total: 1, owned: [1], luccaItems: [], authors: "Marvel Comics", prices: { 1: 0.00 } },
-      { id: "thor-2002", title: "Il Mitico Thor #34", publisher: "Marvel", total: 1, owned: [1], luccaItems: [], authors: "Marvel Comics", prices: { 1: 0.00 } },
+      { id: "spidey-corno", title: "L'Uomo Ragno", publisher: "Editoriale Corno", year: "1975", total: 200, owned: [139], luccaItems: [139], authors: "Stan Lee / John Romita Sr.", prices: { 139: 5.00 } },
+      { id: "spidey-panini-1990", title: "L'Uomo Ragno", publisher: "Panini Marvel Italia", year: "1990", total: 100, owned: [41, 52, 53], luccaItems: [41, 52, 53], authors: "Todd McFarlane", prices: { 41: 3.00, 52: 5.00, 53: 3.00 } },
+      { id: "ult-spidey-2024", title: "Ultimate Spider-Man", publisher: "Panini Marvel Italia", year: "2024", total: 24, owned: [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15], luccaItems: [], authors: "Jonathan Hickman", prices: {} },
+      { id: "spidey-blue", title: "Spider-Man: Blue", publisher: "Marvel", year: "2002", total: 1, owned: [1], luccaItems: [], authors: "Jeph Loeb / Tim Sale", prices: { 1: 8.24 } },
+      { id: "spidey-verse", title: "Spider-Man: Spider-Verse", publisher: "Marvel", year: "2014", total: 1, owned: [1], luccaItems: [], authors: "Dan Slott", prices: { 1: 9.90 } },
+      { id: "x-men-2000", title: "Gli Incredibili X-Men #2", publisher: "Marvel", year: "2000", total: 1, owned: [1], luccaItems: [], authors: "Marvel Comics", prices: { 1: 0.00 } },
+      { id: "thor-2002", title: "Il Mitico Thor #34", publisher: "Marvel", year: "2002", total: 1, owned: [1], luccaItems: [], authors: "Marvel Comics", prices: { 1: 0.00 } },
 
-      { id: "abs-batman", title: "Absolute Batman", publisher: "DC", total: 18, owned: [1,2,3,15,16,17,18], luccaItems: [1,2,3,17,18], authors: "Scott Snyder", prices: {} },
-      { id: "abs-sup", title: "Absolute Superman", publisher: "DC", total: 18, owned: [1], luccaItems: [], authors: "Jason Aaron", prices: {} },
-      { id: "abs-ww", title: "Absolute Wonder Woman", publisher: "DC", total: 17, owned: [1,2,3,4,5,6,7,8], luccaItems: [], authors: "Kelly Thompson", prices: {} },
-      { id: "batman-grandi-storie", title: "Batman: Le grandi storie", publisher: "DC", total: 1, owned: [1], luccaItems: [], authors: "DC Deluxe", prices: { 1: 15.00 } },
-      { id: "batman-due-mondi", title: "Batman dei due mondi", publisher: "DC", total: 1, owned: [1], luccaItems: [], authors: "Fraction / Snyder", prices: { 1: 1.00 } },
-      { id: "batman-gotham-knights", title: "Batman: Gotham Knights – Città dorata", publisher: "DC", total: 1, owned: [1], luccaItems: [], authors: "Evan Narcisse", prices: { 1: 0.00 } },
-      { id: "batman-dkr", title: "Batman: Il ritorno del Cavaliere Oscuro", publisher: "DC", total: 1, owned: [1], luccaItems: [], authors: "Frank Miller", prices: { 1: 7.38 } },
-      { id: "batman-maledizione", title: "Batman: La maledizione del Cavaliere Bianco", publisher: "DC", total: 1, owned: [1], luccaItems: [], authors: "Sean Murphy", prices: { 1: 8.24 } },
-      { id: "batman-ride", title: "Il Batman che ride", publisher: "DC", total: 1, owned: [1], luccaItems: [], authors: "Scott Snyder / Jock", prices: { 1: 8.24 } },
-      { id: "flashpoint", title: "Flashpoint", publisher: "DC", total: 1, owned: [1], luccaItems: [], authors: "Geoff Johns", prices: { 1: 7.36 } },
-      { id: "kingdom-come", title: "Kingdom Come", publisher: "DC", total: 1, owned: [1], luccaItems: [], authors: "Mark Waid / Alex Ross", prices: { 1: 7.56 } },
-      { id: "supergirl-domani", title: "Supergirl: La donna del domani", publisher: "DC", total: 1, owned: [1], luccaItems: [], authors: "Tom King / Evely", prices: { 1: 8.24 } },
-      { id: "superman-red-son", title: "Superman: Red Son", publisher: "DC", total: 1, owned: [1], luccaItems: [], authors: "Mark Millar", prices: { 1: 7.57 } },
-      { id: "jsa-classified", title: "JSA Classified", publisher: "DC", total: 7, owned: [2, 4, 5, 6, 7], luccaItems: [], authors: "DC Comics", prices: {} },
-      { id: "v-vendetta", title: "V per Vendetta", publisher: "DC", total: 1, owned: [1], luccaItems: [], authors: "Alan Moore", prices: { 1: 7.56 } },
+      { id: "abs-batman", title: "Absolute Batman", publisher: "DC Comics / Panini", year: "2024", total: 18, owned: [1,2,3,15,16,17,18], luccaItems: [1,2,3,17,18], authors: "Scott Snyder", prices: {} },
+      { id: "abs-sup", title: "Absolute Superman", publisher: "DC Comics / Panini", year: "2024", total: 18, owned: [1], luccaItems: [], authors: "Jason Aaron", prices: {} },
+      { id: "abs-ww", title: "Absolute Wonder Woman", publisher: "DC Comics / Panini", year: "2024", total: 17, owned: [1,2,3,4,5,6,7,8], luccaItems: [], authors: "Kelly Thompson", prices: {} },
+      { id: "batman-grandi-storie", title: "Batman: Le grandi storie", publisher: "DC Deluxe", year: "2018", total: 1, owned: [1], luccaItems: [], authors: "DC Deluxe", prices: { 1: 15.00 } },
+      { id: "batman-due-mondi", title: "Batman dei due mondi", publisher: "DC Comics", year: "2021", total: 1, owned: [1], luccaItems: [], authors: "Fraction / Snyder", prices: { 1: 1.00 } },
+      { id: "batman-gotham-knights", title: "Batman: Gotham Knights – Città dorata", publisher: "DC Comics", year: "2022", total: 1, owned: [1], luccaItems: [], authors: "Evan Narcisse", prices: { 1: 0.00 } },
+      { id: "batman-dkr", title: "Batman: Il ritorno del Cavaliere Oscuro", publisher: "DC Comics", year: "1986", total: 1, owned: [1], luccaItems: [], authors: "Frank Miller", prices: { 1: 7.38 } },
+      { id: "batman-maledizione", title: "Batman: La maledizione del Cavaliere Bianco", publisher: "DC Comics", year: "2020", total: 1, owned: [1], luccaItems: [], authors: "Sean Murphy", prices: { 1: 8.24 } },
+      { id: "batman-ride", title: "Il Batman che ride", publisher: "DC Comics", year: "2019", total: 1, owned: [1], luccaItems: [], authors: "Scott Snyder / Jock", prices: { 1: 8.24 } },
+      { id: "flashpoint", title: "Flashpoint", publisher: "DC Comics", year: "2011", total: 1, owned: [1], luccaItems: [], authors: "Geoff Johns", prices: { 1: 7.36 } },
+      { id: "kingdom-come", title: "Kingdom Come", publisher: "DC Comics", year: "1996", total: 1, owned: [1], luccaItems: [], authors: "Mark Waid / Alex Ross", prices: { 1: 7.56 } },
+      { id: "supergirl-domani", title: "Supergirl: La donna del domani", publisher: "DC Comics", year: "2022", total: 1, owned: [1], luccaItems: [], authors: "Tom King / Evely", prices: { 1: 8.24 } },
+      { id: "superman-red-son", title: "Superman: Red Son", publisher: "DC Comics", year: "2003", total: 1, owned: [1], luccaItems: [], authors: "Mark Millar", prices: { 1: 7.57 } },
+      { id: "jsa-classified", title: "JSA Classified", publisher: "DC Comics", year: "2005", total: 7, owned: [2, 4, 5, 6, 7], luccaItems: [], authors: "DC Comics", prices: {} },
+      { id: "v-vendetta", title: "V per Vendetta", publisher: "DC Comics", year: "1988", total: 1, owned: [1], luccaItems: [], authors: "Alan Moore", prices: { 1: 7.56 } },
 
-      { id: "pk2", title: "PK2 - Ducklair (2001 + Speciale)", publisher: "PK", total: 19, owned: [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19], luccaItems: [], authors: "Faraci / Artibani", prices: {} },
-      { id: "pkeda", title: "PKEDA (Paperinik Elite)", publisher: "PK", total: 10, owned: [2, 3], luccaItems: [2, 3], variants: [2], authors: "Disney / Celoni", prices: {} },
-      { id: "paperinik-il-mito", title: "Paperinik - Il Mito", publisher: "PK", total: 50, owned: [1,2,3,4,5,8,9,10,13,16], luccaItems: [], authors: "Gazzetta dello Sport", prices: {} },
-      { id: "tapum-ortolani", title: "Tapum! (Storie di guerra)", publisher: "Altro", total: 1, owned: [1], luccaItems: [], authors: "Leo Ortolani", prices: { 1: 0.00 } },
-      { id: "death-note", title: "Death Note", publisher: "Manga", total: 13, owned: [1,2,4,7,12,13], luccaItems: [], authors: "Ohba / Obata", prices: {} }
+      { id: "pk2", title: "PK2 - Ducklair", publisher: "Disney Italia", year: "2001", total: 19, owned: [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19], luccaItems: [], authors: "Faraci / Artibani", prices: {} },
+      { id: "pkeda", title: "PKEDA (Paperinik Elite)", publisher: "Panini Disney", year: "2024", total: 10, owned: [2, 3], luccaItems: [2, 3], variants: [2], authors: "Disney / Celoni", prices: {} },
+      { id: "paperinik-il-mito", title: "Paperinik - Il Mito", publisher: "Gazzetta dello Sport", year: "2012", total: 50, owned: [1,2,3,4,5,8,9,10,13,16], luccaItems: [], authors: "Disney Italia", prices: {} },
+      { id: "tapum-ortolani", title: "Tapum! (Storie di guerra)", publisher: "Feltrinelli Comics", year: "2024", total: 1, owned: [1], luccaItems: [], authors: "Leo Ortolani", prices: { 1: 0.00 } },
+      { id: "death-note", title: "Death Note", publisher: "Planet Manga", year: "2006", total: 13, owned: [1,2,4,7,12,13], luccaItems: [], authors: "Ohba / Obata", prices: {} }
     ];
 
     const OWNER_DIGITAL_RUNS = [
-      { id: "d1", title: "Absolute Batman (2024-)", publisher: "DC", category: "reading", total: 25, read: Array.from({length: 25}, (_, i) => i + 1), authors: "Scott Snyder" },
-      { id: "d2", title: "Absolute Superman (2024-)", publisher: "DC", category: "reading", total: 10, read: Array.from({length: 10}, (_, i) => i + 1), authors: "Jason Aaron" },
-      { id: "d3", title: "Absolute Wonder Woman (2024-)", publisher: "DC", category: "reading", total: 10, read: Array.from({length: 10}, (_, i) => i + 1), authors: "Kelly Thompson" },
-      { id: "d4", title: "Black Cat (2025-)", publisher: "Marvel", category: "reading", total: 5, read: [1,2,3,4,5], authors: "Marvel Comics" },
-      { id: "d5", title: "Zatanna (2026-)", publisher: "DC", category: "reading", total: 6, read: [1,2,3,4,5,6], authors: "DC Comics" },
-      { id: "d6", title: "The Amazing Spider-Man (2025-)", publisher: "Marvel", category: "reading", total: 12, read: Array.from({length: 12}, (_, i) => i + 1), authors: "Marvel Comics" },
-      { id: "d7", title: "Absolute Catwoman (2026-)", publisher: "DC", category: "reading", total: 6, read: [1, 2], authors: "DC Comics" },
-      { id: "d8", title: "Fantastic Four (2025-)", publisher: "Marvel", category: "reading", total: 8, read: Array.from({length: 8}, (_, i) => i + 1), authors: "Marvel Comics" },
-      { id: "d9", title: "Poison Ivy (2022-)", publisher: "DC", category: "reading", total: 49, read: [1], authors: "G. Willow Wilson" },
-      { id: "d10", title: "Ghost in the Shell (1995)", publisher: "Altro", category: "later", total: 1, read: [], authors: "Dark Horse" },
-      { id: "d11", title: "Batman: Under The Hood (2005)", publisher: "DC", category: "later", total: 1, read: [], authors: "Judd Winick" },
-      { id: "d12", title: "Invincible (2003)", publisher: "Altro", category: "finished", isFavorite: true, total: 144, read: Array.from({length: 144}, (_, i) => i + 1), authors: "Robert Kirkman" },
-      { id: "d13", title: "Ultimate Spider-Man (2000-2011)", publisher: "Marvel", category: "finished", total: 160, read: Array.from({length: 160}, (_, i) => i + 1), authors: "Brian M. Bendis" }
-    ];
-
-    const DEMO_PHYSICAL_RUNS = [
-      { id: "spidey-demo", title: "Ultimate Spider-Man (2024)", publisher: "Marvel", total: 24, owned: [1,2,3,4,5], luccaItems: [], authors: "Jonathan Hickman", prices: {} },
-      { id: "batman-demo", title: "Absolute Batman", publisher: "DC", total: 18, owned: [1,2,3], luccaItems: [1,2], authors: "Scott Snyder", prices: {} }
-    ];
-
-    const DEMO_DIGITAL_RUNS = [
-      { id: "d-demo1", title: "Invincible (2003)", publisher: "Altro", category: "finished", isFavorite: true, total: 144, read: Array.from({length: 144}, (_, i) => i + 1), authors: "Robert Kirkman" }
+      { id: "d1", title: "Absolute Batman", publisher: "DC Comics", year: "2024", category: "reading", total: 25, read: Array.from({length: 25}, (_, i) => i + 1), authors: "Scott Snyder" },
+      { id: "d2", title: "Absolute Superman", publisher: "DC Comics", year: "2024", category: "reading", total: 10, read: Array.from({length: 10}, (_, i) => i + 1), authors: "Jason Aaron" },
+      { id: "d3", title: "Absolute Wonder Woman", publisher: "DC Comics", year: "2024", category: "reading", total: 10, read: Array.from({length: 10}, (_, i) => i + 1), authors: "Kelly Thompson" },
+      { id: "d4", title: "Black Cat", publisher: "Marvel", year: "2025", category: "reading", total: 5, read: [1,2,3,4,5], authors: "Marvel Comics" },
+      { id: "d5", title: "Zatanna", publisher: "DC Comics", year: "2026", category: "reading", total: 6, read: [1,2,3,4,5,6], authors: "DC Comics" },
+      { id: "d6", title: "The Amazing Spider-Man", publisher: "Marvel", year: "2025", category: "reading", total: 12, read: Array.from({length: 12}, (_, i) => i + 1), authors: "Marvel Comics" },
+      { id: "d7", title: "Absolute Catwoman", publisher: "DC Comics", year: "2026", category: "reading", total: 6, read: [1, 2], authors: "DC Comics" },
+      { id: "d8", title: "Fantastic Four", publisher: "Marvel", year: "2025", category: "reading", total: 8, read: Array.from({length: 8}, (_, i) => i + 1), authors: "Marvel Comics" },
+      { id: "d9", title: "Poison Ivy", publisher: "DC Comics", year: "2022", category: "reading", total: 49, read: [1], authors: "G. Willow Wilson" },
+      { id: "d10", title: "Ghost in the Shell", publisher: "Dark Horse", year: "1995", category: "later", total: 1, read: [], authors: "Shirow Masamune" },
+      { id: "d11", title: "Batman: Under The Hood", publisher: "DC Comics", year: "2005", category: "later", total: 1, read: [], authors: "Judd Winick" },
+      { id: "d12", title: "Invincible", publisher: "Image Comics", year: "2003", category: "finished", isFavorite: true, total: 144, read: Array.from({length: 144}, (_, i) => i + 1), authors: "Robert Kirkman" },
+      { id: "d13", title: "Ultimate Spider-Man", publisher: "Marvel Comics", year: "2000", category: "finished", total: 160, read: Array.from({length: 160}, (_, i) => i + 1), authors: "Brian M. Bendis" }
     ];
 
     let currentPhysical = [];
     let currentDigital = [];
-
     let activeSubTab = 'physical';
     let currentPublisherFilter = 'ALL';
     let currentDigitalCategory = 'reading';
@@ -513,8 +513,8 @@
         document.getElementById('userNameProfile').innerText = "Proprietario";
         document.getElementById('userRoleProfile').innerText = "Profilo Completo";
       } else {
-        currentPhysical = DEMO_PHYSICAL_RUNS;
-        currentDigital = DEMO_DIGITAL_RUNS;
+        currentPhysical = OWNER_PHYSICAL_RUNS.slice(0, 2);
+        currentDigital = OWNER_DIGITAL_RUNS.slice(0, 2);
         document.getElementById('userNameProfile').innerText = "Utente Ospite (Demo)";
         document.getElementById('userRoleProfile').innerText = "Modalità Test Sandbox";
       }
@@ -586,7 +586,7 @@
       container.innerHTML = '';
 
       const filtered = currentPhysical.filter(r => {
-        const matchesPub = (currentPublisherFilter === 'ALL' || r.publisher === currentPublisherFilter);
+        const matchesPub = (currentPublisherFilter === 'ALL' || r.publisher.includes(currentPublisherFilter) || (currentPublisherFilter === 'PK' && r.publisher.includes('Disney')));
         const matchesSearch = (searchQuery === '' || r.title.toLowerCase().includes(searchQuery) || r.authors.toLowerCase().includes(searchQuery));
         const matchesHunt = (!isHuntingMode || r.owned.length < r.total);
         return matchesPub && matchesSearch && matchesHunt;
@@ -602,7 +602,7 @@
           <div class="run-header-row" onclick="toggleAccordion('${run.id}', 'physical')">
             <div>
               <div class="run-title">${run.title}</div>
-              <div class="run-meta">${run.publisher} • ${run.authors}</div>
+              <div class="run-meta">${run.publisher} (${run.year}) • ${run.authors}</div>
             </div>
             <div class="toggle-arrow" id="arrow-${run.id}">▼</div>
           </div>
@@ -625,7 +625,7 @@
 
       const filtered = currentDigital.filter(r => {
         const matchesCat = (r.category === currentDigitalCategory);
-        const matchesPub = (currentPublisherFilter === 'ALL' || r.publisher === currentPublisherFilter);
+        const matchesPub = (currentPublisherFilter === 'ALL' || r.publisher.includes(currentPublisherFilter));
         const matchesSearch = (searchQuery === '' || r.title.toLowerCase().includes(searchQuery) || r.authors.toLowerCase().includes(searchQuery));
         return matchesCat && matchesPub && matchesSearch;
       });
@@ -640,7 +640,7 @@
           <div class="run-header-row" onclick="toggleAccordion('${run.id}', 'digital')">
             <div>
               <div class="run-title">${run.title} ${run.isFavorite ? '⭐' : ''}</div>
-              <div class="run-meta">${run.publisher} • ${run.authors}</div>
+              <div class="run-meta">${run.publisher} (${run.year}) • ${run.authors}</div>
             </div>
             <div class="toggle-arrow" id="arrow-${run.id}">▼</div>
           </div>
@@ -690,10 +690,32 @@
       arrow.classList.toggle('open', !isOpen);
     }
 
+    /* APERTURA SCHEDA INFORMAZIONI ALBO */
     function openItemModal(runId, num, mode) {
       const run = (mode === 'physical') ? currentPhysical.find(r => r.id === runId) : currentDigital.find(r => r.id === runId);
-      document.getElementById('m-title').innerText = `${run.title} #${num}`;
       
+      document.getElementById('modalViewDetail').style.display = 'block';
+      document.getElementById('modalViewForm').style.display = 'none';
+
+      document.getElementById('m-title').innerText = `${run.title} #${num}`;
+      document.getElementById('infoPublisher').innerText = run.publisher;
+      document.getElementById('infoAuthors').innerText = run.authors;
+      document.getElementById('infoYear').innerText = run.year || 'N/D';
+
+      if (mode === 'physical') {
+        const isOwned = run.owned.includes(num);
+        document.getElementById('infoStatus').innerText = isOwned ? 'Posseduto ✅' : 'Mancante 🎯';
+        document.getElementById('infoStatus').style.color = isOwned ? 'var(--accent-green)' : 'var(--accent-gold)';
+        const pricePaid = (run.prices && run.prices[num]) ? `${run.prices[num].toFixed(2)} €` : 'Di Listino';
+        document.getElementById('infoPrice').innerText = pricePaid;
+        document.getElementById('infoPriceRow').style.display = 'flex';
+      } else {
+        const isRead = run.read.includes(num);
+        document.getElementById('infoStatus').innerText = isRead ? 'Letto 📖' : 'Da Leggere ⏳';
+        document.getElementById('infoStatus').style.color = isRead ? 'var(--accent-blue)' : 'var(--text-muted)';
+        document.getElementById('infoPriceRow').style.display = 'none';
+      }
+
       const coverBox = document.getElementById('m-cover');
       const customKey = `${runId}-${num}`;
 
@@ -702,13 +724,17 @@
         coverBox.innerText = '';
       } else {
         coverBox.style.backgroundImage = 'none';
-        coverBox.innerText = 'Copertina';
+        coverBox.innerText = 'Nessuna Copertina Available';
       }
 
       document.getElementById('itemModal').classList.add('open');
     }
 
+    /* APERTURA FORM ACQUISTO */
     function openAddModal() {
+      document.getElementById('modalViewDetail').style.display = 'none';
+      document.getElementById('modalViewForm').style.display = 'block';
+
       document.getElementById('m-title').innerText = "➕ Nuovo Acquisto";
       document.getElementById('m-cover').style.backgroundImage = 'none';
       document.getElementById('m-cover').innerText = '🛍️';
