@@ -44,7 +44,7 @@
       background: rgba(255,255,255,0.05); color: #fff; font-size: 0.9rem; cursor: pointer;
     }
 
-    /* HEADER NATIVO */
+    /* HEADER NATIVO CON BADGE VERSIOINE */
     .app-header {
       position: sticky; top: 0; z-index: 50;
       background: rgba(13, 14, 18, 0.92); backdrop-filter: blur(16px);
@@ -156,7 +156,7 @@
       border-radius: 16px; padding: 16px; margin: 0 16px 12px 16px;
     }
     .expense-header-title { font-weight: 800; font-size: 0.95rem; color: #fff; margin-bottom: 8px; }
-    .chart-container { position: relative; height: 180px; width: 100%; margin: 10px 0; }
+    .chart-container { position: relative; height: 200px; width: 100%; margin: 10px 0; }
 
     .channel-row { font-size: 0.8rem; color: var(--text-muted); margin-bottom: 6px; line-height: 1.4; }
     .channel-row b { color: #fff; }
@@ -170,6 +170,11 @@
       background: rgba(34, 197, 94, 0.15); border: 1px solid var(--accent-green); color: #4ade80;
       padding: 6px 12px; border-radius: 10px; font-weight: bold; font-size: 0.75rem; cursor: pointer;
       display: flex; align-items: center; gap: 4px; margin-left: auto;
+    }
+
+    .btn-add-chapter {
+      background: rgba(59, 130, 246, 0.15); border: 1px solid var(--accent-blue); color: #60a5fa;
+      padding: 6px 10px; border-radius: 8px; font-size: 0.73rem; font-weight: 800; cursor: pointer; margin-bottom: 8px;
     }
 
     /* FLOATING ACTION BUTTON (FAB) */
@@ -200,6 +205,7 @@
       width: 140px; height: 210px; border-radius: 14px; background: #262933; margin: 0 auto 16px auto;
       display: flex; align-items: center; justify-content: center; font-size: 0.85rem; color: var(--text-muted);
       box-shadow: 0 10px 30px rgba(0,0,0,0.7); background-size: cover; background-position: center; border: 1px solid var(--card-border);
+      text-align: center; padding: 10px;
     }
 
     .info-row {
@@ -242,10 +248,10 @@
     <button class="btn-auth-secondary" onclick="enterApp('demo')">🚀 Prova come Ospite (Demo)</button>
   </div>
 
-  <!-- HEADER NATIVO CON BADGE VERSIOINE PULITO -->
+  <!-- HEADER NATIVO CON BADGE VERSIOINE -->
   <div class="app-header">
     <div class="app-title">📖 Hobbyverse</div>
-    <div class="version-badge">v6.3</div>
+    <div class="version-badge">v6.4</div>
   </div>
 
   <!-- BARRA RICERCA GLOBALE -->
@@ -301,7 +307,7 @@
       <div id="physicalRunsContainer"></div>
     </div>
 
-    <!-- VISTA ONLINE -->
+    <!-- VISTA ONLINE COMPLETA -->
     <div id="subViewDigital" style="display:none;">
       <div class="digital-tabs" id="digitalTabsContainer">
         <div class="d-tab active" id="tab-reading" onclick="filterDigitalCategory('reading')">📖 In Lettura</div>
@@ -312,7 +318,7 @@
     </div>
   </div>
 
-  <!-- SCHERMATA 3: SPESE ANALYTICS PRO -->
+  <!-- SCHERMATA 3: SPESE ANALYTICS PRO COMPLETA -->
   <div id="viewExpenses" style="display:none; padding-top:10px;">
     <div class="kpi-grid" style="margin:0 16px 12px 16px;">
       <div class="kpi-box">
@@ -322,6 +328,14 @@
       <div class="kpi-box">
         <div class="kpi-lbl">Risparmio Netto</div>
         <div class="kpi-val" style="color:var(--accent-gold);">-191,45 €</div>
+      </div>
+      <div class="kpi-box">
+        <div class="kpi-lbl">Totale Speso</div>
+        <div class="kpi-val" style="color:#fff;">248,55 €</div>
+      </div>
+      <div class="kpi-box">
+        <div class="kpi-lbl">Volumi Acquistati</div>
+        <div class="kpi-val" style="color:var(--accent-blue);">52</div>
       </div>
     </div>
 
@@ -359,7 +373,7 @@
   <!-- FLOATING ACTION BUTTON -->
   <div class="fab-add" onclick="openAddModal()">➕</div>
 
-  <!-- BOTTOM SHEET MODAL (SCHEDA DETTAGLIO ALBO & FORM ACQUISTO SEPARATI) -->
+  <!-- BOTTOM SHEET MODAL -->
   <div class="modal-overlay" id="itemModal">
     <div class="bottom-sheet">
       <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:14px;">
@@ -369,19 +383,19 @@
 
       <div class="cover-box-large" id="m-cover">Copertina</div>
 
-      <!-- VISTA 1: DETTAGLIO SCHEDA FUMETTO ESSENZIALE -->
+      <!-- DETTAGLIO ALBO -->
       <div id="modalViewDetail">
         <div style="background:#0d0e12; padding:14px; border-radius:14px; border:1px solid var(--card-border);">
           <div class="info-row"><span class="info-label">🏛️ Casa Editrice:</span><span class="info-val" id="infoPublisher">-</span></div>
           <div class="info-row"><span class="info-label">✍️ Autori:</span><span class="info-val" id="infoAuthors">-</span></div>
           <div class="info-row"><span class="info-label">📅 Anno / Edizione:</span><span class="info-val" id="infoYear">-</span></div>
-          <div class="info-row"><span class="info-label">STATUS Possesso / Lettura:</span><span class="info-val" id="infoStatus" style="color:var(--accent-green);">-</span></div>
+          <div class="info-row"><span class="info-label">STATUS:</span><span class="info-val" id="infoStatus" style="color:var(--accent-green);">-</span></div>
           <div class="info-row" id="infoPriceRow"><span class="info-label">💰 Prezzo Pagato:</span><span class="info-val" id="infoPrice" style="color:var(--accent-gold);">-</span></div>
         </div>
         <button class="btn-save-modal" onclick="closeModal()">Chiudi Scheda</button>
       </div>
 
-      <!-- VISTA 2: FORM NUOVO ACQUISTO -->
+      <!-- FORM NUOVO ACQUISTO / LETTURA -->
       <div id="modalViewForm" style="display:none;">
         <div style="background:#0d0e12; padding:12px; border-radius:12px; border:1px solid var(--card-border);">
           <label style="font-size:0.72rem; color:var(--text-muted);">📦 Tipologia:</label>
@@ -399,7 +413,7 @@
             <option value="Altro">📚 Altro</option>
           </select>
 
-          <label style="font-size:0.72rem; color:var(--text-muted);">🎪 Canale d'Acquisto:</label>
+          <label style="font-size:0.72rem; color:var(--text-muted);">🎪 Canale d'Acquisto / Fonte:</label>
           <select id="sourceTypeSelect" class="edit-select-field">
             <option value="fumetteria">🏪 Fumetteria</option>
             <option value="vinted">🛍️ Vinted / Mercatino Online</option>
@@ -411,10 +425,10 @@
           <input type="number" id="editPriceInput" class="edit-input-field" value="0.00" step="0.01">
 
           <label style="font-size:0.72rem; color:var(--text-muted);">📝 Note Aggiuntive:</label>
-          <input type="text" id="editNotesInput" class="edit-input-field" placeholder="Es. Variant Cover">
+          <input type="text" id="editNotesInput" class="edit-input-field" placeholder="Es. Uscita nuovo numero letture">
         </div>
 
-        <button class="btn-save-modal" onclick="closeModal()">💾 Salva Acquisto</button>
+        <button class="btn-save-modal" onclick="closeModal()">💾 Salva Modifica</button>
       </div>
     </div>
   </div>
@@ -440,7 +454,7 @@
   </div>
 
   <script>
-    // MAPPA COPERTINE LOCALI SENZA SPAZI ANOMALI
+    // MAPPA COPERTINE LOCALI
     const CUSTOM_COVERS = {
       "spidey-corno-139": "img/uomo ragno 139-corno.png",
       "spidey-panini-1990-41": "img/uomo ragno 41-panini.png",
@@ -482,7 +496,7 @@
 
     const OWNER_DIGITAL_RUNS = [
       { id: "d1", title: "Absolute Batman", publisher: "DC Comics", year: "2024", category: "reading", total: 25, read: Array.from({length: 25}, (_, i) => i + 1), authors: "Scott Snyder" },
-      { id: "d2", title: "Absolute Superman", publisher: "DC Comics", year: "2024", category: "reading", total: 10, read: Array.from({length: 10}, (_, i) => i + 1), authors: "Jason Aaron" },
+      { id: "d2", title: "Absolute Superman", publisher: "DC Comics", year: "2024", category: "reading", total: 11, read: Array.from({length: 10}, (_, i) => i + 1), authors: "Jason Aaron" },
       { id: "d3", title: "Absolute Wonder Woman", publisher: "DC Comics", year: "2024", category: "reading", total: 10, read: Array.from({length: 10}, (_, i) => i + 1), authors: "Kelly Thompson" },
       { id: "d4", title: "Black Cat", publisher: "Marvel", year: "2025", category: "reading", total: 5, read: [1,2,3,4,5], authors: "Marvel Comics" },
       { id: "d5", title: "Zatanna", publisher: "DC Comics", year: "2026", category: "reading", total: 6, read: [1,2,3,4,5,6], authors: "DC Comics" },
@@ -645,7 +659,8 @@
             <div class="toggle-arrow" id="arrow-${run.id}">▼</div>
           </div>
           <div class="run-body" id="body-${run.id}">
-            <div style="display:flex; justify-content:space-between; font-size:0.75rem; color:#cbd5e1; margin-bottom:4px; margin-top:8px;">
+            <button class="btn-add-chapter" onclick="incrementDigitalChapter('${run.id}')">➕ Segna Capitolo #${readCount + 1} Letto</button>
+            <div style="display:flex; justify-content:space-between; font-size:0.75rem; color:#cbd5e1; margin-bottom:4px; margin-top:4px;">
               <span>Letto <b>${readCount}</b> su <b>${run.total}</b></span><span>${pct}%</span>
             </div>
             <div class="progress-bar-bg"><div class="progress-bar-fill digital" style="width: ${pct}%;"></div></div>
@@ -654,6 +669,18 @@
         `;
         container.appendChild(card);
       });
+    }
+
+    function incrementDigitalChapter(runId) {
+      const run = currentDigital.find(r => r.id === runId);
+      if (run) {
+        const nextNum = run.read.length + 1;
+        if (!run.read.includes(nextNum)) {
+          run.read.push(nextNum);
+          if (nextNum > run.total) run.total = nextNum;
+          renderDigitalRuns();
+        }
+      }
     }
 
     function toggleAccordion(runId, mode) {
@@ -690,7 +717,6 @@
       arrow.classList.toggle('open', !isOpen);
     }
 
-    /* APERTURA SCHEDA INFORMAZIONI ALBO */
     function openItemModal(runId, num, mode) {
       const run = (mode === 'physical') ? currentPhysical.find(r => r.id === runId) : currentDigital.find(r => r.id === runId);
       
@@ -724,18 +750,17 @@
         coverBox.innerText = '';
       } else {
         coverBox.style.backgroundImage = 'none';
-        coverBox.innerText = 'Nessuna Copertina Available';
+        coverBox.innerText = `${run.title} #${num}`;
       }
 
       document.getElementById('itemModal').classList.add('open');
     }
 
-    /* APERTURA FORM ACQUISTO */
     function openAddModal() {
       document.getElementById('modalViewDetail').style.display = 'none';
       document.getElementById('modalViewForm').style.display = 'block';
 
-      document.getElementById('m-title').innerText = "➕ Nuovo Acquisto";
+      document.getElementById('m-title').innerText = "➕ Nuovo Acquisto / Uscita";
       document.getElementById('m-cover').style.backgroundImage = 'none';
       document.getElementById('m-cover').innerText = '🛍️';
       document.getElementById('itemModal').classList.add('open');
