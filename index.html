@@ -27,7 +27,7 @@
     * { box-sizing: border-box; margin: 0; padding: 0; user-select: none; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; }
     body { background-color: var(--bg-main); color: #fff; min-height: 100vh; overflow-x: hidden; padding-bottom: 85px; touch-action: manipulation; }
 
-    /* ONBOARDING & AUTH OVERLAY */
+    /* AUTH OVERLAY */
     .auth-overlay {
       position: fixed; inset: 0; background: #0d0e12; z-index: 200;
       display: flex; flex-direction: column; justify-content: center; align-items: center; padding: 24px; text-align: center;
@@ -44,7 +44,7 @@
       background: rgba(255,255,255,0.05); color: #fff; font-size: 0.9rem; cursor: pointer;
     }
 
-    /* HEADER NATIVO CON BADGE LOGHI */
+    /* HEADER NATIVO CON BADGE LOGHI PULITI */
     .app-header {
       position: sticky; top: 0; z-index: 50;
       background: rgba(13, 14, 18, 0.92); backdrop-filter: blur(16px);
@@ -52,7 +52,7 @@
       padding: 12px 18px; display: flex; align-items: center; justify-content: space-between;
     }
     .app-title { font-weight: 900; font-size: 1.15rem; letter-spacing: -0.5px; display: flex; align-items: center; gap: 8px; }
-    .header-badges { display: flex; align-items: center; gap: 6px; }
+    .header-badges { display: flex; align-items: center; gap: 8px; }
     .publisher-badge-img { height: 18px; width: auto; object-fit: contain; border-radius: 3px; }
     .version-badge { font-size: 0.72rem; color: var(--accent-gold); font-weight: 800; background: rgba(251, 191, 36, 0.12); padding: 3px 8px; border-radius: 12px; border: 1px solid rgba(251, 191, 36, 0.3); }
 
@@ -87,7 +87,7 @@
     }
     .sub-btn.active { background: #fff; color: #000; box-shadow: 0 2px 8px rgba(0,0,0,0.4); }
 
-    /* SWIPE LATERALE RIPRISTINATO (CHIPS EDITORI E TABS) */
+    /* SWIPE LATERALE CHIPS EDITORI */
     .chips-scroll-container {
       display: flex; gap: 8px; padding: 0 16px 10px 16px; overflow-x: auto; scrollbar-width: none;
       scroll-snap-type: x mandatory; -webkit-overflow-scrolling: touch;
@@ -138,7 +138,7 @@
     
     .num-tile .lucca-badge {
       position: absolute; top: -3px; right: -3px; width: 14px; height: 14px;
-      background-image: url('img/logo lucca.png'); background-size: cover; background-position: center;
+      background-image: url('img/logo_lucca.png'); background-size: cover; background-position: center;
       border-radius: 50%; border: 1px solid rgba(255,255,255,0.2);
     }
     .num-tile .variant-star { position: absolute; bottom: -2px; right: -2px; font-size: 0.65rem; color: var(--accent-gold); }
@@ -158,7 +158,7 @@
     }
     .d-tab.active { background: var(--accent-blue); color: #fff; border-color: var(--accent-blue); }
 
-    /* EXPENSE CARDS & ANALYTICS PRO */
+    /* ANALYTICS */
     .expense-card {
       background: var(--card-bg); border: 1px solid var(--card-border);
       border-radius: 16px; padding: 16px; margin: 0 16px 12px 16px;
@@ -185,7 +185,7 @@
       padding: 6px 12px; border-radius: 8px; font-size: 0.73rem; font-weight: 800; cursor: pointer; margin-bottom: 8px;
     }
 
-    /* FLOATING ACTION BUTTON (FAB) */
+    /* FLOATING ACTION BUTTON */
     .fab-add {
       position: fixed; bottom: 75px; right: 18px; width: 54px; height: 54px;
       background: var(--accent-gold); color: #000; border-radius: 50%;
@@ -195,7 +195,7 @@
     }
     .fab-add:active { transform: scale(0.9); }
 
-    /* BOTTOM SHEET MODAL SMART */
+    /* BOTTOM SHEET MODAL */
     .modal-overlay {
       display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.8);
       backdrop-filter: blur(8px); z-index: 100; align-items: flex-end;
@@ -232,7 +232,7 @@
       background: var(--accent-gold); color: #000; cursor: pointer; margin-top: 14px; font-size: 0.9rem;
     }
 
-    /* BOTTOM NAV NATIVA CON ICONE SVG STILIZZATE */
+    /* BOTTOM NAV NATIVA */
     .bottom-nav {
       position: fixed; bottom: 0; left: 0; right: 0; height: 64px;
       background: rgba(13, 14, 18, 0.95); backdrop-filter: blur(16px);
@@ -247,7 +247,7 @@
 </head>
 <body>
 
-  <!-- ONBOARDING & AUTH SPLASH SCREEN -->
+  <!-- ONBOARDING OVERLAY -->
   <div class="auth-overlay" id="authOverlay">
     <div style="font-size:3.5rem; margin-bottom:10px;">📖</div>
     <div class="auth-title">Hobbyverse</div>
@@ -256,15 +256,15 @@
     <button class="btn-auth-secondary" onclick="enterApp('demo')">🚀 Prova come Ospite (Demo)</button>
   </div>
 
-  <!-- HEADER NATIVO CON BADGE LOGHI MARVEL E DC -->
+  <!-- HEADER NATIVO CON BADGE LOGHI -->
   <div class="app-header">
     <div class="app-title">
       📖 Hobbyverse
     </div>
     <div class="header-badges">
-      <img src="img/logo marvel.png" class="publisher-badge-img" alt="Marvel" onerror="this.style.display='none'">
-      <img src="img/logo dc.png" class="publisher-badge-img" alt="DC" onerror="this.style.display='none'">
-      <div class="version-badge">v6.6</div>
+      <img src="img/logo_marvel.png" class="publisher-badge-img" alt="Marvel" onerror="this.style.display='none'">
+      <img src="img/logo_dc.png" class="publisher-badge-img" alt="DC" onerror="this.style.display='none'">
+      <div class="version-badge">v6.8</div>
     </div>
   </div>
 
@@ -300,7 +300,7 @@
     <!-- SWITCHER SUB-TAB -->
     <div class="sub-tab-switcher">
       <div class="sub-btn active" id="btnSubPhysical" onclick="switchSubTab('physical')">📖 Cartacei</div>
-      <div class="sub-btn" id="btnSubDigital" onclick="switchSubTab('digital')">📱 Online</div>
+      <div class="sub-btn" id="btnSubDigital" onclick="switchSubTab('digital')">📱 Online (65)</div>
     </div>
 
     <!-- PILLOLE EDITORI CON SWIPE -->
@@ -321,19 +321,19 @@
       <div id="physicalRunsContainer"></div>
     </div>
 
-    <!-- VISTA ONLINE COMPLETA CON OPZIONE "TUTTE" -->
+    <!-- VISTA ONLINE COMPLETA (65 SERIE) -->
     <div id="subViewDigital" style="display:none;">
       <div class="digital-tabs" id="digitalTabsContainer">
-        <div class="d-tab active" id="tab-all" onclick="filterDigitalCategory('ALL')">🌟 Tutte (58)</div>
-        <div class="d-tab" id="tab-reading" onclick="filterDigitalCategory('reading')">📖 In Lettura</div>
-        <div class="d-tab" id="tab-later" onclick="filterDigitalCategory('later')">⏳ Da Leggere</div>
-        <div class="d-tab" id="tab-finished" onclick="filterDigitalCategory('finished')">✅ Finiti & ⭐</div>
+        <div class="d-tab active" id="tab-ALL" onclick="filterDigitalCategory('ALL')">🌟 Tutte (65)</div>
+        <div class="d-tab" id="tab-reading" onclick="filterDigitalCategory('reading')">📖 In Lettura (15)</div>
+        <div class="d-tab" id="tab-later" onclick="filterDigitalCategory('later')">⏳ Da Leggere (29)</div>
+        <div class="d-tab" id="tab-finished" onclick="filterDigitalCategory('finished')">✅ Finiti & ⭐ (21)</div>
       </div>
       <div id="digitalRunsContainer"></div>
     </div>
   </div>
 
-  <!-- SCHERMATA 3: SPESE ANALYTICS PRO COMPLETA -->
+  <!-- SCHERMATA 3: ANALYTICS -->
   <div id="viewExpenses" style="display:none; padding-top:10px;">
     <div class="kpi-grid" style="margin:0 16px 12px 16px;">
       <div class="kpi-box">
@@ -398,7 +398,7 @@
 
       <div class="cover-box-large" id="m-cover">Copertina</div>
 
-      <!-- VISTA 1: DETTAGLIO SCHEDA FUMETTO -->
+      <!-- DETTAGLIO ALBO -->
       <div id="modalViewDetail">
         <div style="background:#0d0e12; padding:14px; border-radius:14px; border:1px solid var(--card-border);">
           <div class="info-row"><span class="info-label">🏛️ Casa Editrice:</span><span class="info-val" id="infoPublisher">-</span></div>
@@ -410,14 +410,13 @@
         <button class="btn-save-modal" onclick="closeModal()">Chiudi Scheda</button>
       </div>
 
-      <!-- VISTA 2: FORM NUOVO ACQUISTO -->
+      <!-- FORM NUOVO ACQUISTO -->
       <div id="modalViewForm" style="display:none;">
         <div class="sub-tab-switcher" style="margin:0 0 14px 0;">
           <div class="sub-btn active" id="btnFormPhysical" onclick="switchFormType('physical')">📖 Cartaceo Fisico</div>
           <div class="sub-btn" id="btnFormDigital" onclick="switchFormType('digital')">📱 Lettura Online</div>
         </div>
 
-        <!-- SEZIONE FISICA (CARTACEO) -->
         <div id="formPhysicalGroup" style="background:#0d0e12; padding:12px; border-radius:12px; border:1px solid var(--card-border);">
           <label style="font-size:0.72rem; color:var(--text-muted);">🏷️ Editore / Categoria:</label>
           <select id="itemCategorySelect" class="edit-select-field">
@@ -440,7 +439,6 @@
           <input type="number" id="editPriceInput" class="edit-input-field" value="0.00" step="0.01">
         </div>
 
-        <!-- SEZIONE DEDICATA RUN ONLINE -->
         <div id="formDigitalGroup" style="display:none; background:#0d0e12; padding:12px; border-radius:12px; border:1px solid var(--card-border);">
           <label style="font-size:0.72rem; color:var(--text-muted);">📚 Serie Online / Titolo:</label>
           <input type="text" id="digitalTitleInput" class="edit-input-field" placeholder="Es. Absolute Superman">
@@ -454,10 +452,6 @@
 
           <label style="font-size:0.72rem; color:var(--text-muted);">⚡ Numero Uscita Uscita Oggi / Capitolo:</label>
           <input type="number" id="digitalChapterInput" class="edit-input-field" placeholder="Es. 11">
-
-          <label style="font-size:0.75rem; color:#fff; display:flex; align-items:center; gap:8px; cursor:pointer;">
-            <input type="checkbox" id="digitalFavCheck"> ⭐ Aggiungi ai Preferiti
-          </label>
         </div>
 
         <button class="btn-save-modal" onclick="closeModal()">💾 Salva Modifica</button>
@@ -465,7 +459,7 @@
     </div>
   </div>
 
-  <!-- BOTTOM NAV NATIVA CON ICONE SVG STILIZZATE -->
+  <!-- BOTTOM NAV NATIVA -->
   <div class="bottom-nav">
     <div class="nav-btn active" id="navHome" onclick="switchBottomNav('home')">
       <svg viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path><polyline points="9 22 9 12 15 12 15 22"></polyline></svg>
@@ -486,12 +480,20 @@
   </div>
 
   <script>
-    // MAPPA COPERTINE LOCALI NORMALIZZATA
+    // MAPPA COPERTINE LOCALI E VARIANT SCANSIONATE
     const CUSTOM_COVERS = {
-      "spidey-corno-139": "img/uomo ragno 139-corno.png",
-      "spidey-panini-1990-41": "img/uomo ragno 41-panini.png",
-      "spidey-panini-1990-52": "img/uomo ragno 52-panini.png",
-      "spidey-panini-1990-53": "img/uomo ragno 53-panini.png"
+      // Spider-Man
+      "spidey-corno-139": "img/uomo_ragno_139_corno.png",
+      "spidey-panini-1990-41": "img/uomo_ragno_41_panini.png",
+      "spidey-panini-1990-52": "img/uomo_ragno_52_panini.png",
+      "spidey-panini-1990-53": "img/uomo_ragno_53_panini.png",
+      
+      // Variant Scansionate
+      "abs-batman-2": "img/abs_batman_2_var.png",
+      "abs-batman-18": "img/abs_batman_18_var.png",
+      "abs-green-arrow-1": "img/abs_green_arrow_1_var.png",
+      "abs-martian-1": "img/abs_martian_1_var.png",
+      "pkeda-2": "img/pkeda_2_celoni.png"
     };
 
     const OWNER_PHYSICAL_RUNS = [
@@ -503,7 +505,7 @@
       { id: "x-men-2000", title: "Gli Incredibili X-Men #2", publisher: "Marvel", year: "2000", total: 1, owned: [1], luccaItems: [], authors: "Marvel Comics", prices: { 1: 0.00 } },
       { id: "thor-2002", title: "Il Mitico Thor #34", publisher: "Marvel", year: "2002", total: 1, owned: [1], luccaItems: [], authors: "Marvel Comics", prices: { 1: 0.00 } },
 
-      { id: "abs-batman", title: "Absolute Batman", publisher: "DC Comics / Panini", year: "2024", total: 18, owned: [1,2,3,15,16,17,18], luccaItems: [1,2,3,17,18], authors: "Scott Snyder", prices: {} },
+      { id: "abs-batman", title: "Absolute Batman", publisher: "DC Comics / Panini", year: "2024", total: 18, owned: [1,2,3,15,16,17,18], luccaItems: [1,2,3,17,18], variants: [2, 18], authors: "Scott Snyder", prices: {} },
       { id: "abs-sup", title: "Absolute Superman", publisher: "DC Comics / Panini", year: "2024", total: 18, owned: [1], luccaItems: [], authors: "Jason Aaron", prices: {} },
       { id: "abs-ww", title: "Absolute Wonder Woman", publisher: "DC Comics / Panini", year: "2024", total: 17, owned: [1,2,3,4,5,6,7,8], luccaItems: [], authors: "Kelly Thompson", prices: {} },
       { id: "batman-grandi-storie", title: "Batman: Le grandi storie", publisher: "DC Deluxe", year: "2018", total: 1, owned: [1], luccaItems: [], authors: "DC Deluxe", prices: { 1: 15.00 } },
@@ -527,19 +529,25 @@
     ];
 
     const OWNER_DIGITAL_RUNS = [
-      { id: "d1", title: "Absolute Batman", publisher: "DC Comics", year: "2024", category: "reading", total: 25, read: Array.from({length: 25}, (_, i) => i + 1), authors: "Scott Snyder" },
-      { id: "d2", title: "Absolute Superman", publisher: "DC Comics", year: "2024", category: "reading", total: 11, read: Array.from({length: 10}, (_, i) => i + 1), authors: "Jason Aaron" },
-      { id: "d3", title: "Absolute Wonder Woman", publisher: "DC Comics", year: "2024", category: "reading", total: 10, read: Array.from({length: 10}, (_, i) => i + 1), authors: "Kelly Thompson" },
-      { id: "d4", title: "Black Cat", publisher: "Marvel", year: "2025", category: "reading", total: 5, read: [1,2,3,4,5], authors: "Marvel Comics" },
-      { id: "d5", title: "Zatanna", publisher: "DC Comics", year: "2026", category: "reading", total: 6, read: [1,2,3,4,5,6], authors: "DC Comics" },
-      { id: "d6", title: "The Amazing Spider-Man", publisher: "Marvel", year: "2025", category: "reading", total: 12, read: Array.from({length: 12}, (_, i) => i + 1), authors: "Marvel Comics" },
-      { id: "d7", title: "Absolute Catwoman", publisher: "DC Comics", year: "2026", category: "reading", total: 6, read: [1, 2], authors: "DC Comics" },
-      { id: "d8", title: "Fantastic Four", publisher: "Marvel", year: "2025", category: "reading", total: 8, read: Array.from({length: 8}, (_, i) => i + 1), authors: "Marvel Comics" },
-      { id: "d9", title: "Poison Ivy", publisher: "DC Comics", year: "2022", category: "reading", total: 49, read: [1], authors: "G. Willow Wilson" },
-      { id: "d10", title: "Ghost in the Shell", publisher: "Dark Horse", year: "1995", category: "later", total: 1, read: [], authors: "Shirow Masamune" },
-      { id: "d11", title: "Batman: Under The Hood", publisher: "DC Comics", year: "2005", category: "later", total: 1, read: [], authors: "Judd Winick" },
-      { id: "d12", title: "Invincible", publisher: "Image Comics", year: "2003", category: "finished", isFavorite: true, total: 144, read: Array.from({length: 144}, (_, i) => i + 1), authors: "Robert Kirkman" },
-      { id: "d13", title: "Ultimate Spider-Man", publisher: "Marvel Comics", year: "2000", category: "finished", total: 160, read: Array.from({length: 160}, (_, i) => i + 1), authors: "Brian M. Bendis" }
+      { id: "d_0", title: "Absolute Batman", publisher: "DC Comics", year: "2024–in corso", category: "reading", authors: "Scott Snyder, Nick Dragotta", total: 12, read: [1] },
+      { id: "d_18", title: "Absolute Batman: Ark M Special", publisher: "DC Comics", year: "2026–in corso", category: "finished", authors: "DC Comics", total: 1, read: [1] },
+      { id: "d_19", title: "Absolute Catwoman", publisher: "DC Comics", year: "2026–in corso", category: "reading", authors: "DC Comics", total: 6, read: [1] },
+      { id: "d_20", title: "Absolute Evil", publisher: "DC Comics", year: "2025", category: "finished", authors: "DC Comics", total: 1, read: [1] },
+      { id: "d_21", title: "Absolute Flash", publisher: "DC Comics", year: "2025–in corso", category: "later", authors: "DC Comics", total: 6, read: [] },
+      { id: "d_22", title: "Absolute Green Arrow", publisher: "DC Comics", year: "2026–in corso", category: "reading", authors: "DC Comics", total: 6, read: [1] },
+      { id: "d_23", title: "Absolute Green Lantern", publisher: "DC Comics", year: "2025–in corso", category: "later", authors: "DC Comics", total: 6, read: [] },
+      { id: "d_24", title: "Absolute Martian Manhunter", publisher: "DC Comics", year: "2025–2026", category: "later", authors: "DC Comics", total: 6, read: [] },
+      { id: "d_37", title: "Absolute Superman", publisher: "DC Comics", year: "2024–in corso", category: "reading", authors: "Jason Aaron, Rafa Sandoval", total: 11, read: [1,2,3,4,5,6,7,8,9,10] },
+      { id: "d_55", title: "Absolute Wonder Woman", publisher: "DC Comics", year: "2024–in corso", category: "reading", authors: "Kelly Thompson, Hayden Sherman", total: 10, read: [1] },
+      { id: "d_56", title: "Black Cat", publisher: "Marvel", year: "2025", category: "reading", authors: "Marvel Comics", total: 5, read: [1,2,3] },
+      { id: "d_57", title: "Zatanna", publisher: "DC Comics", year: "2026", category: "reading", authors: "DC Comics", total: 6, read: [1,2] },
+      { id: "d_58", title: "The Amazing Spider-Man", publisher: "Marvel", year: "2025", category: "reading", authors: "Marvel Comics", total: 12, read: [1,2,3,4] },
+      { id: "d_59", title: "Fantastic Four", publisher: "Marvel", year: "2025", category: "reading", authors: "Marvel Comics", total: 8, read: [1,2] },
+      { id: "d_60", title: "Poison Ivy", publisher: "DC Comics", year: "2022", category: "reading", authors: "G. Willow Wilson", total: 49, read: [1] },
+      { id: "d_61", title: "Ghost in the Shell", publisher: "Dark Horse", year: "1995", category: "later", authors: "Shirow Masamune", total: 1, read: [] },
+      { id: "d_62", title: "Batman: Under The Hood", publisher: "DC Comics", year: "2005", category: "later", authors: "Judd Winick", total: 1, read: [] },
+      { id: "d_63", title: "Invincible", publisher: "Image Comics", year: "2003", category: "finished", authors: "Robert Kirkman", total: 144, read: Array.from({length: 144}, (_, i) => i + 1) },
+      { id: "d_64", title: "Ultimate Spider-Man (2000)", publisher: "Marvel Comics", year: "2000–2011", category: "finished", authors: "Brian M. Bendis", total: 160, read: Array.from({length: 160}, (_, i) => i + 1) }
     ];
 
     let currentPhysical = [];
