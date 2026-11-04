@@ -44,14 +44,15 @@
       background: rgba(255,255,255,0.05); color: #fff; font-size: 0.9rem; cursor: pointer;
     }
 
-    /* HEADER NATIVO PULITO */
+    /* HEADER NATIVO CON BADGE NUMERICO VERSIOINE */
     .app-header {
       position: sticky; top: 0; z-index: 50;
       background: rgba(13, 14, 18, 0.92); backdrop-filter: blur(16px);
       border-bottom: 1px solid var(--card-border);
-      padding: 14px 18px; display: flex; align-items: center; justify-content: space-between;
+      padding: 12px 18px; display: flex; align-items: center; justify-content: space-between;
     }
-    .app-title { font-weight: 900; font-size: 1.2rem; letter-spacing: -0.5px; }
+    .app-title { font-weight: 900; font-size: 1.15rem; letter-spacing: -0.5px; }
+    .version-badge { font-size: 0.72rem; color: var(--accent-gold); font-weight: 800; background: rgba(251, 191, 36, 0.12); padding: 3px 8px; border-radius: 12px; border: 1px solid rgba(251, 191, 36, 0.3); }
 
     /* BARRA RICERCA GLOBALE */
     .search-bar-container { padding: 8px 16px; background: #12141a; border-bottom: 1px solid var(--card-border); }
@@ -197,7 +198,7 @@
 
     .cover-box {
       width: 120px; height: 175px; border-radius: 12px; background: #262933; margin: 0 auto 12px auto;
-      display: flex; align-items: center; justify-content: center; font-size: 1.2rem; color: var(--text-muted);
+      display: flex; align-items: center; justify-content: center; font-size: 0.9rem; color: var(--text-muted);
       box-shadow: 0 8px 24px rgba(0,0,0,0.6); background-size: cover; background-position: center; border: 1px solid var(--card-border);
     }
 
@@ -235,9 +236,10 @@
     <button class="btn-auth-secondary" onclick="enterApp('demo')">🚀 Prova come Ospite (Demo)</button>
   </div>
 
-  <!-- HEADER NATIVO PULITO -->
+  <!-- HEADER NATIVO CON BADGE VERSIOINE PULITO -->
   <div class="app-header">
     <div class="app-title">📖 Hobbyverse</div>
+    <div class="version-badge">v6.2</div>
   </div>
 
   <!-- BARRA RICERCA GLOBALE -->
@@ -247,8 +249,8 @@
 
   <!-- DASHBOARD STRISCIA COMPATTA -->
   <div class="hero-stats-bar">
-    <span>Posseduti: <b id="st-val1">49</b></span>
-    <span class="kpi-pill-btn" id="btn-hunt-mode" onclick="toggleHuntingMode()">🎯 Mancanti: <b id="st-val3">105</b></span>
+    <span>Posseduti: <b id="st-val1">59</b></span>
+    <span class="kpi-pill-btn" id="btn-hunt-mode" onclick="toggleHuntingMode()">🎯 Mancanti: <b id="st-val3">145</b></span>
     <span>Spesa: <b style="color:var(--accent-gold);" id="st-val4">248,55 €</b></span>
   </div>
 
@@ -293,7 +295,7 @@
       <div id="physicalRunsContainer"></div>
     </div>
 
-    <!-- VISTA ONLINE (RIPRISTINATA COMPLETA) -->
+    <!-- VISTA ONLINE -->
     <div id="subViewDigital" style="display:none;">
       <div class="digital-tabs" id="digitalTabsContainer">
         <div class="d-tab active" id="tab-reading" onclick="filterDigitalCategory('reading')">📖 In Lettura</div>
@@ -309,11 +311,11 @@
     <div class="kpi-grid" style="margin:0 16px 12px 16px;">
       <div class="kpi-box">
         <div class="kpi-lbl">Valore Stimato</div>
-        <div class="kpi-val" style="color:var(--accent-green);">410,00 €</div>
+        <div class="kpi-val" style="color:var(--accent-green);">440,00 €</div>
       </div>
       <div class="kpi-box">
         <div class="kpi-lbl">Risparmio Netto</div>
-        <div class="kpi-val" style="color:var(--accent-gold);">-161,45 €</div>
+        <div class="kpi-val" style="color:var(--accent-gold);">-191,45 €</div>
       </div>
     </div>
 
@@ -428,6 +430,14 @@
   </div>
 
   <script>
+    // MAPPA CUSTOM PER LE COPERTINE LOCALI (FORMATO: uomo ragno numero-editore.png)
+    const CUSTOM_COVERS = {
+      "spidey-corno-139": "img/uomo ragno 139-corno.png",
+      "spidey-panini-1990-41": "img/uomo ragno 41-panini.png",
+      "spidey-panini-1990-52": "img/uomo ragno 52-panini.png",
+      "spidey-panini-1990-53": "img/uomo ragno 53-panini.png"
+    };
+
     const OWNER_PHYSICAL_RUNS = [
       { id: "spidey-corno", title: "L'Uomo Ragno (Editoriale Corno 1975)", publisher: "Marvel", total: 200, owned: [139], luccaItems: [139], authors: "Stan Lee / John Romita Sr.", prices: { 139: 5.00 } },
       { id: "spidey-panini-1990", title: "L'Uomo Ragno (Panini 1990)", publisher: "Marvel", total: 100, owned: [41, 52, 53], luccaItems: [41, 52, 53], authors: "Todd McFarlane", prices: { 41: 3.00, 52: 5.00, 53: 3.00 } },
@@ -455,6 +465,7 @@
 
       { id: "pk2", title: "PK2 - Ducklair (2001 + Speciale)", publisher: "PK", total: 19, owned: [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19], luccaItems: [], authors: "Faraci / Artibani", prices: {} },
       { id: "pkeda", title: "PKEDA (Paperinik Elite)", publisher: "PK", total: 10, owned: [2, 3], luccaItems: [2, 3], variants: [2], authors: "Disney / Celoni", prices: {} },
+      { id: "paperinik-il-mito", title: "Paperinik - Il Mito", publisher: "PK", total: 50, owned: [1,2,3,4,5,8,9,10,13,16], luccaItems: [], authors: "Gazzetta dello Sport", prices: {} },
       { id: "tapum-ortolani", title: "Tapum! (Storie di guerra)", publisher: "Altro", total: 1, owned: [1], luccaItems: [], authors: "Leo Ortolani", prices: { 1: 0.00 } },
       { id: "death-note", title: "Death Note", publisher: "Manga", total: 13, owned: [1,2,4,7,12,13], luccaItems: [], authors: "Ohba / Obata", prices: {} }
     ];
@@ -645,19 +656,6 @@
       });
     }
 
-    function fetchAutoCover(runTitle, volNum) {
-      const query = encodeURIComponent(`${runTitle} ${volNum}`);
-      fetch(`https://openlibrary.org/search.json?q=${query}&limit=1`)
-        .then(res => res.json())
-        .then(data => {
-          if(data.docs && data.docs[0] && data.docs[0].cover_i) {
-            const coverUrl = `https://covers.openlibrary.org/b/id/${data.docs[0].cover_i}-M.jpg`;
-            document.getElementById('m-cover').style.backgroundImage = `url('${coverUrl}')`;
-            document.getElementById('m-cover').innerText = '';
-          }
-        }).catch(err => console.log('API Cover Fallback'));
-    }
-
     function toggleAccordion(runId, mode) {
       const body = document.getElementById('body-' + runId);
       const arrow = document.getElementById('arrow-' + runId);
@@ -692,6 +690,33 @@
       arrow.classList.toggle('open', !isOpen);
     }
 
+    function openItemModal(runId, num, mode) {
+      const run = (mode === 'physical') ? currentPhysical.find(r => r.id === runId) : currentDigital.find(r => r.id === runId);
+      document.getElementById('m-title').innerText = `${run.title} #${num}`;
+      
+      const coverBox = document.getElementById('m-cover');
+      const customKey = `${runId}-${num}`;
+
+      if (CUSTOM_COVERS[customKey]) {
+        coverBox.style.backgroundImage = `url('${CUSTOM_COVERS[customKey]}')`;
+        coverBox.innerText = '';
+      } else {
+        coverBox.style.backgroundImage = 'none';
+        coverBox.innerText = 'Copertina';
+      }
+
+      document.getElementById('itemModal').classList.add('open');
+    }
+
+    function openAddModal() {
+      document.getElementById('m-title').innerText = "➕ Nuovo Acquisto";
+      document.getElementById('m-cover').style.backgroundImage = 'none';
+      document.getElementById('m-cover').innerText = '🛍️';
+      document.getElementById('itemModal').classList.add('open');
+    }
+
+    function closeModal() { document.getElementById('itemModal').classList.remove('open'); }
+
     function filterDigitalCategory(cat) {
       currentDigitalCategory = cat;
       document.querySelectorAll('.d-tab').forEach(t => t.classList.remove('active'));
@@ -717,28 +742,6 @@
         options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { position: 'bottom', labels: { color: '#94a3b8', font: { size: 11 } } } } }
       });
     }
-
-    function openItemModal(runId, num, mode) {
-      const run = (mode === 'physical') ? currentPhysical.find(r => r.id === runId) : currentDigital.find(r => r.id === runId);
-      document.getElementById('m-title').innerText = `${run.title} #${num}`;
-      
-      const coverBox = document.getElementById('m-cover');
-      coverBox.style.backgroundImage = 'none';
-      coverBox.innerText = 'Copertina';
-      
-      if(mode === 'physical') fetchAutoCover(run.title, num);
-
-      document.getElementById('itemModal').classList.add('open');
-    }
-
-    function openAddModal() {
-      document.getElementById('m-title').innerText = "➕ Nuovo Acquisto";
-      document.getElementById('m-cover').style.backgroundImage = 'none';
-      document.getElementById('m-cover').innerText = '🛍️';
-      document.getElementById('itemModal').classList.add('open');
-    }
-
-    function closeModal() { document.getElementById('itemModal').classList.remove('open'); }
 
     function exportDataJSON() {
       const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(currentPhysical));
