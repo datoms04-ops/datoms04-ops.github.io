@@ -9,7 +9,6 @@
   <meta name="theme-color" content="#0d0e12">
   <link rel="apple-touch-icon" href="image_7a0c9d.jpg">
 
-  <!-- Chart.js per i Grafici Interattivi -->
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
   <style>
@@ -44,7 +43,7 @@
       background: rgba(255,255,255,0.05); color: #fff; font-size: 0.9rem; cursor: pointer;
     }
 
-    /* HEADER NATIVO CON BADGE LOGHI PULITI */
+    /* HEADER NATIVO */
     .app-header {
       position: sticky; top: 0; z-index: 50;
       background: rgba(13, 14, 18, 0.92); backdrop-filter: blur(16px);
@@ -52,18 +51,17 @@
       padding: 12px 18px; display: flex; align-items: center; justify-content: space-between;
     }
     .app-title { font-weight: 900; font-size: 1.15rem; letter-spacing: -0.5px; display: flex; align-items: center; gap: 8px; }
-    .header-badges { display: flex; align-items: center; gap: 8px; }
-    .publisher-badge-img { height: 18px; width: auto; object-fit: contain; border-radius: 3px; }
+    .header-badges { display: flex; align-items: center; gap: 6px; }
     .version-badge { font-size: 0.72rem; color: var(--accent-gold); font-weight: 800; background: rgba(251, 191, 36, 0.12); padding: 3px 8px; border-radius: 12px; border: 1px solid rgba(251, 191, 36, 0.3); }
 
-    /* BARRA RICERCA GLOBALE */
+    /* SEARCH BAR */
     .search-bar-container { padding: 8px 16px; background: #12141a; border-bottom: 1px solid var(--card-border); }
     .search-input {
       width: 100%; padding: 8px 14px; background: #16181e; border: 1px solid var(--card-border);
       border-radius: 12px; color: #fff; font-size: 0.85rem; outline: none;
     }
 
-    /* DASHBOARD STRISCIA COMPATTA */
+    /* HERO STATS BAR */
     .hero-stats-bar {
       display: flex; justify-content: space-between; align-items: center;
       background: #12141a; border-bottom: 1px solid var(--card-border);
@@ -76,7 +74,7 @@
     }
     .kpi-pill-btn.active { border-color: var(--accent-gold); color: var(--accent-gold); background: rgba(251, 191, 36, 0.1); }
 
-    /* SWITCHER SUB-TAB */
+    /* SUB-TAB SWITCHER */
     .sub-tab-switcher {
       display: flex; margin: 10px 16px; background: #16181e;
       border: 1px solid var(--card-border); border-radius: 14px; padding: 4px; gap: 4px;
@@ -87,7 +85,7 @@
     }
     .sub-btn.active { background: #fff; color: #000; box-shadow: 0 2px 8px rgba(0,0,0,0.4); }
 
-    /* SWIPE LATERALE CHIPS EDITORI */
+    /* CHIPS EDITORI CON LOGHI INTEGRATI */
     .chips-scroll-container {
       display: flex; gap: 8px; padding: 0 16px 10px 16px; overflow-x: auto; scrollbar-width: none;
       scroll-snap-type: x mandatory; -webkit-overflow-scrolling: touch;
@@ -97,12 +95,14 @@
     .chip-item {
       scroll-snap-align: start; flex-shrink: 0;
       background: var(--card-bg); border: 1px solid var(--card-border);
-      color: var(--text-muted); padding: 7px 14px; border-radius: 20px;
+      color: var(--text-muted); padding: 6px 14px; border-radius: 20px;
       font-size: 0.78rem; font-weight: 700; white-space: nowrap; cursor: pointer; transition: all 0.2s;
+      display: flex; align-items: center; gap: 6px;
     }
     .chip-item.active { background: var(--accent-gold); color: #000; border-color: var(--accent-gold); }
+    .chip-logo-img { height: 16px; width: auto; object-fit: contain; border-radius: 2px; }
 
-    /* RUN CARDS ACCORDION */
+    /* RUN CARDS */
     .run-card {
       background: var(--card-bg); border: 1px solid var(--card-border);
       border-radius: 16px; padding: 14px 16px; margin: 0 16px 12px 16px;
@@ -143,7 +143,7 @@
     }
     .num-tile .variant-star { position: absolute; bottom: -2px; right: -2px; font-size: 0.65rem; color: var(--accent-gold); }
 
-    /* DIGITAL TABS CON SWIPE */
+    /* DIGITAL TABS */
     .digital-tabs {
       display: flex; gap: 8px; padding: 0 16px 12px 16px; overflow-x: auto; scrollbar-width: none;
       scroll-snap-type: x mandatory; -webkit-overflow-scrolling: touch;
@@ -185,7 +185,7 @@
       padding: 6px 12px; border-radius: 8px; font-size: 0.73rem; font-weight: 800; cursor: pointer; margin-bottom: 8px;
     }
 
-    /* FLOATING ACTION BUTTON */
+    /* FAB */
     .fab-add {
       position: fixed; bottom: 75px; right: 18px; width: 54px; height: 54px;
       background: var(--accent-gold); color: #000; border-radius: 50%;
@@ -195,7 +195,7 @@
     }
     .fab-add:active { transform: scale(0.9); }
 
-    /* BOTTOM SHEET MODAL */
+    /* MODAL BOTTOM SHEET */
     .modal-overlay {
       display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.8);
       backdrop-filter: blur(8px); z-index: 100; align-items: flex-end;
@@ -213,7 +213,7 @@
       width: 140px; height: 210px; border-radius: 14px; background: linear-gradient(135deg, #1e212b, #0d0e12); margin: 0 auto 16px auto;
       display: flex; flex-direction: column; align-items: center; justify-content: center; font-size: 0.85rem; color: #fff;
       box-shadow: 0 10px 30px rgba(0,0,0,0.7); background-size: cover; background-position: center; border: 1px solid var(--card-border);
-      text-align: center; padding: 12px; font-weight: bold;
+      text-align: center; padding: 12px; font-weight: bold; position: relative; overflow: hidden;
     }
 
     .info-row {
@@ -232,7 +232,7 @@
       background: var(--accent-gold); color: #000; cursor: pointer; margin-top: 14px; font-size: 0.9rem;
     }
 
-    /* BOTTOM NAV NATIVA */
+    /* BOTTOM NAV */
     .bottom-nav {
       position: fixed; bottom: 0; left: 0; right: 0; height: 64px;
       background: rgba(13, 14, 18, 0.95); backdrop-filter: blur(16px);
@@ -256,35 +256,31 @@
     <button class="btn-auth-secondary" onclick="enterApp('demo')">🚀 Prova come Ospite (Demo)</button>
   </div>
 
-  <!-- HEADER NATIVO CON BADGE LOGHI -->
+  <!-- HEADER NATIVO -->
   <div class="app-header">
-    <div class="app-title">
-      📖 Hobbyverse
-    </div>
+    <div class="app-title">📖 Hobbyverse</div>
     <div class="header-badges">
-      <img src="img/logo_marvel.png" class="publisher-badge-img" alt="Marvel" onerror="this.style.display='none'">
-      <img src="img/logo_dc.png" class="publisher-badge-img" alt="DC" onerror="this.style.display='none'">
-      <div class="version-badge">v6.8</div>
+      <div class="version-badge">v6.9</div>
     </div>
   </div>
 
-  <!-- BARRA RICERCA GLOBALE -->
+  <!-- SEARCH BAR -->
   <div class="search-bar-container">
     <input type="text" id="globalSearchInput" class="search-input" placeholder="🔍 Cerca una serie, autore o albo..." oninput="handleGlobalSearch()">
   </div>
 
-  <!-- DASHBOARD STRISCIA COMPATTA -->
+  <!-- HERO STATS BAR -->
   <div class="hero-stats-bar">
     <span>Posseduti: <b id="st-val1">59</b></span>
     <span class="kpi-pill-btn" id="btn-hunt-mode" onclick="toggleHuntingMode()">🎯 Mancanti: <b id="st-val3">145</b></span>
     <span>Spesa: <b style="color:var(--accent-gold);" id="st-val4">248,55 €</b></span>
   </div>
 
-  <!-- SCHERMATA 1: HOME DASHBOARD -->
+  <!-- HOME DASHBOARD -->
   <div id="viewHome" style="display:block; padding:16px;">
     <div class="expense-card" style="margin:0 0 12px 0;">
-      <div style="font-size:1.1rem; font-weight:800; margin-bottom:4px;" id="welcomeHomeTitle">👋 Benvenuto in Hobbyverse!</div>
-      <div style="font-size:0.8rem; color:var(--text-muted);" id="welcomeHomeSubtitle">Esplora la collezione completa, gestisci le tue letture e traccia i costi.</div>
+      <div style="font-size:1.1rem; font-weight:800; margin-bottom:4px;">👋 Benvenuto in Hobbyverse!</div>
+      <div style="font-size:0.8rem; color:var(--text-muted);">Esplora la collezione completa, gestisci le tue letture e traccia i costi.</div>
     </div>
     <div class="expense-card" style="margin:0 0 12px 0;">
       <div class="expense-header-title">⚡ Accesso Rapido</div>
@@ -295,25 +291,30 @@
     </div>
   </div>
 
-  <!-- SCHERMATA 2: INVENTARIO (CARTACEI & ONLINE) -->
+  <!-- INVENTARIO -->
   <div id="viewInventory" style="display:none;">
-    <!-- SWITCHER SUB-TAB -->
     <div class="sub-tab-switcher">
       <div class="sub-btn active" id="btnSubPhysical" onclick="switchSubTab('physical')">📖 Cartacei</div>
       <div class="sub-btn" id="btnSubDigital" onclick="switchSubTab('digital')">📱 Online (65)</div>
     </div>
 
-    <!-- PILLOLE EDITORI CON SWIPE -->
+    <!-- CHIPS EDITORI CON LOGHI INTEGRATI -->
     <div class="chips-scroll-container" id="chipsContainer">
       <div class="chip-item active" onclick="filterPublisher('ALL', this)">🌟 Tutti</div>
-      <div class="chip-item" onclick="filterPublisher('DC', this)">🔵 DC Comics</div>
-      <div class="chip-item" onclick="filterPublisher('Marvel', this)">🔴 Marvel</div>
+      <div class="chip-item" onclick="filterPublisher('DC', this)">
+        <img src="img/logo_dc.png" class="chip-logo-img" alt="DC" onerror="this.style.display='none'"> DC Comics
+      </div>
+      <div class="chip-item" onclick="filterPublisher('Marvel', this)">
+        <img src="img/logo_marvel.png" class="chip-logo-img" alt="Marvel" onerror="this.style.display='none'"> Marvel
+      </div>
+      <div class="chip-item" onclick="filterPublisher('PK', this)">
+        <img src="img/logo_pk.png" class="chip-logo-img" alt="PK" onerror="this.style.display='none'"> PK Disney
+      </div>
       <div class="chip-item" onclick="filterPublisher('Manga', this)">🌸 Manga</div>
-      <div class="chip-item" onclick="filterPublisher('PK', this)">💜 PK Disney</div>
       <div class="chip-item" onclick="filterPublisher('Altro', this)">📚 Altro</div>
     </div>
 
-    <!-- VISTA CARTACEI -->
+    <!-- CARTACEI -->
     <div id="subViewPhysical">
       <div style="display:flex; padding:0 16px 8px 16px;">
         <button class="btn-wa-share" onclick="shareMissingWhatsApp()">📲 Condividi Mancolista WhatsApp</button>
@@ -321,37 +322,25 @@
       <div id="physicalRunsContainer"></div>
     </div>
 
-    <!-- VISTA ONLINE COMPLETA (65 SERIE) -->
+    <!-- ONLINE (65 SERIE COMPLETE) -->
     <div id="subViewDigital" style="display:none;">
       <div class="digital-tabs" id="digitalTabsContainer">
         <div class="d-tab active" id="tab-ALL" onclick="filterDigitalCategory('ALL')">🌟 Tutte (65)</div>
         <div class="d-tab" id="tab-reading" onclick="filterDigitalCategory('reading')">📖 In Lettura (15)</div>
         <div class="d-tab" id="tab-later" onclick="filterDigitalCategory('later')">⏳ Da Leggere (29)</div>
-        <div class="d-tab" id="tab-finished" onclick="filterDigitalCategory('finished')">✅ Finiti & ⭐ (21)</div>
+        <div class="d-tab" id="tab-finished" onclick="filterDigitalCategory('finished')">✅ Finiti (21)</div>
       </div>
       <div id="digitalRunsContainer"></div>
     </div>
   </div>
 
-  <!-- SCHERMATA 3: ANALYTICS -->
+  <!-- ANALYTICS -->
   <div id="viewExpenses" style="display:none; padding-top:10px;">
     <div class="kpi-grid" style="margin:0 16px 12px 16px;">
-      <div class="kpi-box">
-        <div class="kpi-lbl">Valore Stimato</div>
-        <div class="kpi-val" style="color:var(--accent-green);">440,00 €</div>
-      </div>
-      <div class="kpi-box">
-        <div class="kpi-lbl">Risparmio Netto</div>
-        <div class="kpi-val" style="color:var(--accent-gold);">-191,45 €</div>
-      </div>
-      <div class="kpi-box">
-        <div class="kpi-lbl">Totale Speso</div>
-        <div class="kpi-val" style="color:#fff;">248,55 €</div>
-      </div>
-      <div class="kpi-box">
-        <div class="kpi-lbl">Volumi Acquistati</div>
-        <div class="kpi-val" style="color:var(--accent-blue);">52</div>
-      </div>
+      <div class="kpi-box"><div class="kpi-lbl">Valore Stimato</div><div class="kpi-val" style="color:var(--accent-green);">440,00 €</div></div>
+      <div class="kpi-box"><div class="kpi-lbl">Risparmio Netto</div><div class="kpi-val" style="color:var(--accent-gold);">-191,45 €</div></div>
+      <div class="kpi-box"><div class="kpi-lbl">Totale Speso</div><div class="kpi-val" style="color:#fff;">248,55 €</div></div>
+      <div class="kpi-box"><div class="kpi-lbl">Volumi Acquistati</div><div class="kpi-val" style="color:var(--accent-blue);">52</div></div>
     </div>
 
     <div class="expense-card">
@@ -364,20 +353,17 @@
 
     <div class="expense-card">
       <div class="expense-header-title">📊 Ripartizione Budget Canali</div>
-      <div class="chart-container">
-        <canvas id="expensesPieChart"></canvas>
-      </div>
+      <div class="chart-container"><canvas id="expensesPieChart"></canvas></div>
     </div>
   </div>
 
-  <!-- SCHERMATA 4: PROFILO & IMPOSTAZIONI -->
+  <!-- PROFILO -->
   <div id="viewProfile" style="display:none; padding:16px;">
     <div class="expense-card" style="margin:0 0 12px 0; text-align:center;">
       <div style="font-size:2.5rem; margin-bottom:6px;">👤</div>
       <div style="font-weight:bold; font-size:1.1rem;" id="userNameProfile">Proprietario</div>
       <div style="font-size:0.75rem; color:var(--text-muted); margin-top:2px;" id="userRoleProfile">Profilo Completo</div>
     </div>
-
     <div class="expense-card" style="margin:0;">
       <div class="expense-header-title">⚙️ Gestione Dati</div>
       <button class="btn-auth-secondary" style="margin-top:8px;" onclick="exportDataJSON()">💾 Esporta Backup (JSON)</button>
@@ -385,10 +371,10 @@
     </div>
   </div>
 
-  <!-- FLOATING ACTION BUTTON -->
+  <!-- FAB -->
   <div class="fab-add" onclick="openAddModal()">➕</div>
 
-  <!-- BOTTOM SHEET MODAL -->
+  <!-- MODAL BOTTOM SHEET -->
   <div class="modal-overlay" id="itemModal">
     <div class="bottom-sheet">
       <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:14px;">
@@ -398,7 +384,6 @@
 
       <div class="cover-box-large" id="m-cover">Copertina</div>
 
-      <!-- DETTAGLIO ALBO -->
       <div id="modalViewDetail">
         <div style="background:#0d0e12; padding:14px; border-radius:14px; border:1px solid var(--card-border);">
           <div class="info-row"><span class="info-label">🏛️ Casa Editrice:</span><span class="info-val" id="infoPublisher">-</span></div>
@@ -410,7 +395,6 @@
         <button class="btn-save-modal" onclick="closeModal()">Chiudi Scheda</button>
       </div>
 
-      <!-- FORM NUOVO ACQUISTO -->
       <div id="modalViewForm" style="display:none;">
         <div class="sub-tab-switcher" style="margin:0 0 14px 0;">
           <div class="sub-btn active" id="btnFormPhysical" onclick="switchFormType('physical')">📖 Cartaceo Fisico</div>
@@ -422,8 +406,8 @@
           <select id="itemCategorySelect" class="edit-select-field">
             <option value="DC">🔵 DC Comics</option>
             <option value="Marvel">🔴 Marvel</option>
-            <option value="Manga">🌸 Manga</option>
             <option value="PK">💜 PK Disney</option>
+            <option value="Manga">🌸 Manga</option>
             <option value="Altro">📚 Altro</option>
           </select>
 
@@ -450,7 +434,7 @@
             <option value="finished">✅ Finito</option>
           </select>
 
-          <label style="font-size:0.72rem; color:var(--text-muted);">⚡ Numero Uscita Uscita Oggi / Capitolo:</label>
+          <label style="font-size:0.72rem; color:var(--text-muted);">⚡ Capitolo / Uscita:</label>
           <input type="number" id="digitalChapterInput" class="edit-input-field" placeholder="Es. 11">
         </div>
 
@@ -459,7 +443,7 @@
     </div>
   </div>
 
-  <!-- BOTTOM NAV NATIVA -->
+  <!-- BOTTOM NAV -->
   <div class="bottom-nav">
     <div class="nav-btn active" id="navHome" onclick="switchBottomNav('home')">
       <svg viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path><polyline points="9 22 9 12 15 12 15 22"></polyline></svg>
@@ -480,15 +464,12 @@
   </div>
 
   <script>
-    // MAPPA COPERTINE LOCALI E VARIANT SCANSIONATE
+    // MAPPA COPERTINE LOCALI E VARIANT
     const CUSTOM_COVERS = {
-      // Spider-Man
       "spidey-corno-139": "img/uomo_ragno_139_corno.png",
       "spidey-panini-1990-41": "img/uomo_ragno_41_panini.png",
       "spidey-panini-1990-52": "img/uomo_ragno_52_panini.png",
       "spidey-panini-1990-53": "img/uomo_ragno_53_panini.png",
-      
-      // Variant Scansionate
       "abs-batman-2": "img/abs_batman_2_var.png",
       "abs-batman-18": "img/abs_batman_18_var.png",
       "abs-green-arrow-1": "img/abs_green_arrow_1_var.png",
@@ -528,6 +509,7 @@
       { id: "death-note", title: "Death Note", publisher: "Planet Manga", year: "2006", total: 13, owned: [1,2,4,7,12,13], luccaItems: [], authors: "Ohba / Obata", prices: {} }
     ];
 
+    // TUTTE LE 65 SERIE DIGITALI INTEGRATE COMPLETAMENTE
     const OWNER_DIGITAL_RUNS = [
       { id: "d_0", title: "Absolute Batman", publisher: "DC Comics", year: "2024–in corso", category: "reading", authors: "Scott Snyder, Nick Dragotta", total: 12, read: [1] },
       { id: "d_18", title: "Absolute Batman: Ark M Special", publisher: "DC Comics", year: "2026–in corso", category: "finished", authors: "DC Comics", total: 1, read: [1] },
@@ -679,7 +661,7 @@
 
       const filtered = currentDigital.filter(r => {
         const matchesCat = (currentDigitalCategory === 'ALL' || r.category === currentDigitalCategory);
-        const matchesPub = (currentPublisherFilter === 'ALL' || r.publisher.includes(currentPublisherFilter));
+        const matchesPub = (currentPublisherFilter === 'ALL' || r.publisher.includes(currentPublisherFilter) || (currentPublisherFilter === 'PK' && r.publisher.includes('Disney')));
         const matchesSearch = (searchQuery === '' || r.title.toLowerCase().includes(searchQuery) || r.authors.toLowerCase().includes(searchQuery));
         return matchesCat && matchesPub && matchesSearch;
       });
@@ -757,7 +739,8 @@
       arrow.classList.toggle('open', !isOpen);
     }
 
-    function openItemModal(runId, num, mode) {
+    // AUTO-FETCH COPERTINE REMOTE DA API
+    async function openItemModal(runId, num, mode) {
       const run = (mode === 'physical') ? currentPhysical.find(r => r.id === runId) : currentDigital.find(r => r.id === runId);
       
       document.getElementById('modalViewDetail').style.display = 'block';
@@ -790,7 +773,22 @@
         coverBox.innerHTML = '';
       } else {
         coverBox.style.backgroundImage = 'none';
-        coverBox.innerHTML = `<div>📖<br><span style="font-size:0.75rem; margin-top:4px; display:block;">${run.title}<br>#${num}</span></div>`;
+        coverBox.innerHTML = `<div>⏳<br><span style="font-size:0.7rem;">Ricerca copertina...</span></div>`;
+        
+        try {
+          const q = encodeURIComponent(`${run.title} ${num}`);
+          const res = await fetch(`https://openlibrary.org/search.json?q=${q}&limit=1`);
+          const data = await res.json();
+          if (data.docs && data.docs[0] && data.docs[0].cover_i) {
+            const coverUrl = `https://covers.openlibrary.org/b/id/${data.docs[0].cover_i}-M.jpg`;
+            coverBox.style.backgroundImage = `url('${coverUrl}')`;
+            coverBox.innerHTML = '';
+          } else {
+            coverBox.innerHTML = `<div>📖<br><span style="font-size:0.75rem; margin-top:4px; display:block;">${run.title}<br>#${num}</span></div>`;
+          }
+        } catch (e) {
+          coverBox.innerHTML = `<div>📖<br><span style="font-size:0.75rem; margin-top:4px; display:block;">${run.title}<br>#${num}</span></div>`;
+        }
       }
 
       document.getElementById('itemModal').classList.add('open');
