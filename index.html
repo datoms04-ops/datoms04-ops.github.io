@@ -98,13 +98,18 @@
     }
     .chip-item.active { background: var(--accent-gold); color: #000; border-color: var(--accent-gold); }
 
-    /* RUN CARDS ACCORDION */
+    /* RUN CARDS ACCORDION CON LOGHI EDITORE */
     .run-card {
       background: var(--card-bg); border: 1px solid var(--card-border);
       border-radius: 16px; padding: 14px 16px; margin: 0 16px 12px 16px;
     }
     .run-header-row { display: flex; justify-content: space-between; align-items: center; cursor: pointer; }
-    .run-title { font-weight: 800; font-size: 0.96rem; color: #fff; display: flex; align-items: center; gap: 6px; }
+    .run-title { font-weight: 800; font-size: 0.96rem; color: #fff; display: flex; align-items: center; gap: 8px; }
+    
+    .pub-logo-icon {
+      width: 22px; height: 16px; object-fit: contain; border-radius: 3px; display: inline-block; vertical-align: middle;
+    }
+
     .run-meta { font-size: 0.73rem; color: var(--text-muted); margin-top: 2px; }
 
     .toggle-arrow {
@@ -174,7 +179,7 @@
 
     .btn-add-chapter {
       background: rgba(59, 130, 246, 0.15); border: 1px solid var(--accent-blue); color: #60a5fa;
-      padding: 6px 10px; border-radius: 8px; font-size: 0.73rem; font-weight: 800; cursor: pointer; margin-bottom: 8px;
+      padding: 6px 12px; border-radius: 8px; font-size: 0.73rem; font-weight: 800; cursor: pointer; margin-bottom: 8px;
     }
 
     /* FLOATING ACTION BUTTON (FAB) */
@@ -187,7 +192,7 @@
     }
     .fab-add:active { transform: scale(0.9); }
 
-    /* BOTTOM SHEET MODAL */
+    /* BOTTOM SHEET MODAL SMART */
     .modal-overlay {
       display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.8);
       backdrop-filter: blur(8px); z-index: 100; align-items: flex-end;
@@ -251,7 +256,7 @@
   <!-- HEADER NATIVO CON BADGE VERSIOINE -->
   <div class="app-header">
     <div class="app-title">📖 Hobbyverse</div>
-    <div class="version-badge">v6.4</div>
+    <div class="version-badge">v6.5</div>
   </div>
 
   <!-- BARRA RICERCA GLOBALE -->
@@ -373,7 +378,7 @@
   <!-- FLOATING ACTION BUTTON -->
   <div class="fab-add" onclick="openAddModal()">➕</div>
 
-  <!-- BOTTOM SHEET MODAL -->
+  <!-- BOTTOM SHEET MODAL (DETTAGLIO ALBO & NUOVA STRUTTURA PER RUN ONLINE) -->
   <div class="modal-overlay" id="itemModal">
     <div class="bottom-sheet">
       <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:14px;">
@@ -383,7 +388,7 @@
 
       <div class="cover-box-large" id="m-cover">Copertina</div>
 
-      <!-- DETTAGLIO ALBO -->
+      <!-- VISTA 1: DETTAGLIO SCHEDA FUMETTO -->
       <div id="modalViewDetail">
         <div style="background:#0d0e12; padding:14px; border-radius:14px; border:1px solid var(--card-border);">
           <div class="info-row"><span class="info-label">🏛️ Casa Editrice:</span><span class="info-val" id="infoPublisher">-</span></div>
@@ -395,15 +400,15 @@
         <button class="btn-save-modal" onclick="closeModal()">Chiudi Scheda</button>
       </div>
 
-      <!-- FORM NUOVO ACQUISTO / LETTURA -->
+      <!-- VISTA 2: FORM NUOVO ACQUISTO (STRUTTURA DEDICATA CARTACEO VS ONLINE) -->
       <div id="modalViewForm" style="display:none;">
-        <div style="background:#0d0e12; padding:12px; border-radius:12px; border:1px solid var(--card-border);">
-          <label style="font-size:0.72rem; color:var(--text-muted);">📦 Tipologia:</label>
-          <select id="itemTypeSelect" class="edit-select-field">
-            <option value="physical">📖 Cartaceo</option>
-            <option value="digital">📱 Online / Digitale</option>
-          </select>
+        <div class="sub-tab-switcher" style="margin:0 0 14px 0;">
+          <div class="sub-btn active" id="btnFormPhysical" onclick="switchFormType('physical')">📖 Cartaceo Fisico</div>
+          <div class="sub-btn" id="btnFormDigital" onclick="switchFormType('digital')">📱 Lettura Online</div>
+        </div>
 
+        <!-- SEZIONE FISICA (CARTACEO) -->
+        <div id="formPhysicalGroup" style="background:#0d0e12; padding:12px; border-radius:12px; border:1px solid var(--card-border);">
           <label style="font-size:0.72rem; color:var(--text-muted);">🏷️ Editore / Categoria:</label>
           <select id="itemCategorySelect" class="edit-select-field">
             <option value="DC">🔵 DC Comics</option>
@@ -423,9 +428,26 @@
 
           <label style="font-size:0.72rem; color:var(--text-muted);">✏️ Prezzo Pagato (€):</label>
           <input type="number" id="editPriceInput" class="edit-input-field" value="0.00" step="0.01">
+        </div>
 
-          <label style="font-size:0.72rem; color:var(--text-muted);">📝 Note Aggiuntive:</label>
-          <input type="text" id="editNotesInput" class="edit-input-field" placeholder="Es. Uscita nuovo numero letture">
+        <!-- SEZIONE DEDICATA RUN ONLINE -->
+        <div id="formDigitalGroup" style="display:none; background:#0d0e12; padding:12px; border-radius:12px; border:1px solid var(--card-border);">
+          <label style="font-size:0.72rem; color:var(--text-muted);">📚 Serie Online / Titolo:</label>
+          <input type="text" id="digitalTitleInput" class="edit-input-field" placeholder="Es. Absolute Superman">
+
+          <label style="font-size:0.72rem; color:var(--text-muted);">📌 Stato della Lettura:</label>
+          <select id="digitalCategorySelect" class="edit-select-field">
+            <option value="reading">📖 In Lettura</option>
+            <option value="later">⏳ Da Leggere</option>
+            <option value="finished">✅ Finito</option>
+          </select>
+
+          <label style="font-size:0.72rem; color:var(--text-muted);">⚡ Numero Uscita Uscita Oggi / Capitolo:</label>
+          <input type="number" id="digitalChapterInput" class="edit-input-field" placeholder="Es. 11">
+
+          <label style="font-size:0.75rem; color:#fff; display:flex; align-items:center; gap:8px; cursor:pointer;">
+            <input type="checkbox" id="digitalFavCheck"> ⭐ Aggiungi ai Preferiti
+          </label>
         </div>
 
         <button class="btn-save-modal" onclick="closeModal()">💾 Salva Modifica</button>
@@ -460,6 +482,15 @@
       "spidey-panini-1990-41": "img/uomo ragno 41-panini.png",
       "spidey-panini-1990-52": "img/uomo ragno 52-panini.png",
       "spidey-panini-1990-53": "img/uomo ragno 53-panini.png"
+    };
+
+    // MAPPA LOGHI EDITORI
+    const PUBLISHER_LOGOS = {
+      "Marvel": "img/logo marvel.png",
+      "DC": "img/logo dc.png",
+      "DC Comics": "img/logo dc.png",
+      "DC Comics / Panini": "img/logo dc.png",
+      "Panini Marvel Italia": "img/logo marvel.png"
     };
 
     const OWNER_PHYSICAL_RUNS = [
@@ -612,10 +643,13 @@
         const card = document.createElement('div');
         card.className = 'run-card';
 
+        const logoUrl = PUBLISHER_LOGOS[run.publisher];
+        const logoTag = logoUrl ? `<img src="${logoUrl}" class="pub-logo-icon" alt="logo">` : '';
+
         card.innerHTML = `
           <div class="run-header-row" onclick="toggleAccordion('${run.id}', 'physical')">
             <div>
-              <div class="run-title">${run.title}</div>
+              <div class="run-title">${run.title} ${logoTag}</div>
               <div class="run-meta">${run.publisher} (${run.year}) • ${run.authors}</div>
             </div>
             <div class="toggle-arrow" id="arrow-${run.id}">▼</div>
@@ -650,10 +684,13 @@
         const card = document.createElement('div');
         card.className = 'run-card';
 
+        const logoUrl = PUBLISHER_LOGOS[run.publisher];
+        const logoTag = logoUrl ? `<img src="${logoUrl}" class="pub-logo-icon" alt="logo">` : '';
+
         card.innerHTML = `
           <div class="run-header-row" onclick="toggleAccordion('${run.id}', 'digital')">
             <div>
-              <div class="run-title">${run.title} ${run.isFavorite ? '⭐' : ''}</div>
+              <div class="run-title">${run.title} ${logoTag} ${run.isFavorite ? '⭐' : ''}</div>
               <div class="run-meta">${run.publisher} (${run.year}) • ${run.authors}</div>
             </div>
             <div class="toggle-arrow" id="arrow-${run.id}">▼</div>
@@ -760,10 +797,17 @@
       document.getElementById('modalViewDetail').style.display = 'none';
       document.getElementById('modalViewForm').style.display = 'block';
 
-      document.getElementById('m-title').innerText = "➕ Nuovo Acquisto / Uscita";
+      document.getElementById('m-title').innerText = "➕ Nuovo Acquisto / Lettura";
       document.getElementById('m-cover').style.backgroundImage = 'none';
       document.getElementById('m-cover').innerText = '🛍️';
       document.getElementById('itemModal').classList.add('open');
+    }
+
+    function switchFormType(type) {
+      document.getElementById('btnFormPhysical').classList.toggle('active', type === 'physical');
+      document.getElementById('btnFormDigital').classList.toggle('active', type === 'digital');
+      document.getElementById('formPhysicalGroup').style.display = (type === 'physical') ? 'block' : 'none';
+      document.getElementById('formDigitalGroup').style.display = (type === 'digital') ? 'block' : 'none';
     }
 
     function closeModal() { document.getElementById('itemModal').classList.remove('open'); }
