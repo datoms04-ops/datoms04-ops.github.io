@@ -25,7 +25,7 @@
     }
 
     * { box-sizing: border-box; margin: 0; padding: 0; user-select: none; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; }
-    body { background-color: var(--bg-main); color: #fff; min-height: 100vh; overflow-x: hidden; padding-bottom: 85px; touch-action: pan-y; }
+    body { background-color: var(--bg-main); color: #fff; min-height: 100vh; overflow-x: hidden; padding-bottom: 85px; touch-action: manipulation; }
 
     /* ONBOARDING & AUTH OVERLAY */
     .auth-overlay {
@@ -44,14 +44,16 @@
       background: rgba(255,255,255,0.05); color: #fff; font-size: 0.9rem; cursor: pointer;
     }
 
-    /* HEADER NATIVO CON BADGE VERSIOINE */
+    /* HEADER NATIVO CON BADGE LOGHI */
     .app-header {
       position: sticky; top: 0; z-index: 50;
       background: rgba(13, 14, 18, 0.92); backdrop-filter: blur(16px);
       border-bottom: 1px solid var(--card-border);
       padding: 12px 18px; display: flex; align-items: center; justify-content: space-between;
     }
-    .app-title { font-weight: 900; font-size: 1.15rem; letter-spacing: -0.5px; }
+    .app-title { font-weight: 900; font-size: 1.15rem; letter-spacing: -0.5px; display: flex; align-items: center; gap: 8px; }
+    .header-badges { display: flex; align-items: center; gap: 6px; }
+    .publisher-badge-img { height: 18px; width: auto; object-fit: contain; border-radius: 3px; }
     .version-badge { font-size: 0.72rem; color: var(--accent-gold); font-weight: 800; background: rgba(251, 191, 36, 0.12); padding: 3px 8px; border-radius: 12px; border: 1px solid rgba(251, 191, 36, 0.3); }
 
     /* BARRA RICERCA GLOBALE */
@@ -85,31 +87,28 @@
     }
     .sub-btn.active { background: #fff; color: #000; box-shadow: 0 2px 8px rgba(0,0,0,0.4); }
 
-    /* PILLOLE EDITORI */
+    /* SWIPE LATERALE RIPRISTINATO (CHIPS EDITORI E TABS) */
     .chips-scroll-container {
       display: flex; gap: 8px; padding: 0 16px 10px 16px; overflow-x: auto; scrollbar-width: none;
+      scroll-snap-type: x mandatory; -webkit-overflow-scrolling: touch;
     }
     .chips-scroll-container::-webkit-scrollbar { display: none; }
     
     .chip-item {
+      scroll-snap-align: start; flex-shrink: 0;
       background: var(--card-bg); border: 1px solid var(--card-border);
       color: var(--text-muted); padding: 7px 14px; border-radius: 20px;
       font-size: 0.78rem; font-weight: 700; white-space: nowrap; cursor: pointer; transition: all 0.2s;
     }
     .chip-item.active { background: var(--accent-gold); color: #000; border-color: var(--accent-gold); }
 
-    /* RUN CARDS ACCORDION CON LOGHI EDITORE */
+    /* RUN CARDS ACCORDION */
     .run-card {
       background: var(--card-bg); border: 1px solid var(--card-border);
       border-radius: 16px; padding: 14px 16px; margin: 0 16px 12px 16px;
     }
     .run-header-row { display: flex; justify-content: space-between; align-items: center; cursor: pointer; }
     .run-title { font-weight: 800; font-size: 0.96rem; color: #fff; display: flex; align-items: center; gap: 8px; }
-    
-    .pub-logo-icon {
-      width: 22px; height: 16px; object-fit: contain; border-radius: 3px; display: inline-block; vertical-align: middle;
-    }
-
     .run-meta { font-size: 0.73rem; color: var(--text-muted); margin-top: 2px; }
 
     .toggle-arrow {
@@ -144,13 +143,17 @@
     }
     .num-tile .variant-star { position: absolute; bottom: -2px; right: -2px; font-size: 0.65rem; color: var(--accent-gold); }
 
-    /* DIGITAL TABS */
-    .digital-tabs { display: flex; gap: 8px; padding: 0 16px 12px 16px; overflow-x: auto; scrollbar-width: none; }
+    /* DIGITAL TABS CON SWIPE */
+    .digital-tabs {
+      display: flex; gap: 8px; padding: 0 16px 12px 16px; overflow-x: auto; scrollbar-width: none;
+      scroll-snap-type: x mandatory; -webkit-overflow-scrolling: touch;
+    }
     .digital-tabs::-webkit-scrollbar { display: none; }
 
     .d-tab {
-      flex: 1; background: var(--card-bg); border: 1px solid var(--card-border);
-      color: var(--text-muted); padding: 8px 12px; border-radius: 12px; font-size: 0.75rem;
+      scroll-snap-align: start; flex-shrink: 0;
+      background: var(--card-bg); border: 1px solid var(--card-border);
+      color: var(--text-muted); padding: 8px 14px; border-radius: 12px; font-size: 0.75rem;
       font-weight: 700; text-align: center; white-space: nowrap; cursor: pointer;
     }
     .d-tab.active { background: var(--accent-blue); color: #fff; border-color: var(--accent-blue); }
@@ -207,10 +210,10 @@
     @keyframes slideUp { from { transform: translateY(100%); } to { transform: translateY(0); } }
 
     .cover-box-large {
-      width: 140px; height: 210px; border-radius: 14px; background: #262933; margin: 0 auto 16px auto;
-      display: flex; align-items: center; justify-content: center; font-size: 0.85rem; color: var(--text-muted);
+      width: 140px; height: 210px; border-radius: 14px; background: linear-gradient(135deg, #1e212b, #0d0e12); margin: 0 auto 16px auto;
+      display: flex; flex-direction: column; align-items: center; justify-content: center; font-size: 0.85rem; color: #fff;
       box-shadow: 0 10px 30px rgba(0,0,0,0.7); background-size: cover; background-position: center; border: 1px solid var(--card-border);
-      text-align: center; padding: 10px;
+      text-align: center; padding: 12px; font-weight: bold;
     }
 
     .info-row {
@@ -253,10 +256,16 @@
     <button class="btn-auth-secondary" onclick="enterApp('demo')">🚀 Prova come Ospite (Demo)</button>
   </div>
 
-  <!-- HEADER NATIVO CON BADGE VERSIOINE -->
+  <!-- HEADER NATIVO CON BADGE LOGHI MARVEL E DC -->
   <div class="app-header">
-    <div class="app-title">📖 Hobbyverse</div>
-    <div class="version-badge">v6.5</div>
+    <div class="app-title">
+      📖 Hobbyverse
+    </div>
+    <div class="header-badges">
+      <img src="img/logo marvel.png" class="publisher-badge-img" alt="Marvel" onerror="this.style.display='none'">
+      <img src="img/logo dc.png" class="publisher-badge-img" alt="DC" onerror="this.style.display='none'">
+      <div class="version-badge">v6.6</div>
+    </div>
   </div>
 
   <!-- BARRA RICERCA GLOBALE -->
@@ -294,7 +303,7 @@
       <div class="sub-btn" id="btnSubDigital" onclick="switchSubTab('digital')">📱 Online</div>
     </div>
 
-    <!-- PILLOLE EDITORI -->
+    <!-- PILLOLE EDITORI CON SWIPE -->
     <div class="chips-scroll-container" id="chipsContainer">
       <div class="chip-item active" onclick="filterPublisher('ALL', this)">🌟 Tutti</div>
       <div class="chip-item" onclick="filterPublisher('DC', this)">🔵 DC Comics</div>
@@ -312,10 +321,11 @@
       <div id="physicalRunsContainer"></div>
     </div>
 
-    <!-- VISTA ONLINE COMPLETA -->
+    <!-- VISTA ONLINE COMPLETA CON OPZIONE "TUTTE" -->
     <div id="subViewDigital" style="display:none;">
       <div class="digital-tabs" id="digitalTabsContainer">
-        <div class="d-tab active" id="tab-reading" onclick="filterDigitalCategory('reading')">📖 In Lettura</div>
+        <div class="d-tab active" id="tab-all" onclick="filterDigitalCategory('ALL')">🌟 Tutte (58)</div>
+        <div class="d-tab" id="tab-reading" onclick="filterDigitalCategory('reading')">📖 In Lettura</div>
         <div class="d-tab" id="tab-later" onclick="filterDigitalCategory('later')">⏳ Da Leggere</div>
         <div class="d-tab" id="tab-finished" onclick="filterDigitalCategory('finished')">✅ Finiti & ⭐</div>
       </div>
@@ -378,7 +388,7 @@
   <!-- FLOATING ACTION BUTTON -->
   <div class="fab-add" onclick="openAddModal()">➕</div>
 
-  <!-- BOTTOM SHEET MODAL (DETTAGLIO ALBO & NUOVA STRUTTURA PER RUN ONLINE) -->
+  <!-- BOTTOM SHEET MODAL -->
   <div class="modal-overlay" id="itemModal">
     <div class="bottom-sheet">
       <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:14px;">
@@ -400,7 +410,7 @@
         <button class="btn-save-modal" onclick="closeModal()">Chiudi Scheda</button>
       </div>
 
-      <!-- VISTA 2: FORM NUOVO ACQUISTO (STRUTTURA DEDICATA CARTACEO VS ONLINE) -->
+      <!-- VISTA 2: FORM NUOVO ACQUISTO -->
       <div id="modalViewForm" style="display:none;">
         <div class="sub-tab-switcher" style="margin:0 0 14px 0;">
           <div class="sub-btn active" id="btnFormPhysical" onclick="switchFormType('physical')">📖 Cartaceo Fisico</div>
@@ -476,21 +486,12 @@
   </div>
 
   <script>
-    // MAPPA COPERTINE LOCALI
+    // MAPPA COPERTINE LOCALI NORMALIZZATA
     const CUSTOM_COVERS = {
       "spidey-corno-139": "img/uomo ragno 139-corno.png",
       "spidey-panini-1990-41": "img/uomo ragno 41-panini.png",
       "spidey-panini-1990-52": "img/uomo ragno 52-panini.png",
       "spidey-panini-1990-53": "img/uomo ragno 53-panini.png"
-    };
-
-    // MAPPA LOGHI EDITORI
-    const PUBLISHER_LOGOS = {
-      "Marvel": "img/logo marvel.png",
-      "DC": "img/logo dc.png",
-      "DC Comics": "img/logo dc.png",
-      "DC Comics / Panini": "img/logo dc.png",
-      "Panini Marvel Italia": "img/logo marvel.png"
     };
 
     const OWNER_PHYSICAL_RUNS = [
@@ -545,7 +546,7 @@
     let currentDigital = [];
     let activeSubTab = 'physical';
     let currentPublisherFilter = 'ALL';
-    let currentDigitalCategory = 'reading';
+    let currentDigitalCategory = 'ALL';
     let isHuntingMode = false;
     let searchQuery = '';
     let chartInstance = null;
@@ -643,13 +644,10 @@
         const card = document.createElement('div');
         card.className = 'run-card';
 
-        const logoUrl = PUBLISHER_LOGOS[run.publisher];
-        const logoTag = logoUrl ? `<img src="${logoUrl}" class="pub-logo-icon" alt="logo">` : '';
-
         card.innerHTML = `
           <div class="run-header-row" onclick="toggleAccordion('${run.id}', 'physical')">
             <div>
-              <div class="run-title">${run.title} ${logoTag}</div>
+              <div class="run-title">${run.title}</div>
               <div class="run-meta">${run.publisher} (${run.year}) • ${run.authors}</div>
             </div>
             <div class="toggle-arrow" id="arrow-${run.id}">▼</div>
@@ -672,7 +670,7 @@
       container.innerHTML = '';
 
       const filtered = currentDigital.filter(r => {
-        const matchesCat = (r.category === currentDigitalCategory);
+        const matchesCat = (currentDigitalCategory === 'ALL' || r.category === currentDigitalCategory);
         const matchesPub = (currentPublisherFilter === 'ALL' || r.publisher.includes(currentPublisherFilter));
         const matchesSearch = (searchQuery === '' || r.title.toLowerCase().includes(searchQuery) || r.authors.toLowerCase().includes(searchQuery));
         return matchesCat && matchesPub && matchesSearch;
@@ -684,13 +682,10 @@
         const card = document.createElement('div');
         card.className = 'run-card';
 
-        const logoUrl = PUBLISHER_LOGOS[run.publisher];
-        const logoTag = logoUrl ? `<img src="${logoUrl}" class="pub-logo-icon" alt="logo">` : '';
-
         card.innerHTML = `
           <div class="run-header-row" onclick="toggleAccordion('${run.id}', 'digital')">
             <div>
-              <div class="run-title">${run.title} ${logoTag} ${run.isFavorite ? '⭐' : ''}</div>
+              <div class="run-title">${run.title} ${run.isFavorite ? '⭐' : ''}</div>
               <div class="run-meta">${run.publisher} (${run.year}) • ${run.authors}</div>
             </div>
             <div class="toggle-arrow" id="arrow-${run.id}">▼</div>
@@ -784,10 +779,10 @@
 
       if (CUSTOM_COVERS[customKey]) {
         coverBox.style.backgroundImage = `url('${CUSTOM_COVERS[customKey]}')`;
-        coverBox.innerText = '';
+        coverBox.innerHTML = '';
       } else {
         coverBox.style.backgroundImage = 'none';
-        coverBox.innerText = `${run.title} #${num}`;
+        coverBox.innerHTML = `<div>📖<br><span style="font-size:0.75rem; margin-top:4px; display:block;">${run.title}<br>#${num}</span></div>`;
       }
 
       document.getElementById('itemModal').classList.add('open');
@@ -799,7 +794,7 @@
 
       document.getElementById('m-title').innerText = "➕ Nuovo Acquisto / Lettura";
       document.getElementById('m-cover').style.backgroundImage = 'none';
-      document.getElementById('m-cover').innerText = '🛍️';
+      document.getElementById('m-cover').innerHTML = '🛍️';
       document.getElementById('itemModal').classList.add('open');
     }
 
