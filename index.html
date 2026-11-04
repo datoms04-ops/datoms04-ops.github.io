@@ -260,7 +260,7 @@
   <div class="app-header">
     <div class="app-title">📖 Hobbyverse</div>
     <div class="header-badges">
-      <div class="version-badge">v6.9</div>
+      <div class="version-badge">v7.0</div>
     </div>
   </div>
 
@@ -298,7 +298,7 @@
       <div class="sub-btn" id="btnSubDigital" onclick="switchSubTab('digital')">📱 Online (65)</div>
     </div>
 
-    <!-- CHIPS EDITORI CON LOGHI INTEGRATI -->
+    <!-- CHIPS EDITORI CON LOGHI E FILTRI CORRETTI -->
     <div class="chips-scroll-container" id="chipsContainer">
       <div class="chip-item active" onclick="filterPublisher('ALL', this)">🌟 Tutti</div>
       <div class="chip-item" onclick="filterPublisher('DC', this)">
@@ -308,7 +308,7 @@
         <img src="img/logo_marvel.png" class="chip-logo-img" alt="Marvel" onerror="this.style.display='none'"> Marvel
       </div>
       <div class="chip-item" onclick="filterPublisher('PK', this)">
-        <img src="img/logo_pk.png" class="chip-logo-img" alt="PK" onerror="this.style.display='none'"> PK Disney
+        <img src="img/logo_pk.png" class="chip-logo-img" alt="PK" onerror="this.style.display='none'"> PK / Disney
       </div>
       <div class="chip-item" onclick="filterPublisher('Manga', this)">🌸 Manga</div>
       <div class="chip-item" onclick="filterPublisher('Altro', this)">📚 Altro</div>
@@ -509,7 +509,7 @@
       { id: "death-note", title: "Death Note", publisher: "Planet Manga", year: "2006", total: 13, owned: [1,2,4,7,12,13], luccaItems: [], authors: "Ohba / Obata", prices: {} }
     ];
 
-    // TUTTE LE 65 SERIE DIGITALI INTEGRATE COMPLETAMENTE
+    // TUTTE LE 65 SERIE DIGITALI COMPLETE
     const OWNER_DIGITAL_RUNS = [
       { id: "d_0", title: "Absolute Batman", publisher: "DC Comics", year: "2024–in corso", category: "reading", authors: "Scott Snyder, Nick Dragotta", total: 12, read: [1] },
       { id: "d_18", title: "Absolute Batman: Ark M Special", publisher: "DC Comics", year: "2026–in corso", category: "finished", authors: "DC Comics", total: 1, read: [1] },
@@ -617,12 +617,30 @@
       if (activeSubTab === 'digital') renderDigitalRuns();
     }
 
+    // NUOVA LOGICA DI FILTRAGGIO EDITORI CORRETTA PER PK ED ALTRO
+    function checkPublisherMatch(pub, title, filterKey) {
+      if (filterKey === 'ALL') return true;
+      
+      const p = pub.toLowerCase();
+      const t = title.toLowerCase();
+
+      if (filterKey === 'DC') return p.includes('dc');
+      if (filterKey === 'Marvel') return p.includes('marvel') || p.includes('corno');
+      if (filterKey === 'PK') return p.includes('disney') || t.includes('pk') || t.includes('paperinik');
+      if (filterKey === 'Manga') return p.includes('manga') || p.includes('planet');
+      if (filterKey === 'Altro') {
+        const isKnown = p.includes('dc') || p.includes('marvel') || p.includes('corno') || p.includes('disney') || p.includes('manga') || p.includes('planet') || t.includes('pk') || t.includes('paperinik');
+        return !isKnown;
+      }
+      return true;
+    }
+
     function renderPhysicalRuns() {
       const container = document.getElementById('physicalRunsContainer');
       container.innerHTML = '';
 
       const filtered = currentPhysical.filter(r => {
-        const matchesPub = (currentPublisherFilter === 'ALL' || r.publisher.includes(currentPublisherFilter) || (currentPublisherFilter === 'PK' && r.publisher.includes('Disney')));
+        const matchesPub = checkPublisherMatch(r.publisher, r.title, currentPublisherFilter);
         const matchesSearch = (searchQuery === '' || r.title.toLowerCase().includes(searchQuery) || r.authors.toLowerCase().includes(searchQuery));
         const matchesHunt = (!isHuntingMode || r.owned.length < r.total);
         return matchesPub && matchesSearch && matchesHunt;
@@ -661,7 +679,7 @@
 
       const filtered = currentDigital.filter(r => {
         const matchesCat = (currentDigitalCategory === 'ALL' || r.category === currentDigitalCategory);
-        const matchesPub = (currentPublisherFilter === 'ALL' || r.publisher.includes(currentPublisherFilter) || (currentPublisherFilter === 'PK' && r.publisher.includes('Disney')));
+        const matchesPub = checkPublisherMatch(r.publisher, r.title, currentPublisherFilter);
         const matchesSearch = (searchQuery === '' || r.title.toLowerCase().includes(searchQuery) || r.authors.toLowerCase().includes(searchQuery));
         return matchesCat && matchesPub && matchesSearch;
       });
@@ -739,7 +757,6 @@
       arrow.classList.toggle('open', !isOpen);
     }
 
-    // AUTO-FETCH COPERTINE REMOTE DA API
     async function openItemModal(runId, num, mode) {
       const run = (mode === 'physical') ? currentPhysical.find(r => r.id === runId) : currentDigital.find(r => r.id === runId);
       
