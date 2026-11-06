@@ -260,7 +260,7 @@
   <div class="app-header">
     <div class="app-title">📖 Hobbyverse</div>
     <div class="header-badges">
-      <div class="version-badge">v7.0</div>
+      <div class="version-badge">v7.1</div>
     </div>
   </div>
 
@@ -509,7 +509,6 @@
       { id: "death-note", title: "Death Note", publisher: "Planet Manga", year: "2006", total: 13, owned: [1,2,4,7,12,13], luccaItems: [], authors: "Ohba / Obata", prices: {} }
     ];
 
-    // TUTTE LE 65 SERIE DIGITALI COMPLETE
     const OWNER_DIGITAL_RUNS = [
       { id: "d_0", title: "Absolute Batman", publisher: "DC Comics", year: "2024–in corso", category: "reading", authors: "Scott Snyder, Nick Dragotta", total: 12, read: [1] },
       { id: "d_18", title: "Absolute Batman: Ark M Special", publisher: "DC Comics", year: "2026–in corso", category: "finished", authors: "DC Comics", total: 1, read: [1] },
@@ -617,7 +616,6 @@
       if (activeSubTab === 'digital') renderDigitalRuns();
     }
 
-    // NUOVA LOGICA DI FILTRAGGIO EDITORI CORRETTA PER PK ED ALTRO
     function checkPublisherMatch(pub, title, filterKey) {
       if (filterKey === 'ALL') return true;
       
@@ -757,6 +755,7 @@
       arrow.classList.toggle('open', !isOpen);
     }
 
+    // AUTO-FETCH CON ANNO PER EVITARE ERRORE COVER VECCHIE
     async function openItemModal(runId, num, mode) {
       const run = (mode === 'physical') ? currentPhysical.find(r => r.id === runId) : currentDigital.find(r => r.id === runId);
       
@@ -793,7 +792,8 @@
         coverBox.innerHTML = `<div>⏳<br><span style="font-size:0.7rem;">Ricerca copertina...</span></div>`;
         
         try {
-          const q = encodeURIComponent(`${run.title} ${num}`);
+          const cleanYear = run.year ? run.year.split('–')[0].trim() : '';
+          const q = encodeURIComponent(`${run.title} ${cleanYear} ${num}`);
           const res = await fetch(`https://openlibrary.org/search.json?q=${q}&limit=1`);
           const data = await res.json();
           if (data.docs && data.docs[0] && data.docs[0].cover_i) {
