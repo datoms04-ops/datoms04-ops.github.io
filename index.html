@@ -3,12 +3,13 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <title>Hobbyverse</title>
+  <title>Hobbyverse v7.3</title>
 
   <link rel="manifest" href="manifest.json">
   <meta name="theme-color" content="#0d0e12">
   <link rel="apple-touch-icon" href="image_7a0c9d.jpg">
 
+  <!-- Chart.js con gestione fallback -->
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
   <style>
@@ -265,7 +266,7 @@
   <div class="app-header">
     <div class="app-title">📖 Hobbyverse</div>
     <div class="header-badges">
-      <div class="version-badge">v7.2</div>
+      <div class="version-badge">v7.3</div>
     </div>
   </div>
 
@@ -274,11 +275,11 @@
     <input type="text" id="globalSearchInput" class="search-input" placeholder="🔍 Cerca una serie, autore o albo..." oninput="handleGlobalSearch()">
   </div>
 
-  <!-- HERO STATS BAR -->
+  <!-- HERO STATS BAR DINAMICA -->
   <div class="hero-stats-bar">
-    <span>Posseduti: <b id="st-val1">59</b></span>
-    <span class="kpi-pill-btn" id="btn-hunt-mode" onclick="toggleHuntingMode()">🎯 Mancanti: <b id="st-val3">145</b></span>
-    <span>Spesa: <b style="color:var(--accent-gold);" id="st-val4">248,55 €</b></span>
+    <span>Posseduti: <b id="st-val1">0</b></span>
+    <span class="kpi-pill-btn" id="btn-hunt-mode" onclick="toggleHuntingMode()">🎯 Mancanti: <b id="st-val3">0</b></span>
+    <span>Spesa: <b style="color:var(--accent-gold);" id="st-val4">0,00 €</b></span>
   </div>
 
   <!-- HOME DASHBOARD -->
@@ -299,8 +300,8 @@
   <!-- INVENTARIO -->
   <div id="viewInventory" style="display:none;">
     <div class="sub-tab-switcher">
-      <div class="sub-btn active" id="btnSubPhysical" onclick="switchSubTab('physical')">📖 Cartacei</div>
-      <div class="sub-btn" id="btnSubDigital" onclick="switchSubTab('digital')">📱 Online (60)</div>
+      <div class="sub-btn active" id="btnSubPhysical" onclick="switchSubTab('physical')">📖 Cartacei (<span id="cnt-phys-total">27</span>)</div>
+      <div class="sub-btn" id="btnSubDigital" onclick="switchSubTab('digital')">📱 Online (<span id="cnt-dig-total">60</span>)</div>
     </div>
 
     <!-- CHIPS EDITORI CON LOGHI E FILTRI CORRETTI -->
@@ -330,39 +331,39 @@
     <!-- ONLINE (60 SERIE COMPLETE BATCAVE) -->
     <div id="subViewDigital" style="display:none;">
       <div class="digital-tabs" id="digitalTabsContainer">
-        <div class="d-tab active" id="tab-ALL" onclick="filterDigitalCategory('ALL')">🌟 Tutte (60)</div>
-        <div class="d-tab" id="tab-reading" onclick="filterDigitalCategory('reading')">📖 In Lettura (15)</div>
-        <div class="d-tab" id="tab-later" onclick="filterDigitalCategory('later')">⏳ Da Leggere (22)</div>
-        <div class="d-tab" id="tab-finished" onclick="filterDigitalCategory('finished')">✅ Finiti (23)</div>
+        <div class="d-tab active" id="tab-ALL" onclick="filterDigitalCategory('ALL')">🌟 Tutte (<span id="cnt-dig-all">60</span>)</div>
+        <div class="d-tab" id="tab-reading" onclick="filterDigitalCategory('reading')">📖 In Lettura (<span id="cnt-dig-reading">15</span>)</div>
+        <div class="d-tab" id="tab-later" onclick="filterDigitalCategory('later')">⏳ Da Leggere (<span id="cnt-dig-later">22</span>)</div>
+        <div class="d-tab" id="tab-finished" onclick="filterDigitalCategory('finished')">✅ Finiti (<span id="cnt-dig-finished">23</span>)</div>
       </div>
       <div id="digitalRunsContainer"></div>
     </div>
   </div>
 
-  <!-- ANALYTICS -->
+  <!-- ANALYTICS DINAMICA -->
   <div id="viewExpenses" style="display:none; padding-top:10px;">
     <div class="kpi-grid" style="margin:0 16px 12px 16px;">
-      <div class="kpi-box"><div class="kpi-lbl">Valore Stimato</div><div class="kpi-val" style="color:var(--accent-green);">440,00 €</div></div>
-      <div class="kpi-box"><div class="kpi-lbl">Risparmio Netto</div><div class="kpi-val" style="color:var(--accent-gold);">-191,45 €</div></div>
-      <div class="kpi-box"><div class="kpi-lbl">Totale Speso</div><div class="kpi-val" style="color:#fff;">248,55 €</div></div>
-      <div class="kpi-box"><div class="kpi-lbl">Volumi Acquistati</div><div class="kpi-val" style="color:var(--accent-blue);">52</div></div>
+      <div class="kpi-box"><div class="kpi-lbl">Valore Stimato</div><div class="kpi-val" style="color:var(--accent-green);" id="kpiEstValue">440,00 €</div></div>
+      <div class="kpi-box"><div class="kpi-lbl">Risparmio Netto</div><div class="kpi-val" style="color:var(--accent-gold);" id="kpiNetSavings">-191,45 €</div></div>
+      <div class="kpi-box"><div class="kpi-lbl">Totale Speso</div><div class="kpi-val" style="color:#fff;" id="kpiTotalSpent">248,55 €</div></div>
+      <div class="kpi-box"><div class="kpi-lbl">Volumi Acquistati</div><div class="kpi-val" style="color:var(--accent-blue);" id="kpiOwnedCount">93</div></div>
     </div>
 
     <div class="expense-card">
       <div class="expense-header-title">🛒 Spese per Canale d'Acquisto</div>
-      <div class="channel-row"><b>Vinted / Online:</b> 128,33 € <span style="font-size:0.73rem; color:var(--text-muted);">(19 volumi)</span></div>
-      <div class="channel-row"><b>Fumetteria:</b> 67,90 € <span style="font-size:0.73rem; color:var(--text-muted);">(19 fumetti)</span></div>
-      <div class="channel-row"><b>Lucca C&G 60 🔴:</b> 47,06 € <span style="font-size:0.73rem; color:var(--text-muted);">(14 albi, Panini a 3€ e 5€)</span></div>
-      <div class="channel-row"><b>Regali:</b> 0,00 € <span style="font-size:0.73rem; color:var(--text-muted);">(9 fumetti compreso Tapum!)</span></div>
+      <div class="channel-row"><b>Vinted / Online:</b> <span id="expVintedVal">128,33 €</span></div>
+      <div class="channel-row"><b>Fumetteria:</b> <span id="expFumetteriaVal">67,90 €</span></div>
+      <div class="channel-row"><b>Lucca C&G / Fiera 🔴:</b> <span id="expLuccaVal">47,06 €</span></div>
+      <div class="channel-row"><b>Regali (Costo 0 €):</b> <span id="expRegaliVal">0,00 €</span></div>
     </div>
 
     <div class="expense-card">
       <div class="expense-header-title">📊 Ripartizione Budget Canali</div>
-      <div class="chart-container"><canvas id="expensesPieChart"></canvas></div>
+      <div class="chart-container" id="chartFallbackContainer"><canvas id="expensesPieChart"></canvas></div>
     </div>
   </div>
 
-  <!-- PROFILO -->
+  <!-- PROFILO CON RIPRISTINO E BACKUP -->
   <div id="viewProfile" style="display:none; padding:16px;">
     <div class="expense-card" style="margin:0 0 12px 0; text-align:center;">
       <div style="font-size:2.5rem; margin-bottom:6px;">👤</div>
@@ -370,8 +371,10 @@
       <div style="font-size:0.75rem; color:var(--text-muted); margin-top:2px;" id="userRoleProfile">Profilo Completo</div>
     </div>
     <div class="expense-card" style="margin:0;">
-      <div class="expense-header-title">⚙️ Gestione Dati</div>
-      <button class="btn-auth-secondary" style="margin-top:8px;" onclick="exportDataJSON()">💾 Esporta Backup (JSON)</button>
+      <div class="expense-header-title">⚙️ Gestione Dati e Backup</div>
+      <button class="btn-auth-secondary" style="margin-top:8px;" onclick="exportDataJSON()">💾 Esporta Backup Completo (JSON)</button>
+      <input type="file" id="importJsonInput" style="display:none;" accept=".json" onchange="importDataJSON(event)">
+      <button class="btn-auth-secondary" style="margin-top:8px;" onclick="document.getElementById('importJsonInput').click()">📥 Ripristina da Backup (JSON)</button>
       <button class="btn-auth-secondary" style="margin-top:8px; border-color:rgba(239, 68, 68, 0.4); color:var(--accent-red);" onclick="resetAppDemo()">🚪 Cambia Modalità Accesso</button>
     </div>
   </div>
@@ -379,7 +382,7 @@
   <!-- FAB -->
   <div class="fab-add" onclick="openAddModal()">➕</div>
 
-  <!-- MODAL BOTTOM SHEET -->
+  <!-- MODAL BOTTOM SHEET CON SALVATAGGIO REALE -->
   <div class="modal-overlay" id="itemModal">
     <div class="bottom-sheet">
       <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:14px;">
@@ -398,6 +401,7 @@
           <div class="info-row" id="infoPriceRow"><span class="info-label">💰 Prezzo Pagato:</span><span class="info-val" id="infoPrice" style="color:var(--accent-gold);">-</span></div>
         </div>
         <div id="batcaveLinkContainer" style="margin-top:8px; text-align:center;"></div>
+        <button class="btn-auth-secondary" style="margin-top:10px; width:100%;" onclick="switchToEditModeInModal()">✏️ Modifica Dati Scheda</button>
         <button class="btn-save-modal" onclick="closeModal()">Chiudi Scheda</button>
       </div>
 
@@ -410,10 +414,10 @@
         <div id="formPhysicalGroup" style="background:#0d0e12; padding:12px; border-radius:12px; border:1px solid var(--card-border);">
           <label style="font-size:0.72rem; color:var(--text-muted);">🏷️ Editore / Categoria:</label>
           <select id="itemCategorySelect" class="edit-select-field">
-            <option value="DC">🔵 DC Comics</option>
-            <option value="Marvel">🔴 Marvel</option>
-            <option value="PK">💜 PK Disney</option>
-            <option value="Manga">🌸 Manga</option>
+            <option value="DC Comics">🔵 DC Comics</option>
+            <option value="Marvel Comics">🔴 Marvel</option>
+            <option value="Panini Disney">💜 PK Disney</option>
+            <option value="Planet Manga">🌸 Manga</option>
             <option value="Altro">📚 Altro</option>
           </select>
 
@@ -426,7 +430,7 @@
           </select>
 
           <label style="font-size:0.72rem; color:var(--text-muted);">✏️ Prezzo Pagato (€):</label>
-          <input type="number" id="editPriceInput" class="edit-input-field" value="0.00" step="0.01">
+          <input type="number" id="editPriceInput" class="edit-input-field" value="0.00" step="0.01" min="0">
         </div>
 
         <div id="formDigitalGroup" style="display:none; background:#0d0e12; padding:12px; border-radius:12px; border:1px solid var(--card-border);">
@@ -440,11 +444,11 @@
             <option value="finished">✅ Finito</option>
           </select>
 
-          <label style="font-size:0.72rem; color:var(--text-muted);">⚡ Capitolo / Uscita:</label>
-          <input type="number" id="digitalChapterInput" class="edit-input-field" placeholder="Es. 11">
+          <label style="font-size:0.72rem; color:var(--text-muted);">⚡ Capitoli Letti / Totali:</label>
+          <input type="number" id="digitalChapterInput" class="edit-input-field" placeholder="Es. 1" min="0">
         </div>
 
-        <button class="btn-save-modal" onclick="closeModal()">💾 Salva Modifica</button>
+        <button class="btn-save-modal" onclick="saveModalItem()">💾 Salva Modifica</button>
       </div>
     </div>
   </div>
@@ -470,6 +474,14 @@
   </div>
 
   <script>
+    // DEEP CLONE HELPER (Evita modifiche tra Demo e Proprietario)
+    function deepClone(obj) {
+      if (typeof structuredClone === 'function') {
+        return structuredClone(obj);
+      }
+      return JSON.parse(JSON.stringify(obj));
+    }
+
     // MAPPA COPERTINE LOCALI E VARIANT
     const CUSTOM_COVERS = {
       "spidey-corno-139": "img/uomo_ragno_139_corno.png",
@@ -483,41 +495,39 @@
       "pkeda-2": "img/pkeda_2_celoni.png"
     };
 
-    const OWNER_PHYSICAL_RUNS = [
-      { id: "spidey-corno", title: "L'Uomo Ragno", publisher: "Editoriale Corno", year: "1975", total: 200, owned: [139], luccaItems: [139], authors: "Stan Lee / John Romita Sr.", prices: { 139: 5.00 } },
-      { id: "spidey-panini-1990", title: "L'Uomo Ragno", publisher: "Panini Marvel Italia", year: "1990", total: 100, owned: [41, 52, 53], luccaItems: [41, 52, 53], authors: "Todd McFarlane", prices: { 41: 3.00, 52: 5.00, 53: 3.00 } },
-      { id: "ult-spidey-2024", title: "Ultimate Spider-Man", publisher: "Panini Marvel Italia", year: "2024", total: 24, owned: [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15], luccaItems: [], authors: "Jonathan Hickman", prices: {} },
-      { id: "spidey-blue", title: "Spider-Man: Blue", publisher: "Marvel", year: "2002", total: 1, owned: [1], luccaItems: [], authors: "Jeph Loeb / Tim Sale", prices: { 1: 8.24 } },
-      { id: "spidey-verse", title: "Spider-Man: Spider-Verse", publisher: "Marvel", year: "2014", total: 1, owned: [1], luccaItems: [], authors: "Dan Slott", prices: { 1: 9.90 } },
-      { id: "x-men-2000", title: "Gli Incredibili X-Men #2", publisher: "Marvel", year: "2000", total: 1, owned: [1], luccaItems: [], authors: "Marvel Comics", prices: { 1: 0.00 } },
-      { id: "thor-2002", title: "Il Mitico Thor #34", publisher: "Marvel", year: "2002", total: 1, owned: [1], luccaItems: [], authors: "Marvel Comics", prices: { 1: 0.00 } },
+    const INITIAL_PHYSICAL_RUNS = [
+      { id: "spidey-corno", title: "L'Uomo Ragno", publisher: "Editoriale Corno", year: "1975", total: 200, owned: [139], luccaItems: [139], authors: "Stan Lee / John Romita Sr.", prices: { 139: 5.00 }, sources: { 139: "lucca" } },
+      { id: "spidey-panini-1990", title: "L'Uomo Ragno", publisher: "Panini Marvel Italia", year: "1990", total: 100, owned: [41, 52, 53], luccaItems: [41, 52, 53], authors: "Todd McFarlane", prices: { 41: 3.00, 52: 5.00, 53: 3.00 }, sources: { 41: "lucca", 52: "lucca", 53: "lucca" } },
+      { id: "ult-spidey-2024", title: "Ultimate Spider-Man", publisher: "Panini Marvel Italia", year: "2024", total: 24, owned: [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15], luccaItems: [], authors: "Jonathan Hickman", prices: {}, sources: {} },
+      { id: "spidey-blue", title: "Spider-Man: Blue", publisher: "Marvel Comics", year: "2002", total: 1, owned: [1], luccaItems: [], authors: "Jeph Loeb / Tim Sale", prices: { 1: 8.24 }, sources: { 1: "vinted" } },
+      { id: "spidey-verse", title: "Spider-Man: Spider-Verse", publisher: "Marvel Comics", year: "2014", total: 1, owned: [1], luccaItems: [], authors: "Dan Slott", prices: { 1: 9.90 }, sources: { 1: "vinted" } },
+      { id: "x-men-2000", title: "Gli Incredibili X-Men #2", publisher: "Marvel Comics", year: "2000", total: 1, owned: [1], luccaItems: [], authors: "Marvel Comics", prices: { 1: 0.00 }, sources: { 1: "regalo" } },
+      { id: "thor-2002", title: "Il Mitico Thor #34", publisher: "Marvel Comics", year: "2002", total: 1, owned: [1], luccaItems: [], authors: "Marvel Comics", prices: { 1: 0.00 }, sources: { 1: "regalo" } },
 
-      { id: "abs-batman", title: "Absolute Batman", publisher: "DC Comics / Panini", year: "2024", total: 18, owned: [1,2,3,15,16,17,18], luccaItems: [1,2,3,17,18], variants: [2, 18], authors: "Scott Snyder", prices: {} },
-      { id: "abs-sup", title: "Absolute Superman", publisher: "DC Comics / Panini", year: "2024", total: 18, owned: [1], luccaItems: [], authors: "Jason Aaron", prices: {} },
-      { id: "abs-ww", title: "Absolute Wonder Woman", publisher: "DC Comics / Panini", year: "2024", total: 17, owned: [1,2,3,4,5,6,7,8], luccaItems: [], authors: "Kelly Thompson", prices: {} },
-      { id: "batman-grandi-storie", title: "Batman: Le grandi storie", publisher: "DC Deluxe", year: "2018", total: 1, owned: [1], luccaItems: [], authors: "DC Deluxe", prices: { 1: 15.00 } },
-      { id: "batman-due-mondi", title: "Batman dei due mondi", publisher: "DC Comics", year: "2021", total: 1, owned: [1], luccaItems: [], authors: "Fraction / Snyder", prices: { 1: 1.00 } },
-      { id: "batman-gotham-knights", title: "Batman: Gotham Knights – Città dorata", publisher: "DC Comics", year: "2022", total: 1, owned: [1], luccaItems: [], authors: "Evan Narcisse", prices: { 1: 0.00 } },
-      { id: "batman-dkr", title: "Batman: Il ritorno del Cavaliere Oscuro", publisher: "DC Comics", year: "1986", total: 1, owned: [1], luccaItems: [], authors: "Frank Miller", prices: { 1: 7.38 } },
-      { id: "batman-maledizione", title: "Batman: La maledizione del Cavaliere Bianco", publisher: "DC Comics", year: "2020", total: 1, owned: [1], luccaItems: [], authors: "Sean Murphy", prices: { 1: 8.24 } },
-      { id: "batman-ride", title: "Il Batman che ride", publisher: "DC Comics", year: "2019", total: 1, owned: [1], luccaItems: [], authors: "Scott Snyder / Jock", prices: { 1: 8.24 } },
-      { id: "flashpoint", title: "Flashpoint", publisher: "DC Comics", year: "2011", total: 1, owned: [1], luccaItems: [], authors: "Geoff Johns", prices: { 1: 7.36 } },
-      { id: "kingdom-come", title: "Kingdom Come", publisher: "DC Comics", year: "1996", total: 1, owned: [1], luccaItems: [], authors: "Mark Waid / Alex Ross", prices: { 1: 7.56 } },
-      { id: "supergirl-domani", title: "Supergirl: La donna del domani", publisher: "DC Comics", year: "2022", total: 1, owned: [1], luccaItems: [], authors: "Tom King / Evely", prices: { 1: 8.24 } },
-      { id: "superman-red-son", title: "Superman: Red Son", publisher: "DC Comics", year: "2003", total: 1, owned: [1], luccaItems: [], authors: "Mark Millar", prices: { 1: 7.57 } },
-      { id: "jsa-classified", title: "JSA Classified", publisher: "DC Comics", year: "2005", total: 7, owned: [2, 4, 5, 6, 7], luccaItems: [], authors: "DC Comics", prices: {} },
-      { id: "v-vendetta", title: "V per Vendetta", publisher: "DC Comics", year: "1988", total: 1, owned: [1], luccaItems: [], authors: "Alan Moore", prices: { 1: 7.56 } },
+      { id: "abs-batman", title: "Absolute Batman", publisher: "DC Comics", year: "2024", total: 18, owned: [1,2,3,15,16,17,18], luccaItems: [1,2,3,17,18], variants: [2, 18], authors: "Scott Snyder", prices: {}, sources: {} },
+      { id: "abs-sup", title: "Absolute Superman", publisher: "DC Comics", year: "2024", total: 18, owned: [1], luccaItems: [], authors: "Jason Aaron", prices: {}, sources: {} },
+      { id: "abs-ww", title: "Absolute Wonder Woman", publisher: "DC Comics", year: "2024", total: 17, owned: [1,2,3,4,5,6,7,8], luccaItems: [], authors: "Kelly Thompson", prices: {}, sources: {} },
+      { id: "batman-grandi-storie", title: "Batman: Le grandi storie", publisher: "DC Comics", year: "2018", total: 1, owned: [1], luccaItems: [], authors: "DC Deluxe", prices: { 1: 15.00 }, sources: { 1: "fumetteria" } },
+      { id: "batman-due-mondi", title: "Batman dei due mondi", publisher: "DC Comics", year: "2021", total: 1, owned: [1], luccaItems: [], authors: "Fraction / Snyder", prices: { 1: 1.00 }, sources: { 1: "vinted" } },
+      { id: "batman-gotham-knights", title: "Batman: Gotham Knights – Città dorata", publisher: "DC Comics", year: "2022", total: 1, owned: [1], luccaItems: [], authors: "Evan Narcisse", prices: { 1: 0.00 }, sources: { 1: "regalo" } },
+      { id: "batman-dkr", title: "Batman: Il ritorno del Cavaliere Oscuro", publisher: "DC Comics", year: "1986", total: 1, owned: [1], luccaItems: [], authors: "Frank Miller", prices: { 1: 7.38 }, sources: { 1: "vinted" } },
+      { id: "batman-maledizione", title: "Batman: La maledizione del Cavaliere Bianco", publisher: "DC Comics", year: "2020", total: 1, owned: [1], luccaItems: [], authors: "Sean Murphy", prices: { 1: 8.24 }, sources: { 1: "vinted" } },
+      { id: "batman-ride", title: "Il Batman che ride", publisher: "DC Comics", year: "2019", total: 1, owned: [1], luccaItems: [], authors: "Scott Snyder / Jock", prices: { 1: 8.24 }, sources: { 1: "vinted" } },
+      { id: "flashpoint", title: "Flashpoint", publisher: "DC Comics", year: "2011", total: 1, owned: [1], luccaItems: [], authors: "Geoff Johns", prices: { 1: 7.36 }, sources: { 1: "vinted" } },
+      { id: "kingdom-come", title: "Kingdom Come", publisher: "DC Comics", year: "1996", total: 1, owned: [1], luccaItems: [], authors: "Mark Waid / Alex Ross", prices: { 1: 7.56 }, sources: { 1: "vinted" } },
+      { id: "supergirl-domani", title: "Supergirl: La donna del domani", publisher: "DC Comics", year: "2022", total: 1, owned: [1], luccaItems: [], authors: "Tom King / Evely", prices: { 1: 8.24 }, sources: { 1: "vinted" } },
+      { id: "superman-red-son", title: "Superman: Red Son", publisher: "DC Comics", year: "2003", total: 1, owned: [1], luccaItems: [], authors: "Mark Millar", prices: { 1: 7.57 }, sources: { 1: "vinted" } },
+      { id: "jsa-classified", title: "JSA Classified", publisher: "DC Comics", year: "2005", total: 7, owned: [2, 4, 5, 6, 7], luccaItems: [], authors: "DC Comics", prices: {}, sources: {} },
+      { id: "v-vendetta", title: "V per Vendetta", publisher: "DC Comics", year: "1988", total: 1, owned: [1], luccaItems: [], authors: "Alan Moore", prices: { 1: 7.56 }, sources: { 1: "vinted" } },
 
-      { id: "pk2", title: "PK2 - Ducklair", publisher: "Disney Italia", year: "2001", total: 19, owned: [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19], luccaItems: [], authors: "Faraci / Artibani", prices: {} },
-      { id: "pkeda", title: "PKEDA (Paperinik Elite)", publisher: "Panini Disney", year: "2024", total: 10, owned: [2, 3], luccaItems: [2, 3], variants: [2], authors: "Disney / Celoni", prices: {} },
-      { id: "paperinik-il-mito", title: "Paperinik - Il Mito", publisher: "Gazzetta dello Sport", year: "2012", total: 50, owned: [1,2,3,4,5,8,9,10,13,16], luccaItems: [], authors: "Disney Italia", prices: {} },
-      { id: "tapum-ortolani", title: "Tapum! (Storie di guerra)", publisher: "Feltrinelli Comics", year: "2024", total: 1, owned: [1], luccaItems: [], authors: "Leo Ortolani", prices: { 1: 0.00 } },
-      { id: "death-note", title: "Death Note", publisher: "Planet Manga", year: "2006", total: 13, owned: [1,2,4,7,12,13], luccaItems: [], authors: "Ohba / Obata", prices: {} }
+      { id: "pk2", title: "PK2 - Ducklair", publisher: "Panini Disney", year: "2001", total: 19, owned: [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19], luccaItems: [], authors: "Faraci / Artibani", prices: {}, sources: {} },
+      { id: "pkeda", title: "PKEDA (Paperinik Elite)", publisher: "Panini Disney", year: "2024", total: 10, owned: [2, 3], luccaItems: [2, 3], variants: [2], authors: "Disney / Celoni", prices: {}, sources: {} },
+      { id: "paperinik-il-mito", title: "Paperinik - Il Mito", publisher: "Panini Disney", year: "2012", total: 50, owned: [1,2,3,4,5,8,9,10,13,16], luccaItems: [], authors: "Disney Italia", prices: {}, sources: {} },
+      { id: "tapum-ortolani", title: "Tapum! (Storie di guerra)", publisher: "Feltrinelli Comics", year: "2024", total: 1, owned: [1], luccaItems: [], authors: "Leo Ortolani", prices: { 1: 0.00 }, sources: { 1: "regalo" } },
+      { id: "death-note", title: "Death Note", publisher: "Planet Manga", year: "2006", total: 13, owned: [1,2,4,7,12,13], luccaItems: [], authors: "Ohba / Obata", prices: {}, sources: {} }
     ];
 
-    // ARRAY UFFICIALE E INTEGRALE ESTESO DAI TUOI FILE BATCAVE (60 SERIE)
-    const OWNER_DIGITAL_RUNS = [
-      // --- 📖 IN LETTURA / READING (15 SERIE) ---
+    const INITIAL_DIGITAL_RUNS = [
       { id: "d_0", title: "Absolute Power (2024-)", publisher: "DC Comics", year: "2024", category: "reading", isFavorite: false, url: "https://batcave.biz/32800-absolute-power-2024.html", total: 1, read: [1] },
       { id: "d_1", title: "Miles Morales: Spider-Man (2026-)", publisher: "Marvel Comics", year: "2026", category: "reading", isFavorite: false, url: "https://batcave.biz/38437-miles-morales-spider-man-2026.html", total: 1, read: [1] },
       { id: "d_2", title: "Poison Ivy (2022-)", publisher: "DC Comics", year: "2022", category: "reading", isFavorite: false, url: "https://batcave.biz/4228-poison-ivy.html", total: 1, read: [1] },
@@ -533,50 +543,46 @@
       { id: "d_12", title: "Absolute Superman (2024-)", publisher: "DC Comics", year: "2024", category: "reading", isFavorite: false, url: "https://batcave.biz/33086-absolute-superman-2024.html", total: 1, read: [1] },
       { id: "d_13", title: "Absolute Green Arrow (2026-)", publisher: "DC Comics", year: "2026", category: "reading", isFavorite: false, url: "https://batcave.biz/35117-absolute-green-arrow-2026.html", total: 1, read: [1] },
       { id: "d_14", title: "Absolute Batman (2024-)", publisher: "DC Comics", year: "2024", category: "reading", isFavorite: false, url: "https://batcave.biz/33051-absolute-batman-2024.html", total: 1, read: [1] },
-
-      // --- ⏳ DA LEGGERE / LATER (22 SERIE) ---
       { id: "d_15", title: "Ghost in the Shell", publisher: "Dark Horse Comics", year: "1995", category: "later", isFavorite: false, url: "https://batcave.biz/15788-ghost-in-the-shell.html", total: 1, read: [] },
       { id: "d_16", title: "Wonder Woman (1987-2006)", publisher: "DC Comics", year: "1987", category: "later", isFavorite: false, url: "https://batcave.biz/31686-wonder-woman-1987-2006.html", total: 1, read: [] },
       { id: "d_17", title: "DC Comics Essentials: Batman Year One", publisher: "DC Comics", year: "2015", category: "later", isFavorite: false, url: "https://batcave.biz/12853-dc-comics-essentials-batman-year-one.html", total: 1, read: [] },
       { id: "d_18", title: "Batman: Under The Hood", publisher: "DC Comics", year: "2005", category: "later", isFavorite: false, url: "https://batcave.biz/9244-batman-under-the-hood.html", total: 1, read: [] },
       { id: "d_19", title: "Spider-Gwen: Smash (2023-)", publisher: "Marvel Comics", year: "2023", category: "later", isFavorite: false, url: "https://batcave.biz/32309-spider-gwen-smash-2023.html", total: 1, read: [] },
-      { id: "d_20", title: "Spider-Man: The Clone Saga (2009-2010)", publisher: "Marvel", year: "2009", category: "later", isFavorite: false, url: "https://batcave.biz/26024-spider-man-the-clone-saga-2009-2010.html", total: 1, read: [] },
+      { id: "d_20", title: "Spider-Man: The Clone Saga (2009-2010)", publisher: "Marvel Comics", year: "2009", category: "later", isFavorite: false, url: "https://batcave.biz/26024-spider-man-the-clone-saga-2009-2010.html", total: 1, read: [] },
       { id: "d_21", title: "Amazing Spider-Man - Renew Your Vows", publisher: "Marvel Comics", year: "2016", category: "later", isFavorite: false, url: "https://batcave.biz/240-amazing-spider-man-renew-your-vows.html", total: 1, read: [] },
       { id: "d_22", title: "Something is Killing the Children (2019-)", publisher: "Boom! Studios", year: "2019", category: "later", isFavorite: false, url: "https://batcave.biz/4864-something-is-killing-the-children.html", total: 1, read: [] },
       { id: "d_23", title: "Uncanny X-Men (2024-)", publisher: "Marvel Comics", year: "2024", category: "later", isFavorite: false, url: "https://batcave.biz/32886-uncanny-x-men-2024.html", total: 1, read: [] },
       { id: "d_24", title: "Spawn (1992-)", publisher: "Image Comics", year: "1992", category: "later", isFavorite: false, url: "https://batcave.biz/4908-spawn.html", total: 1, read: [] },
       { id: "d_25", title: "The Boys (2006-2012)", publisher: "Dynamite Entertainment", year: "2006", category: "later", isFavorite: false, url: "https://batcave.biz/5629-the-boys-2006-2012.html", total: 1, read: [] },
-      { id: "d_26", title: "Spider-Man/Black Cat: The Evil That Men Do (2002-2006)", publisher: "Marvel", year: "2002", category: "later", isFavorite: false, url: "https://batcave.biz/25952-spider-manblack-cat-the-evil-that-men-do-2002-2006.html", total: 1, read: [] },
+      { id: "d_26", title: "Spider-Man/Black Cat: The Evil That Men Do (2002-2006)", publisher: "Marvel Comics", year: "2002", category: "later", isFavorite: false, url: "https://batcave.biz/25952-spider-manblack-cat-the-evil-that-men-do-2002-2006.html", total: 1, read: [] },
       { id: "d_27", title: "The Amazing Spider-Man (1963-2018)", publisher: "Marvel Comics", year: "1963", category: "later", isFavorite: false, url: "https://batcave.biz/6966-the-amazing-spider-man-1963.html", total: 1, read: [] },
-      { id: "d_28", title: "Superior Spider-Man (2019)", publisher: "Marvel", year: "2019", category: "later", isFavorite: false, url: "https://batcave.biz/38022-superior-spider-man-2019.html", total: 1, read: [] },
+      { id: "d_28", title: "Superior Spider-Man (2019)", publisher: "Marvel Comics", year: "2019", category: "later", isFavorite: false, url: "https://batcave.biz/38022-superior-spider-man-2019.html", total: 1, read: [] },
       { id: "d_29", title: "Spider-Man: Life Story (2019)", publisher: "Marvel Comics", year: "2019", category: "later", isFavorite: false, url: "https://batcave.biz/4960-spider-man-life-story.html", total: 1, read: [] },
       { id: "d_30", title: "Absolute Green Lantern (2025-)", publisher: "DC Comics", year: "2025", category: "later", isFavorite: false, url: "https://batcave.biz/33443-absolute-green-lantern-2025.html", total: 1, read: [] },
       { id: "d_31", title: "Batman (2016-2026)", publisher: "DC Comics", year: "2016", category: "later", isFavorite: false, url: "https://batcave.biz/561-batman.html", total: 1, read: [] },
       { id: "d_32", title: "Absolute Martian Manhunter (2025-2026)", publisher: "DC Comics", year: "2025", category: "later", isFavorite: false, url: "https://batcave.biz/33412-absolute-martian-manhunter-2025.html", total: 1, read: [] },
-      { id: "d_33", title: "Superior Spider-Man (2013-2014)", publisher: "Marvel", year: "2013", category: "later", isFavorite: false, url: "https://batcave.biz/26635-superior-spider-man-2013-2014.html", total: 1, read: [] },
+      { id: "d_33", title: "Superior Spider-Man (2013-2014)", publisher: "Marvel Comics", year: "2013", category: "later", isFavorite: false, url: "https://batcave.biz/26635-superior-spider-man-2013-2014.html", total: 1, read: [] },
       { id: "d_34", title: "Absolute Flash (2025-)", publisher: "DC Comics", year: "2025", category: "later", isFavorite: false, url: "https://batcave.biz/33390-absolute-flash-2025.html", total: 1, read: [] },
       { id: "d_35", title: "Ultimate Spider-Man: Incursion (2025-)", publisher: "Marvel Comics", year: "2025", category: "later", isFavorite: false, url: "https://batcave.biz/33548-ultimate-spider-man-incursion-2025.html", total: 1, read: [] },
-      { id: "d_36", title: "Secret Wars (2015-2016)", publisher: "Marvel", year: "2015", category: "later", isFavorite: false, url: "https://batcave.biz/24958-secret-wars-2015-2016.html", total: 1, read: [] },
-
-      // --- ✅ FINITI / FINISHED & FAVORITES (23 SERIE) ---
+      { id: "d_36", title: "Secret Wars (2015-2016)", publisher: "Marvel Comics", year: "2015", category: "later", isFavorite: false, url: "https://batcave.biz/24958-secret-wars-2015-2016.html", total: 1, read: [] },
       { id: "d_37", title: "Batman: Bad Seeds - Sunrise (2026-)", publisher: "DC Comics", year: "2026", category: "finished", isFavorite: false, url: "https://batcave.biz/38957-batman-bad-seeds-sunrise-2026.html", total: 1, read: [1] },
       { id: "d_38", title: "Venom (2025-2026)", publisher: "Marvel Comics", year: "2025", category: "finished", isFavorite: false, url: "https://batcave.biz/33826-venom-2025.html", total: 1, read: [1] },
       { id: "d_39", title: "Queen in Black (2026)", publisher: "Marvel Comics", year: "2026", category: "finished", isFavorite: false, url: "https://batcave.biz/38345-queen-in-black-2026.html", total: 1, read: [1] },
       { id: "d_40", title: "Batman of Two Worlds (2026)", publisher: "DC Comics", year: "2026", category: "finished", isFavorite: false, url: "https://batcave.biz/38735-batman-of-two-worlds-2026.html", total: 1, read: [1] },
-      { id: "d_41", title: "Amazing Spider-Man: Renew Your Vows (2015)", publisher: "Marvel", year: "2015", category: "finished", isFavorite: false, url: "https://batcave.biz/7817-amazing-spider-man-renew-your-vows-2015.html", total: 1, read: [1] },
-      { id: "d_42", title: "Mary Jane: Homecoming", publisher: "Marvel", year: "2005", category: "finished", isFavorite: false, url: "https://batcave.biz/21371-mary-jane-homecoming.html", total: 1, read: [1] },
-      { id: "d_43", title: "Spider-Man Loves Mary Jane Season 2 (2008-2009)", publisher: "Marvel", year: "2008", category: "finished", isFavorite: false, url: "https://batcave.biz/25921-spider-man-loves-mary-jane-season-2-2008-2009.html", total: 1, read: [1] },
-      { id: "d_44", title: "Spider-Man Loves Mary Jane (2006-2007)", publisher: "Marvel", year: "2006", category: "finished", isFavorite: false, url: "https://batcave.biz/25920-spider-man-loves-mary-jane-2006-2007.html", total: 1, read: [1] },
+      { id: "d_41", title: "Amazing Spider-Man: Renew Your Vows (2015)", publisher: "Marvel Comics", year: "2015", category: "finished", isFavorite: false, url: "https://batcave.biz/7817-amazing-spider-man-renew-your-vows-2015.html", total: 1, read: [1] },
+      { id: "d_42", title: "Mary Jane: Homecoming", publisher: "Marvel Comics", year: "2005", category: "finished", isFavorite: false, url: "https://batcave.biz/21371-mary-jane-homecoming.html", total: 1, read: [1] },
+      { id: "d_43", title: "Spider-Man Loves Mary Jane Season 2 (2008-2009)", publisher: "Marvel Comics", year: "2008", category: "finished", isFavorite: false, url: "https://batcave.biz/25921-spider-man-loves-mary-jane-season-2-2008-2009.html", total: 1, read: [1] },
+      { id: "d_44", title: "Spider-Man Loves Mary Jane (2006-2007)", publisher: "Marvel Comics", year: "2006", category: "finished", isFavorite: false, url: "https://batcave.biz/25920-spider-man-loves-mary-jane-2006-2007.html", total: 1, read: [1] },
       { id: "d_45", title: "Mary Jane: Face It, Tiger (2026)", publisher: "Marvel Comics", year: "2026", category: "finished", isFavorite: false, url: "https://batcave.biz/38385-mary-jane-face-it-tiger-2026.html", total: 1, read: [1] },
       { id: "d_46", title: "DC / Marvel: Superman / Spider-Man (2026-)", publisher: "DC Comics", year: "2026", category: "finished", isFavorite: false, url: "https://batcave.biz/34156-dc-marvel-superman-spider-man-2026.html", total: 1, read: [1] },
       { id: "d_47", title: "Ultimate Spider-Man (2024-2026)", publisher: "Marvel Comics", year: "2024", category: "finished", isFavorite: false, url: "https://batcave.biz/32394-ultimate-spider-man-2024.html", total: 1, read: [1] },
       { id: "d_48", title: "Spider-Man: Reign 2 (2024-)", publisher: "Marvel Comics", year: "2024", category: "finished", isFavorite: false, url: "https://batcave.biz/32802-spider-man-reign-2-2024.html", total: 1, read: [1] },
       { id: "d_49", title: "Mary Jane and Black Cat (2022-)", publisher: "Marvel Comics", year: "2022", category: "finished", isFavorite: false, url: "https://batcave.biz/3668-mary-jane-and-black-cat.html", total: 1, read: [1] },
-      { id: "d_50", title: "Spider-Man: Reign (2007)", publisher: "Marvel", year: "2007", category: "finished", isFavorite: false, url: "https://batcave.biz/26010-spider-man-reign-2007.html", total: 1, read: [1] },
+      { id: "d_50", title: "Spider-Man: Reign (2007)", publisher: "Marvel Comics", year: "2007", category: "finished", isFavorite: false, url: "https://batcave.biz/26010-spider-man-reign-2007.html", total: 1, read: [1] },
       { id: "d_51", title: "Absolute Batman: Ark M Special (2026-)", publisher: "DC Comics", year: "2026", category: "finished", isFavorite: false, url: "https://batcave.biz/34013-absolute-batman-ark-m-special-2026.html", total: 1, read: [1] },
       { id: "d_52", title: "Absolute Evil (2025)", publisher: "DC Comics", year: "2025", category: "finished", isFavorite: false, url: "https://batcave.biz/33817-absolute-evil-2025.html", total: 1, read: [1] },
       { id: "d_53", title: "The Amazing Spider-Man (2018-2022)", publisher: "Marvel Comics", year: "2018", category: "finished", isFavorite: false, url: "https://batcave.biz/241-amazing-spider-man.html", total: 1, read: [1] },
-      { id: "d_54", title: "Ultimate Fallout (2011)", publisher: "Marvel", year: "2011", category: "finished", isFavorite: false, url: "https://batcave.biz/30373-ultimate-fallout-2011.html", total: 1, read: [1] },
+      { id: "d_54", title: "Ultimate Fallout (2011)", publisher: "Marvel Comics", year: "2011", category: "finished", isFavorite: false, url: "https://batcave.biz/30373-ultimate-fallout-2011.html", total: 1, read: [1] },
       { id: "d_55", title: "All-New Spider-Gwen: Ghost-Spider (2025-)", publisher: "Marvel Comics", year: "2025", category: "finished", isFavorite: false, url: "https://batcave.biz/33718-all-new-spider-gwen-ghost-spider-2025.html", total: 1, read: [1] },
       { id: "d_56", title: "Spider-Man: Kraven's Last Hunt (1987)", publisher: "Marvel Comics", year: "1987", category: "finished", isFavorite: false, url: "https://batcave.biz/25995-spider-man-kravens-last-hunt-1989-2008.html", total: 1, read: [1] },
       { id: "d_57", title: "Spider-Man: Blue (2002-2003)", publisher: "Marvel Comics", year: "2002", category: "finished", isFavorite: false, url: "https://batcave.biz/25970-spider-man-blue-2002-2003.html", total: 1, read: [1] },
@@ -584,28 +590,72 @@
       { id: "d_59", title: "Invincible (2003)", publisher: "Image Comics", year: "2003", category: "finished", isFavorite: true, url: "https://batcave.biz/6975-invincible-2003.html", total: 1, read: [1] }
     ];
 
+    // STATO APPLICAZIONE IN MEMORIA
     let currentPhysical = [];
     let currentDigital = [];
+    let appMode = 'owner'; // 'owner' o 'demo'
     let activeSubTab = 'physical';
     let currentPublisherFilter = 'ALL';
     let currentDigitalCategory = 'ALL';
     let isHuntingMode = false;
     let searchQuery = '';
     let chartInstance = null;
+    let activeModalState = null; // contiene rif al volume aperto nel modale
+    let currentModalTargetId = null; // previene race condition copertine
 
+    // CARICAMENTO STATO E PERSISTENZA LOCALSTORAGE
+    function loadAppState() {
+      if (appMode === 'demo') {
+        currentPhysical = deepClone(INITIAL_PHYSICAL_RUNS.slice(0, 3));
+        currentDigital = deepClone(INITIAL_DIGITAL_RUNS.slice(0, 3));
+        return;
+      }
+      try {
+        const savedData = localStorage.getItem('hobbyverse_v73_owner_data');
+        if (savedData) {
+          const parsed = JSON.parse(savedData);
+          if (parsed && Array.isArray(parsed.physical) && Array.isArray(parsed.digital)) {
+            currentPhysical = parsed.physical;
+            currentDigital = parsed.digital;
+            return;
+          }
+        }
+      } catch (e) {
+        console.error("Errore nel ripristino dati da localStorage:", e);
+      }
+      // Fallback sicuro se non c'è cache valida
+      currentPhysical = deepClone(INITIAL_PHYSICAL_RUNS);
+      currentDigital = deepClone(INITIAL_DIGITAL_RUNS);
+    }
+
+    function saveAppState() {
+      if (appMode === 'demo') return; // non sovrascrive i dati reali in Demo
+      try {
+        const payload = {
+          version: "v7.3",
+          updatedAt: new Date().toISOString(),
+          physical: currentPhysical,
+          digital: currentDigital
+        };
+        localStorage.setItem('hobbyverse_v73_owner_data', JSON.stringify(payload));
+      } catch (e) {
+        console.error("Errore durante il salvataggio in localStorage:", e);
+      }
+    }
+
+    // INIZIALIZZAZIONE ACCESSO
     function enterApp(mode) {
+      appMode = mode;
       document.getElementById('authOverlay').style.display = 'none';
       if (mode === 'owner') {
-        currentPhysical = OWNER_PHYSICAL_RUNS;
-        currentDigital = OWNER_DIGITAL_RUNS;
         document.getElementById('userNameProfile').innerText = "Proprietario";
         document.getElementById('userRoleProfile').innerText = "Profilo Completo";
       } else {
-        currentPhysical = OWNER_PHYSICAL_RUNS.slice(0, 2);
-        currentDigital = OWNER_DIGITAL_RUNS.slice(0, 2);
         document.getElementById('userNameProfile').innerText = "Utente Ospite (Demo)";
         document.getElementById('userRoleProfile').innerText = "Modalità Test Sandbox";
       }
+      loadAppState();
+      updateAppStatistics();
       renderPhysicalRuns();
       renderDigitalRuns();
     }
@@ -638,7 +688,7 @@
     }
 
     function handleGlobalSearch() {
-      searchQuery = document.getElementById('globalSearchInput').value.toLowerCase();
+      searchQuery = document.getElementById('globalSearchInput').value.toLowerCase().trim();
       renderPhysicalRuns();
       renderDigitalRuns();
     }
@@ -663,7 +713,7 @@
 
     function filterPublisher(pub, el) {
       currentPublisherFilter = pub;
-      document.querySelectorAll('.chip-item').forEach(c => c.classList.remove('active'));
+      document.querySelectorAll('#chipsContainer .chip-item').forEach(c => c.classList.remove('active'));
       el.classList.add('active');
       if (activeSubTab === 'physical') renderPhysicalRuns();
       if (activeSubTab === 'digital') renderDigitalRuns();
@@ -671,9 +721,8 @@
 
     function checkPublisherMatch(pub, title, filterKey) {
       if (filterKey === 'ALL') return true;
-      
-      const p = pub.toLowerCase();
-      const t = title.toLowerCase();
+      const p = (pub || '').toLowerCase();
+      const t = (title || '').toLowerCase();
 
       if (filterKey === 'DC') return p.includes('dc');
       if (filterKey === 'Marvel') return p.includes('marvel') || p.includes('corno');
@@ -686,13 +735,82 @@
       return true;
     }
 
+    // STATISTICHE E CONTEGGI DINAMICI
+    function updateAppStatistics() {
+      let ownedPhys = 0;
+      let totalPhysCapacity = 0;
+      let spentCalculated = 0.0;
+
+      let channelSpent = { vinted: 0.0, fumetteria: 0.0, lucca: 0.0, regalo: 0.0 };
+
+      currentPhysical.forEach(r => {
+        ownedPhys += r.owned ? r.owned.length : 0;
+        totalPhysCapacity += r.total || 0;
+
+        if (r.prices) {
+          Object.keys(r.prices).forEach(issueKey => {
+            const num = parseInt(issueKey);
+            const p = r.prices[num];
+            if (p !== undefined && p !== null) {
+              spentCalculated += p;
+
+              // Ripartizione per canale d'acquisto
+              let src = (r.sources && r.sources[num]) ? r.sources[num] : '';
+              if (!src) {
+                if (r.luccaItems && r.luccaItems.includes(num)) src = 'lucca';
+                else src = 'vinted';
+              }
+              if (channelSpent[src] !== undefined) channelSpent[src] += p;
+              else channelSpent.vinted += p;
+            }
+          });
+        }
+      });
+
+      const missingPhys = totalPhysCapacity - ownedPhys;
+
+      document.getElementById('st-val1').innerText = ownedPhys;
+      document.getElementById('st-val3').innerText = missingPhys;
+      document.getElementById('st-val4').innerText = spentCalculated.toFixed(2).replace('.', ',') + ' €';
+
+      document.getElementById('kpiOwnedCount').innerText = ownedPhys;
+      document.getElementById('kpiTotalSpent').innerText = spentCalculated.toFixed(2).replace('.', ',') + ' €';
+
+      const estVal = spentCalculated * 1.75;
+      document.getElementById('kpiEstValue').innerText = estVal.toFixed(2).replace('.', ',') + ' €';
+      document.getElementById('kpiNetSavings').innerText = '-' + (estVal - spentCalculated).toFixed(2).replace('.', ',') + ' €';
+
+      document.getElementById('expVintedVal').innerText = channelSpent.vinted.toFixed(2).replace('.', ',') + ' €';
+      document.getElementById('expFumetteriaVal').innerText = channelSpent.fumetteria.toFixed(2).replace('.', ',') + ' €';
+      document.getElementById('expLuccaVal').innerText = channelSpent.lucca.toFixed(2).replace('.', ',') + ' €';
+      document.getElementById('expRegaliVal').innerText = channelSpent.regalo.toFixed(2).replace('.', ',') + ' €';
+
+      // Conteggi Digitali dinamici
+      const digTotal = currentDigital.length;
+      const digReading = currentDigital.filter(d => d.category === 'reading').length;
+      const digLater = currentDigital.filter(d => d.category === 'later').length;
+      const digFinished = currentDigital.filter(d => d.category === 'finished').length;
+
+      document.getElementById('cnt-phys-total').innerText = currentPhysical.length;
+      document.getElementById('cnt-dig-total').innerText = digTotal;
+      document.getElementById('cnt-dig-all').innerText = digTotal;
+      document.getElementById('cnt-dig-reading').innerText = digReading;
+      document.getElementById('cnt-dig-later').innerText = digLater;
+      document.getElementById('cnt-dig-finished').innerText = digFinished;
+    }
+
     function renderPhysicalRuns() {
       const container = document.getElementById('physicalRunsContainer');
+      if (!container) return;
       container.innerHTML = '';
 
       const filtered = currentPhysical.filter(r => {
         const matchesPub = checkPublisherMatch(r.publisher, r.title, currentPublisherFilter);
-        const matchesSearch = (searchQuery === '' || r.title.toLowerCase().includes(searchQuery) || (r.authors && r.authors.toLowerCase().includes(searchQuery)));
+        const matchesSearch = (searchQuery === '' || 
+          r.title.toLowerCase().includes(searchQuery) || 
+          (r.authors && r.authors.toLowerCase().includes(searchQuery)) ||
+          r.publisher.toLowerCase().includes(searchQuery)
+        );
         const matchesHunt = (!isHuntingMode || r.owned.length < r.total);
         return matchesPub && matchesSearch && matchesHunt;
       });
@@ -707,7 +825,7 @@
           <div class="run-header-row" onclick="toggleAccordion('${run.id}', 'physical')">
             <div>
               <div class="run-title">${run.title}</div>
-              <div class="run-meta">${run.publisher} (${run.year}) • ${run.authors}</div>
+              <div class="run-meta">${run.publisher} (${run.year}) • ${run.authors || 'N/D'}</div>
             </div>
             <div class="toggle-arrow" id="arrow-${run.id}">▼</div>
           </div>
@@ -731,7 +849,10 @@
       const filtered = currentDigital.filter(r => {
         const matchesCat = (currentDigitalCategory === 'ALL' || r.category === currentDigitalCategory);
         const matchesPub = checkPublisherMatch(r.publisher, r.title, currentPublisherFilter);
-        const matchesSearch = (searchQuery === '' || r.title.toLowerCase().includes(searchQuery));
+        const matchesSearch = (searchQuery === '' || 
+          r.title.toLowerCase().includes(searchQuery) ||
+          r.publisher.toLowerCase().includes(searchQuery)
+        );
         return matchesCat && matchesPub && matchesSearch;
       });
 
@@ -752,9 +873,9 @@
           <div class="run-body" id="body-${run.id}">
             <button class="btn-add-chapter" onclick="incrementDigitalChapter('${run.id}')">➕ Segna Capitolo #${readCount + 1} Letto</button>
             <div style="display:flex; justify-content:space-between; font-size:0.75rem; color:#cbd5e1; margin-bottom:4px; margin-top:4px;">
-              <span>Letto <b>${readCount}</b> su <b>${run.total}</b></span><span>${pct}%</span>
+              <span id="read-lbl-${run.id}">Letto <b>${readCount}</b> su <b>${run.total}</b></span><span id="pct-lbl-${run.id}">${pct}%</span>
             </div>
-            <div class="progress-bar-bg"><div class="progress-bar-fill digital" style="width: ${pct}%;"></div></div>
+            <div class="progress-bar-bg"><div class="progress-bar-fill digital" id="bar-${run.id}" style="width: ${pct}%;"></div></div>
             <div class="numbers-grid" id="grid-${run.id}"></div>
           </div>
         `;
@@ -762,6 +883,7 @@
       });
     }
 
+    // SELEZIONE E INCREMENTO CHIRURGICO SENZA COLLASSARE LA SCHEDA
     function incrementDigitalChapter(runId) {
       const run = currentDigital.find(r => r.id === runId);
       if (run) {
@@ -769,7 +891,31 @@
         if (!run.read.includes(nextNum)) {
           run.read.push(nextNum);
           if (nextNum > run.total) run.total = nextNum;
-          renderDigitalRuns();
+          saveAppState();
+          updateAppStatistics();
+
+          // Aggiornamento DOM mirato
+          const readCount = run.read.length;
+          const pct = Math.round((readCount / run.total) * 100);
+
+          const lbl = document.getElementById(`read-lbl-${runId}`);
+          if (lbl) lbl.innerHTML = `Letto <b>${readCount}</b> su <b>${run.total}</b>`;
+
+          const pctLbl = document.getElementById(`pct-lbl-${runId}`);
+          if (pctLbl) pctLbl.innerText = `${pct}%`;
+
+          const bar = document.getElementById(`bar-${runId}`);
+          if (bar) bar.style.width = `${pct}%`;
+
+          const grid = document.getElementById(`grid-${runId}`);
+          if (grid && grid.children.length > 0) {
+            let tilesHtml = '';
+            for (let i = 1; i <= run.total; i++) {
+              const isRead = run.read.includes(i);
+              tilesHtml += `<div class="num-tile ${isRead ? 'read' : ''}" onclick="openItemModal('${run.id}', ${i}, 'digital')">${i}</div>`;
+            }
+            grid.innerHTML = tilesHtml;
+          }
         }
       }
     }
@@ -778,9 +924,11 @@
       const body = document.getElementById('body-' + runId);
       const arrow = document.getElementById('arrow-' + runId);
       const grid = document.getElementById('grid-' + runId);
+      if (!body) return;
+
       const isOpen = body.classList.contains('open');
 
-      if (!isOpen && grid.children.length === 0) {
+      if (!isOpen && grid && grid.children.length === 0) {
         const run = (mode === 'physical') ? currentPhysical.find(r => r.id === runId) : currentDigital.find(r => r.id === runId);
         let tilesHtml = '';
         for (let i = 1; i <= run.total; i++) {
@@ -805,12 +953,17 @@
       }
 
       body.classList.toggle('open', !isOpen);
-      arrow.classList.toggle('open', !isOpen);
+      if (arrow) arrow.classList.toggle('open', !isOpen);
     }
 
+    // MODALE DETTAGLIO ED EDITA
     async function openItemModal(runId, num, mode) {
       const run = (mode === 'physical') ? currentPhysical.find(r => r.id === runId) : currentDigital.find(r => r.id === runId);
-      
+      if (!run) return;
+
+      activeModalState = { runId, num, mode, isNew: false };
+      currentModalTargetId = `${runId}-${num}`;
+
       document.getElementById('modalViewDetail').style.display = 'block';
       document.getElementById('modalViewForm').style.display = 'none';
 
@@ -830,8 +983,12 @@
         const isOwned = run.owned.includes(num);
         document.getElementById('infoStatus').innerText = isOwned ? 'Posseduto ✅' : 'Mancante 🎯';
         document.getElementById('infoStatus').style.color = isOwned ? 'var(--accent-green)' : 'var(--accent-gold)';
-        const pricePaid = (run.prices && run.prices[num]) ? `${run.prices[num].toFixed(2)} €` : 'Di Listino';
-        document.getElementById('infoPrice').innerText = pricePaid;
+        
+        let priceText = 'Di Listino / Non Specificato';
+        if (run.prices && run.prices[num] !== undefined && run.prices[num] !== null) {
+          priceText = `${Number(run.prices[num]).toFixed(2)} €`;
+        }
+        document.getElementById('infoPrice').innerText = priceText;
         document.getElementById('infoPriceRow').style.display = 'flex';
       } else {
         const isRead = run.read.includes(num);
@@ -840,6 +997,7 @@
         document.getElementById('infoPriceRow').style.display = 'none';
       }
 
+      // GESTIONE COPERTINE CON PROTEZIONE RACE CONDITION
       const coverBox = document.getElementById('m-cover');
       const customKey = `${runId}-${num}`;
 
@@ -850,7 +1008,7 @@
         coverBox.style.backgroundImage = 'none';
         coverBox.innerHTML = `<div>📖<br><span style="font-size:0.75rem; margin-top:4px; display:block;">${run.title}<br>#${num}</span></div>`;
 
-        // Timeout di sicurezza per non bloccare il caricamento
+        const requestTargetId = currentModalTargetId;
         const controller = new AbortController();
         const timeoutId = setTimeout(() => controller.abort(), 2000);
 
@@ -861,13 +1019,15 @@
           const res = await fetch(`https://openlibrary.org/search.json?q=${q}&limit=1`, { signal: controller.signal });
           const data = await res.json();
           clearTimeout(timeoutId);
-          if (data.docs && data.docs[0] && data.docs[0].cover_i) {
+
+          // Verifica che la scheda aperta sia ancora la stessa (Evita Race Condition)
+          if (currentModalTargetId === requestTargetId && data.docs && data.docs[0] && data.docs[0].cover_i) {
             const coverUrl = `https://covers.openlibrary.org/b/id/${data.docs[0].cover_i}-M.jpg`;
             coverBox.style.backgroundImage = `url('${coverUrl}')`;
             coverBox.innerHTML = '';
           }
         } catch (e) {
-          // Mantieni fallback pulito
+          // Fallback silenzioso
         }
       }
 
@@ -875,6 +1035,7 @@
     }
 
     function openAddModal() {
+      activeModalState = { isNew: true, mode: 'physical' };
       document.getElementById('modalViewDetail').style.display = 'none';
       document.getElementById('modalViewForm').style.display = 'block';
 
@@ -884,6 +1045,113 @@
       document.getElementById('itemModal').classList.add('open');
     }
 
+    function switchToEditModeInModal() {
+      if (!activeModalState || activeModalState.isNew) return;
+      document.getElementById('modalViewDetail').style.display = 'none';
+      document.getElementById('modalViewForm').style.display = 'block';
+
+      const run = (activeModalState.mode === 'physical') 
+        ? currentPhysical.find(r => r.id === activeModalState.runId) 
+        : currentDigital.find(r => r.id === activeModalState.runId);
+
+      switchFormType(activeModalState.mode);
+
+      if (activeModalState.mode === 'physical') {
+        const curPrice = (run.prices && run.prices[activeModalState.num] !== undefined) ? run.prices[activeModalState.num] : 0.00;
+        document.getElementById('editPriceInput').value = curPrice;
+      } else {
+        document.getElementById('digitalTitleInput').value = run.title;
+        document.getElementById('digitalCategorySelect').value = run.category;
+        document.getElementById('digitalChapterInput').value = run.read.length;
+      }
+    }
+
+    // SALVATAGGIO REALE DEI DATI DALLA SCHEDA
+    function saveModalItem() {
+      if (!activeModalState) {
+        closeModal();
+        return;
+      }
+
+      if (activeModalState.isNew) {
+        const isPhys = document.getElementById('btnFormPhysical').classList.contains('active');
+        if (isPhys) {
+          const pubSelect = document.getElementById('itemCategorySelect').value;
+          const srcSelect = document.getElementById('sourceTypeSelect').value;
+          const priceVal = parseFloat(document.getElementById('editPriceInput').value) || 0.0;
+
+          // Aggiungi nuova miniserie fisica di test
+          const newId = 'phys_new_' + Date.now();
+          currentPhysical.unshift({
+            id: newId,
+            title: `Nuovo Volume (${pubSelect})`,
+            publisher: pubSelect,
+            year: new Date().getFullYear().toString(),
+            total: 1,
+            owned: [1],
+            authors: "Autore Personalizzato",
+            prices: { 1: priceVal },
+            sources: { 1: srcSelect }
+          });
+        } else {
+          const titleVal = document.getElementById('digitalTitleInput').value.trim() || "Nuova Lettura Online";
+          const catSelect = document.getElementById('digitalCategorySelect').value;
+          const chapVal = parseInt(document.getElementById('digitalChapterInput').value) || 1;
+
+          currentDigital.unshift({
+            id: 'd_new_' + Date.now(),
+            title: titleVal,
+            publisher: "Digital/Web",
+            year: new Date().getFullYear().toString(),
+            category: catSelect,
+            isFavorite: false,
+            total: chapVal,
+            read: Array.from({length: chapVal}, (_, i) => i + 1)
+          });
+        }
+      } else {
+        // Modifica di un volume esistente
+        const { runId, num, mode } = activeModalState;
+        if (mode === 'physical') {
+          const run = currentPhysical.find(r => r.id === runId);
+          if (run) {
+            const pubSelect = document.getElementById('itemCategorySelect').value;
+            const srcSelect = document.getElementById('sourceTypeSelect').value;
+            const priceVal = parseFloat(document.getElementById('editPriceInput').value);
+
+            run.publisher = pubSelect;
+            if (!run.prices) run.prices = {};
+            if (!run.sources) run.sources = {};
+            
+            if (!isNaN(priceVal) && priceVal >= 0) {
+              run.prices[num] = priceVal;
+            }
+            run.sources[num] = srcSelect;
+          }
+        } else {
+          const run = currentDigital.find(r => r.id === runId);
+          if (run) {
+            const titleVal = document.getElementById('digitalTitleInput').value.trim();
+            const catSelect = document.getElementById('digitalCategorySelect').value;
+            const chapVal = parseInt(document.getElementById('digitalChapterInput').value);
+
+            if (titleVal) run.title = titleVal;
+            run.category = catSelect;
+            if (!isNaN(chapVal) && chapVal >= 0) {
+              run.total = Math.max(run.total, chapVal);
+              run.read = Array.from({length: chapVal}, (_, i) => i + 1);
+            }
+          }
+        }
+      }
+
+      saveAppState();
+      updateAppStatistics();
+      renderPhysicalRuns();
+      renderDigitalRuns();
+      closeModal();
+    }
+
     function switchFormType(type) {
       document.getElementById('btnFormPhysical').classList.toggle('active', type === 'physical');
       document.getElementById('btnFormDigital').classList.toggle('active', type === 'digital');
@@ -891,7 +1159,11 @@
       document.getElementById('formDigitalGroup').style.display = (type === 'digital') ? 'block' : 'none';
     }
 
-    function closeModal() { document.getElementById('itemModal').classList.remove('open'); }
+    function closeModal() {
+      currentModalTargetId = null;
+      activeModalState = null;
+      document.getElementById('itemModal').classList.remove('open');
+    }
 
     function filterDigitalCategory(cat) {
       currentDigitalCategory = cat;
@@ -902,15 +1174,39 @@
     }
 
     function initPieChart() {
+      const container = document.getElementById('chartFallbackContainer');
+      if (typeof Chart === 'undefined') {
+        if (container) container.innerHTML = `<div style="font-size:0.8rem; color:var(--text-muted); text-align:center; padding:20px;">📊 Grafico non disponibile in modalità offline.</div>`;
+        return;
+      }
       if (chartInstance) chartInstance.destroy();
       const ctx = document.getElementById('expensesPieChart').getContext('2d');
+
+      let channelSpent = { vinted: 0.0, fumetteria: 0.0, lucca: 0.0, regalo: 0.0 };
+      currentPhysical.forEach(r => {
+        if (r.prices) {
+          Object.keys(r.prices).forEach(issueKey => {
+            const num = parseInt(issueKey);
+            const p = r.prices[num];
+            if (p !== undefined && p !== null) {
+              let src = (r.sources && r.sources[num]) ? r.sources[num] : '';
+              if (!src) {
+                if (r.luccaItems && r.luccaItems.includes(num)) src = 'lucca';
+                else src = 'vinted';
+              }
+              if (channelSpent[src] !== undefined) channelSpent[src] += p;
+              else channelSpent.vinted += p;
+            }
+          });
+        }
+      });
 
       chartInstance = new Chart(ctx, {
         type: 'doughnut',
         data: {
-          labels: ['Vinted / Online', 'Fumetteria', 'Lucca C&G 60', 'Regali'],
+          labels: ['Vinted / Online', 'Fumetteria', 'Lucca C&G / Fiera', 'Regali'],
           datasets: [{
-            data: [128.33, 67.90, 47.06, 0.00],
+            data: [channelSpent.vinted, channelSpent.fumetteria, channelSpent.lucca, channelSpent.regalo],
             backgroundColor: ['#3b82f6', '#ef4444', '#fbbf24', '#22c55e'],
             borderWidth: 0
           }]
@@ -919,17 +1215,60 @@
       });
     }
 
+    // BACKUP JSON COMPLETO (FISICI + DIGITALI)
     function exportDataJSON() {
-      const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(currentPhysical));
+      const exportPayload = {
+        app: "Hobbyverse",
+        version: "v7.3",
+        exportedAt: new Date().toISOString(),
+        physical: currentPhysical,
+        digital: currentDigital
+      };
+      const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(exportPayload, null, 2));
       const downloadAnchor = document.createElement('a');
       downloadAnchor.setAttribute("href", dataStr);
-      downloadAnchor.setAttribute("download", "hobbyverse_backup.json");
+      downloadAnchor.setAttribute("download", `hobbyverse_backup_v73_${new Date().toISOString().slice(0,10)}.json`);
       document.body.appendChild(downloadAnchor);
       downloadAnchor.click();
       downloadAnchor.remove();
     }
 
+    // RIPRISTINO DA BACKUP JSON
+    function importDataJSON(event) {
+      const file = event.target.files[0];
+      if (!file) return;
+
+      const reader = new FileReader();
+      reader.onload = function(e) {
+        try {
+          const imported = JSON.parse(e.target.result);
+          if (imported && (Array.isArray(imported.physical) || Array.isArray(imported.digital))) {
+            if (confirm("Vuoi ripristinare la collezione da questo file di backup? I dati correnti verranno sovrascritti.")) {
+              if (Array.isArray(imported.physical)) currentPhysical = imported.physical;
+              if (Array.isArray(imported.digital)) currentDigital = imported.digital;
+              saveAppState();
+              updateAppStatistics();
+              renderPhysicalRuns();
+              renderDigitalRuns();
+              alert("✅ Ripristino completato con successo!");
+            }
+          } else {
+            alert("⚠️ Il file JSON selezionato non ha una struttura valida per Hobbyverse.");
+          }
+        } catch (err) {
+          alert("❌ Errore nella lettura del file JSON: " + err.message);
+        }
+      };
+      reader.readAsText(file);
+    }
+
+    // RESET SANDBOX DEMO
     function resetAppDemo() {
+      searchQuery = '';
+      currentPublisherFilter = 'ALL';
+      currentDigitalCategory = 'ALL';
+      isHuntingMode = false;
+      document.getElementById('globalSearchInput').value = '';
       document.getElementById('authOverlay').style.display = 'flex';
     }
   </script>
