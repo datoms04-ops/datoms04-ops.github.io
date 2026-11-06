@@ -185,6 +185,11 @@
       padding: 6px 12px; border-radius: 8px; font-size: 0.73rem; font-weight: 800; cursor: pointer; margin-bottom: 8px;
     }
 
+    .btn-link-out {
+      display: inline-block; background: rgba(251, 191, 36, 0.15); border: 1px solid var(--accent-gold); color: var(--accent-gold);
+      padding: 6px 12px; border-radius: 8px; font-size: 0.73rem; font-weight: 800; text-decoration: none; margin-top: 6px;
+    }
+
     /* FAB */
     .fab-add {
       position: fixed; bottom: 75px; right: 18px; width: 54px; height: 54px;
@@ -260,7 +265,7 @@
   <div class="app-header">
     <div class="app-title">📖 Hobbyverse</div>
     <div class="header-badges">
-      <div class="version-badge">v7.1</div>
+      <div class="version-badge">v7.2</div>
     </div>
   </div>
 
@@ -295,7 +300,7 @@
   <div id="viewInventory" style="display:none;">
     <div class="sub-tab-switcher">
       <div class="sub-btn active" id="btnSubPhysical" onclick="switchSubTab('physical')">📖 Cartacei</div>
-      <div class="sub-btn" id="btnSubDigital" onclick="switchSubTab('digital')">📱 Online (65)</div>
+      <div class="sub-btn" id="btnSubDigital" onclick="switchSubTab('digital')">📱 Online (60)</div>
     </div>
 
     <!-- CHIPS EDITORI CON LOGHI E FILTRI CORRETTI -->
@@ -322,13 +327,13 @@
       <div id="physicalRunsContainer"></div>
     </div>
 
-    <!-- ONLINE (65 SERIE COMPLETE) -->
+    <!-- ONLINE (60 SERIE COMPLETE BATCAVE) -->
     <div id="subViewDigital" style="display:none;">
       <div class="digital-tabs" id="digitalTabsContainer">
-        <div class="d-tab active" id="tab-ALL" onclick="filterDigitalCategory('ALL')">🌟 Tutte (65)</div>
+        <div class="d-tab active" id="tab-ALL" onclick="filterDigitalCategory('ALL')">🌟 Tutte (60)</div>
         <div class="d-tab" id="tab-reading" onclick="filterDigitalCategory('reading')">📖 In Lettura (15)</div>
-        <div class="d-tab" id="tab-later" onclick="filterDigitalCategory('later')">⏳ Da Leggere (29)</div>
-        <div class="d-tab" id="tab-finished" onclick="filterDigitalCategory('finished')">✅ Finiti (21)</div>
+        <div class="d-tab" id="tab-later" onclick="filterDigitalCategory('later')">⏳ Da Leggere (22)</div>
+        <div class="d-tab" id="tab-finished" onclick="filterDigitalCategory('finished')">✅ Finiti (23)</div>
       </div>
       <div id="digitalRunsContainer"></div>
     </div>
@@ -386,12 +391,13 @@
 
       <div id="modalViewDetail">
         <div style="background:#0d0e12; padding:14px; border-radius:14px; border:1px solid var(--card-border);">
-          <div class="info-row"><span class="info-label">🏛️ Casa Editrice:</span><span class="info-val" id="infoPublisher">-</span></div>
-          <div class="info-row"><span class="info-label">✍️ Autori:</span><span class="info-val" id="infoAuthors">-</span></div>
+          <div class="info-row"><span class="info-label">🏛️ Editore:</span><span class="info-val" id="infoPublisher">-</span></div>
+          <div class="info-row"><span class="info-label">✍️ Autori / Info:</span><span class="info-val" id="infoAuthors">-</span></div>
           <div class="info-row"><span class="info-label">📅 Anno / Edizione:</span><span class="info-val" id="infoYear">-</span></div>
           <div class="info-row"><span class="info-label">STATUS:</span><span class="info-val" id="infoStatus" style="color:var(--accent-green);">-</span></div>
           <div class="info-row" id="infoPriceRow"><span class="info-label">💰 Prezzo Pagato:</span><span class="info-val" id="infoPrice" style="color:var(--accent-gold);">-</span></div>
         </div>
+        <div id="batcaveLinkContainer" style="margin-top:8px; text-align:center;"></div>
         <button class="btn-save-modal" onclick="closeModal()">Chiudi Scheda</button>
       </div>
 
@@ -509,26 +515,73 @@
       { id: "death-note", title: "Death Note", publisher: "Planet Manga", year: "2006", total: 13, owned: [1,2,4,7,12,13], luccaItems: [], authors: "Ohba / Obata", prices: {} }
     ];
 
+    // ARRAY UFFICIALE E INTEGRALE ESTESO DAI TUOI FILE BATCAVE (60 SERIE)
     const OWNER_DIGITAL_RUNS = [
-      { id: "d_0", title: "Absolute Batman", publisher: "DC Comics", year: "2024–in corso", category: "reading", authors: "Scott Snyder, Nick Dragotta", total: 12, read: [1] },
-      { id: "d_18", title: "Absolute Batman: Ark M Special", publisher: "DC Comics", year: "2026–in corso", category: "finished", authors: "DC Comics", total: 1, read: [1] },
-      { id: "d_19", title: "Absolute Catwoman", publisher: "DC Comics", year: "2026–in corso", category: "reading", authors: "DC Comics", total: 6, read: [1] },
-      { id: "d_20", title: "Absolute Evil", publisher: "DC Comics", year: "2025", category: "finished", authors: "DC Comics", total: 1, read: [1] },
-      { id: "d_21", title: "Absolute Flash", publisher: "DC Comics", year: "2025–in corso", category: "later", authors: "DC Comics", total: 6, read: [] },
-      { id: "d_22", title: "Absolute Green Arrow", publisher: "DC Comics", year: "2026–in corso", category: "reading", authors: "DC Comics", total: 6, read: [1] },
-      { id: "d_23", title: "Absolute Green Lantern", publisher: "DC Comics", year: "2025–in corso", category: "later", authors: "DC Comics", total: 6, read: [] },
-      { id: "d_24", title: "Absolute Martian Manhunter", publisher: "DC Comics", year: "2025–2026", category: "later", authors: "DC Comics", total: 6, read: [] },
-      { id: "d_37", title: "Absolute Superman", publisher: "DC Comics", year: "2024–in corso", category: "reading", authors: "Jason Aaron, Rafa Sandoval", total: 11, read: [1,2,3,4,5,6,7,8,9,10] },
-      { id: "d_55", title: "Absolute Wonder Woman", publisher: "DC Comics", year: "2024–in corso", category: "reading", authors: "Kelly Thompson, Hayden Sherman", total: 10, read: [1] },
-      { id: "d_56", title: "Black Cat", publisher: "Marvel", year: "2025", category: "reading", authors: "Marvel Comics", total: 5, read: [1,2,3] },
-      { id: "d_57", title: "Zatanna", publisher: "DC Comics", year: "2026", category: "reading", authors: "DC Comics", total: 6, read: [1,2] },
-      { id: "d_58", title: "The Amazing Spider-Man", publisher: "Marvel", year: "2025", category: "reading", authors: "Marvel Comics", total: 12, read: [1,2,3,4] },
-      { id: "d_59", title: "Fantastic Four", publisher: "Marvel", year: "2025", category: "reading", authors: "Marvel Comics", total: 8, read: [1,2] },
-      { id: "d_60", title: "Poison Ivy", publisher: "DC Comics", year: "2022", category: "reading", authors: "G. Willow Wilson", total: 49, read: [1] },
-      { id: "d_61", title: "Ghost in the Shell", publisher: "Dark Horse", year: "1995", category: "later", authors: "Shirow Masamune", total: 1, read: [] },
-      { id: "d_62", title: "Batman: Under The Hood", publisher: "DC Comics", year: "2005", category: "later", authors: "Judd Winick", total: 1, read: [] },
-      { id: "d_63", title: "Invincible", publisher: "Image Comics", year: "2003", category: "finished", authors: "Robert Kirkman", total: 144, read: Array.from({length: 144}, (_, i) => i + 1) },
-      { id: "d_64", title: "Ultimate Spider-Man (2000)", publisher: "Marvel Comics", year: "2000–2011", category: "finished", authors: "Brian M. Bendis", total: 160, read: Array.from({length: 160}, (_, i) => i + 1) }
+      // --- 📖 IN LETTURA / READING (15 SERIE) ---
+      { id: "d_0", title: "Absolute Power (2024-)", publisher: "DC Comics", year: "2024", category: "reading", isFavorite: false, url: "https://batcave.biz/32800-absolute-power-2024.html", total: 1, read: [1] },
+      { id: "d_1", title: "Miles Morales: Spider-Man (2026-)", publisher: "Marvel Comics", year: "2026", category: "reading", isFavorite: false, url: "https://batcave.biz/38437-miles-morales-spider-man-2026.html", total: 1, read: [1] },
+      { id: "d_2", title: "Poison Ivy (2022-)", publisher: "DC Comics", year: "2022", category: "reading", isFavorite: false, url: "https://batcave.biz/4228-poison-ivy.html", total: 1, read: [1] },
+      { id: "d_3", title: "Black Cat (2025-)", publisher: "Marvel Comics", year: "2025", category: "reading", isFavorite: false, url: "https://batcave.biz/33717-black-cat-2025.html", total: 1, read: [1] },
+      { id: "d_4", title: "Zatanna (2026-)", publisher: "DC Comics", year: "2026", category: "reading", isFavorite: false, url: "https://batcave.biz/34225-zatanna-2026.html", total: 1, read: [1] },
+      { id: "d_5", title: "The Amazing Spider-Man (2025-)", publisher: "Marvel Comics", year: "2025", category: "reading", isFavorite: false, url: "https://batcave.biz/33450-the-amazing-spider-man-2025.html", total: 1, read: [1] },
+      { id: "d_6", title: "Absolute Catwoman (2026-)", publisher: "DC Comics", year: "2026", category: "reading", isFavorite: false, url: "https://batcave.biz/37029-absolute-catwoman-2026.html", total: 1, read: [1] },
+      { id: "d_7", title: "Fantastic Four (2025-)", publisher: "Marvel Comics", year: "2025", category: "reading", isFavorite: false, url: "https://batcave.biz/33639-fantastic-four-2025.html", total: 1, read: [1] },
+      { id: "d_8", title: "Absolute Wonder Woman (2024-)", publisher: "DC Comics", year: "2024", category: "reading", isFavorite: false, url: "https://batcave.biz/33091-absolute-wonder-woman-2024.html", total: 1, read: [1] },
+      { id: "d_9", title: "The Amazing Spider-Man: Spider-Versity (2026-)", publisher: "Marvel Comics", year: "2026", category: "reading", isFavorite: false, url: "https://batcave.biz/34196-the-amazing-spider-man-spider-versity-2026.html", total: 1, read: [1] },
+      { id: "d_10", title: "Wonder Woman (2023-)", publisher: "DC Comics", year: "2023", category: "reading", isFavorite: false, url: "https://batcave.biz/6944-wonder-woman-2023.html", total: 1, read: [1] },
+      { id: "d_11", title: "Batman (2025-)", publisher: "DC Comics", year: "2025", category: "reading", isFavorite: false, url: "https://batcave.biz/33758-batman-2025.html", total: 1, read: [1] },
+      { id: "d_12", title: "Absolute Superman (2024-)", publisher: "DC Comics", year: "2024", category: "reading", isFavorite: false, url: "https://batcave.biz/33086-absolute-superman-2024.html", total: 1, read: [1] },
+      { id: "d_13", title: "Absolute Green Arrow (2026-)", publisher: "DC Comics", year: "2026", category: "reading", isFavorite: false, url: "https://batcave.biz/35117-absolute-green-arrow-2026.html", total: 1, read: [1] },
+      { id: "d_14", title: "Absolute Batman (2024-)", publisher: "DC Comics", year: "2024", category: "reading", isFavorite: false, url: "https://batcave.biz/33051-absolute-batman-2024.html", total: 1, read: [1] },
+
+      // --- ⏳ DA LEGGERE / LATER (22 SERIE) ---
+      { id: "d_15", title: "Ghost in the Shell", publisher: "Dark Horse Comics", year: "1995", category: "later", isFavorite: false, url: "https://batcave.biz/15788-ghost-in-the-shell.html", total: 1, read: [] },
+      { id: "d_16", title: "Wonder Woman (1987-2006)", publisher: "DC Comics", year: "1987", category: "later", isFavorite: false, url: "https://batcave.biz/31686-wonder-woman-1987-2006.html", total: 1, read: [] },
+      { id: "d_17", title: "DC Comics Essentials: Batman Year One", publisher: "DC Comics", year: "2015", category: "later", isFavorite: false, url: "https://batcave.biz/12853-dc-comics-essentials-batman-year-one.html", total: 1, read: [] },
+      { id: "d_18", title: "Batman: Under The Hood", publisher: "DC Comics", year: "2005", category: "later", isFavorite: false, url: "https://batcave.biz/9244-batman-under-the-hood.html", total: 1, read: [] },
+      { id: "d_19", title: "Spider-Gwen: Smash (2023-)", publisher: "Marvel Comics", year: "2023", category: "later", isFavorite: false, url: "https://batcave.biz/32309-spider-gwen-smash-2023.html", total: 1, read: [] },
+      { id: "d_20", title: "Spider-Man: The Clone Saga (2009-2010)", publisher: "Marvel", year: "2009", category: "later", isFavorite: false, url: "https://batcave.biz/26024-spider-man-the-clone-saga-2009-2010.html", total: 1, read: [] },
+      { id: "d_21", title: "Amazing Spider-Man - Renew Your Vows", publisher: "Marvel Comics", year: "2016", category: "later", isFavorite: false, url: "https://batcave.biz/240-amazing-spider-man-renew-your-vows.html", total: 1, read: [] },
+      { id: "d_22", title: "Something is Killing the Children (2019-)", publisher: "Boom! Studios", year: "2019", category: "later", isFavorite: false, url: "https://batcave.biz/4864-something-is-killing-the-children.html", total: 1, read: [] },
+      { id: "d_23", title: "Uncanny X-Men (2024-)", publisher: "Marvel Comics", year: "2024", category: "later", isFavorite: false, url: "https://batcave.biz/32886-uncanny-x-men-2024.html", total: 1, read: [] },
+      { id: "d_24", title: "Spawn (1992-)", publisher: "Image Comics", year: "1992", category: "later", isFavorite: false, url: "https://batcave.biz/4908-spawn.html", total: 1, read: [] },
+      { id: "d_25", title: "The Boys (2006-2012)", publisher: "Dynamite Entertainment", year: "2006", category: "later", isFavorite: false, url: "https://batcave.biz/5629-the-boys-2006-2012.html", total: 1, read: [] },
+      { id: "d_26", title: "Spider-Man/Black Cat: The Evil That Men Do (2002-2006)", publisher: "Marvel", year: "2002", category: "later", isFavorite: false, url: "https://batcave.biz/25952-spider-manblack-cat-the-evil-that-men-do-2002-2006.html", total: 1, read: [] },
+      { id: "d_27", title: "The Amazing Spider-Man (1963-2018)", publisher: "Marvel Comics", year: "1963", category: "later", isFavorite: false, url: "https://batcave.biz/6966-the-amazing-spider-man-1963.html", total: 1, read: [] },
+      { id: "d_28", title: "Superior Spider-Man (2019)", publisher: "Marvel", year: "2019", category: "later", isFavorite: false, url: "https://batcave.biz/38022-superior-spider-man-2019.html", total: 1, read: [] },
+      { id: "d_29", title: "Spider-Man: Life Story (2019)", publisher: "Marvel Comics", year: "2019", category: "later", isFavorite: false, url: "https://batcave.biz/4960-spider-man-life-story.html", total: 1, read: [] },
+      { id: "d_30", title: "Absolute Green Lantern (2025-)", publisher: "DC Comics", year: "2025", category: "later", isFavorite: false, url: "https://batcave.biz/33443-absolute-green-lantern-2025.html", total: 1, read: [] },
+      { id: "d_31", title: "Batman (2016-2026)", publisher: "DC Comics", year: "2016", category: "later", isFavorite: false, url: "https://batcave.biz/561-batman.html", total: 1, read: [] },
+      { id: "d_32", title: "Absolute Martian Manhunter (2025-2026)", publisher: "DC Comics", year: "2025", category: "later", isFavorite: false, url: "https://batcave.biz/33412-absolute-martian-manhunter-2025.html", total: 1, read: [] },
+      { id: "d_33", title: "Superior Spider-Man (2013-2014)", publisher: "Marvel", year: "2013", category: "later", isFavorite: false, url: "https://batcave.biz/26635-superior-spider-man-2013-2014.html", total: 1, read: [] },
+      { id: "d_34", title: "Absolute Flash (2025-)", publisher: "DC Comics", year: "2025", category: "later", isFavorite: false, url: "https://batcave.biz/33390-absolute-flash-2025.html", total: 1, read: [] },
+      { id: "d_35", title: "Ultimate Spider-Man: Incursion (2025-)", publisher: "Marvel Comics", year: "2025", category: "later", isFavorite: false, url: "https://batcave.biz/33548-ultimate-spider-man-incursion-2025.html", total: 1, read: [] },
+      { id: "d_36", title: "Secret Wars (2015-2016)", publisher: "Marvel", year: "2015", category: "later", isFavorite: false, url: "https://batcave.biz/24958-secret-wars-2015-2016.html", total: 1, read: [] },
+
+      // --- ✅ FINITI / FINISHED & FAVORITES (23 SERIE) ---
+      { id: "d_37", title: "Batman: Bad Seeds - Sunrise (2026-)", publisher: "DC Comics", year: "2026", category: "finished", isFavorite: false, url: "https://batcave.biz/38957-batman-bad-seeds-sunrise-2026.html", total: 1, read: [1] },
+      { id: "d_38", title: "Venom (2025-2026)", publisher: "Marvel Comics", year: "2025", category: "finished", isFavorite: false, url: "https://batcave.biz/33826-venom-2025.html", total: 1, read: [1] },
+      { id: "d_39", title: "Queen in Black (2026)", publisher: "Marvel Comics", year: "2026", category: "finished", isFavorite: false, url: "https://batcave.biz/38345-queen-in-black-2026.html", total: 1, read: [1] },
+      { id: "d_40", title: "Batman of Two Worlds (2026)", publisher: "DC Comics", year: "2026", category: "finished", isFavorite: false, url: "https://batcave.biz/38735-batman-of-two-worlds-2026.html", total: 1, read: [1] },
+      { id: "d_41", title: "Amazing Spider-Man: Renew Your Vows (2015)", publisher: "Marvel", year: "2015", category: "finished", isFavorite: false, url: "https://batcave.biz/7817-amazing-spider-man-renew-your-vows-2015.html", total: 1, read: [1] },
+      { id: "d_42", title: "Mary Jane: Homecoming", publisher: "Marvel", year: "2005", category: "finished", isFavorite: false, url: "https://batcave.biz/21371-mary-jane-homecoming.html", total: 1, read: [1] },
+      { id: "d_43", title: "Spider-Man Loves Mary Jane Season 2 (2008-2009)", publisher: "Marvel", year: "2008", category: "finished", isFavorite: false, url: "https://batcave.biz/25921-spider-man-loves-mary-jane-season-2-2008-2009.html", total: 1, read: [1] },
+      { id: "d_44", title: "Spider-Man Loves Mary Jane (2006-2007)", publisher: "Marvel", year: "2006", category: "finished", isFavorite: false, url: "https://batcave.biz/25920-spider-man-loves-mary-jane-2006-2007.html", total: 1, read: [1] },
+      { id: "d_45", title: "Mary Jane: Face It, Tiger (2026)", publisher: "Marvel Comics", year: "2026", category: "finished", isFavorite: false, url: "https://batcave.biz/38385-mary-jane-face-it-tiger-2026.html", total: 1, read: [1] },
+      { id: "d_46", title: "DC / Marvel: Superman / Spider-Man (2026-)", publisher: "DC Comics", year: "2026", category: "finished", isFavorite: false, url: "https://batcave.biz/34156-dc-marvel-superman-spider-man-2026.html", total: 1, read: [1] },
+      { id: "d_47", title: "Ultimate Spider-Man (2024-2026)", publisher: "Marvel Comics", year: "2024", category: "finished", isFavorite: false, url: "https://batcave.biz/32394-ultimate-spider-man-2024.html", total: 1, read: [1] },
+      { id: "d_48", title: "Spider-Man: Reign 2 (2024-)", publisher: "Marvel Comics", year: "2024", category: "finished", isFavorite: false, url: "https://batcave.biz/32802-spider-man-reign-2-2024.html", total: 1, read: [1] },
+      { id: "d_49", title: "Mary Jane and Black Cat (2022-)", publisher: "Marvel Comics", year: "2022", category: "finished", isFavorite: false, url: "https://batcave.biz/3668-mary-jane-and-black-cat.html", total: 1, read: [1] },
+      { id: "d_50", title: "Spider-Man: Reign (2007)", publisher: "Marvel", year: "2007", category: "finished", isFavorite: false, url: "https://batcave.biz/26010-spider-man-reign-2007.html", total: 1, read: [1] },
+      { id: "d_51", title: "Absolute Batman: Ark M Special (2026-)", publisher: "DC Comics", year: "2026", category: "finished", isFavorite: false, url: "https://batcave.biz/34013-absolute-batman-ark-m-special-2026.html", total: 1, read: [1] },
+      { id: "d_52", title: "Absolute Evil (2025)", publisher: "DC Comics", year: "2025", category: "finished", isFavorite: false, url: "https://batcave.biz/33817-absolute-evil-2025.html", total: 1, read: [1] },
+      { id: "d_53", title: "The Amazing Spider-Man (2018-2022)", publisher: "Marvel Comics", year: "2018", category: "finished", isFavorite: false, url: "https://batcave.biz/241-amazing-spider-man.html", total: 1, read: [1] },
+      { id: "d_54", title: "Ultimate Fallout (2011)", publisher: "Marvel", year: "2011", category: "finished", isFavorite: false, url: "https://batcave.biz/30373-ultimate-fallout-2011.html", total: 1, read: [1] },
+      { id: "d_55", title: "All-New Spider-Gwen: Ghost-Spider (2025-)", publisher: "Marvel Comics", year: "2025", category: "finished", isFavorite: false, url: "https://batcave.biz/33718-all-new-spider-gwen-ghost-spider-2025.html", total: 1, read: [1] },
+      { id: "d_56", title: "Spider-Man: Kraven's Last Hunt (1987)", publisher: "Marvel Comics", year: "1987", category: "finished", isFavorite: false, url: "https://batcave.biz/25995-spider-man-kravens-last-hunt-1989-2008.html", total: 1, read: [1] },
+      { id: "d_57", title: "Spider-Man: Blue (2002-2003)", publisher: "Marvel Comics", year: "2002", category: "finished", isFavorite: false, url: "https://batcave.biz/25970-spider-man-blue-2002-2003.html", total: 1, read: [1] },
+      { id: "d_58", title: "Ultimate Spider-Man (2000-2011)", publisher: "Marvel Comics", year: "2000", category: "finished", isFavorite: false, url: "https://batcave.biz/30392-ultimate-spider-man-2000-2011.html", total: 1, read: [1] },
+      { id: "d_59", title: "Invincible (2003)", publisher: "Image Comics", year: "2003", category: "finished", isFavorite: true, url: "https://batcave.biz/6975-invincible-2003.html", total: 1, read: [1] }
     ];
 
     let currentPhysical = [];
@@ -639,7 +692,7 @@
 
       const filtered = currentPhysical.filter(r => {
         const matchesPub = checkPublisherMatch(r.publisher, r.title, currentPublisherFilter);
-        const matchesSearch = (searchQuery === '' || r.title.toLowerCase().includes(searchQuery) || r.authors.toLowerCase().includes(searchQuery));
+        const matchesSearch = (searchQuery === '' || r.title.toLowerCase().includes(searchQuery) || (r.authors && r.authors.toLowerCase().includes(searchQuery)));
         const matchesHunt = (!isHuntingMode || r.owned.length < r.total);
         return matchesPub && matchesSearch && matchesHunt;
       });
@@ -678,7 +731,7 @@
       const filtered = currentDigital.filter(r => {
         const matchesCat = (currentDigitalCategory === 'ALL' || r.category === currentDigitalCategory);
         const matchesPub = checkPublisherMatch(r.publisher, r.title, currentPublisherFilter);
-        const matchesSearch = (searchQuery === '' || r.title.toLowerCase().includes(searchQuery) || r.authors.toLowerCase().includes(searchQuery));
+        const matchesSearch = (searchQuery === '' || r.title.toLowerCase().includes(searchQuery));
         return matchesCat && matchesPub && matchesSearch;
       });
 
@@ -692,7 +745,7 @@
           <div class="run-header-row" onclick="toggleAccordion('${run.id}', 'digital')">
             <div>
               <div class="run-title">${run.title} ${run.isFavorite ? '⭐' : ''}</div>
-              <div class="run-meta">${run.publisher} (${run.year}) • ${run.authors}</div>
+              <div class="run-meta">${run.publisher} (${run.year})</div>
             </div>
             <div class="toggle-arrow" id="arrow-${run.id}">▼</div>
           </div>
@@ -755,7 +808,6 @@
       arrow.classList.toggle('open', !isOpen);
     }
 
-    // AUTO-FETCH CON ANNO PER EVITARE ERRORE COVER VECCHIE
     async function openItemModal(runId, num, mode) {
       const run = (mode === 'physical') ? currentPhysical.find(r => r.id === runId) : currentDigital.find(r => r.id === runId);
       
@@ -764,8 +816,15 @@
 
       document.getElementById('m-title').innerText = `${run.title} #${num}`;
       document.getElementById('infoPublisher').innerText = run.publisher;
-      document.getElementById('infoAuthors').innerText = run.authors;
+      document.getElementById('infoAuthors').innerText = run.authors || '-';
       document.getElementById('infoYear').innerText = run.year || 'N/D';
+
+      const linkContainer = document.getElementById('batcaveLinkContainer');
+      if (mode === 'digital' && run.url) {
+        linkContainer.innerHTML = `<a href="${run.url}" target="_blank" class="btn-link-out">🔗 Apri su Batcave.biz</a>`;
+      } else {
+        linkContainer.innerHTML = '';
+      }
 
       if (mode === 'physical') {
         const isOwned = run.owned.includes(num);
@@ -789,22 +848,26 @@
         coverBox.innerHTML = '';
       } else {
         coverBox.style.backgroundImage = 'none';
-        coverBox.innerHTML = `<div>⏳<br><span style="font-size:0.7rem;">Ricerca copertina...</span></div>`;
-        
+        coverBox.innerHTML = `<div>📖<br><span style="font-size:0.75rem; margin-top:4px; display:block;">${run.title}<br>#${num}</span></div>`;
+
+        // Timeout di sicurezza per non bloccare il caricamento
+        const controller = new AbortController();
+        const timeoutId = setTimeout(() => controller.abort(), 2000);
+
         try {
+          const cleanTitle = run.title.replace(/\([^)]*\)/g, '').trim();
           const cleanYear = run.year ? run.year.split('–')[0].trim() : '';
-          const q = encodeURIComponent(`${run.title} ${cleanYear} ${num}`);
-          const res = await fetch(`https://openlibrary.org/search.json?q=${q}&limit=1`);
+          const q = encodeURIComponent(`${cleanTitle} ${cleanYear}`);
+          const res = await fetch(`https://openlibrary.org/search.json?q=${q}&limit=1`, { signal: controller.signal });
           const data = await res.json();
+          clearTimeout(timeoutId);
           if (data.docs && data.docs[0] && data.docs[0].cover_i) {
             const coverUrl = `https://covers.openlibrary.org/b/id/${data.docs[0].cover_i}-M.jpg`;
             coverBox.style.backgroundImage = `url('${coverUrl}')`;
             coverBox.innerHTML = '';
-          } else {
-            coverBox.innerHTML = `<div>📖<br><span style="font-size:0.75rem; margin-top:4px; display:block;">${run.title}<br>#${num}</span></div>`;
           }
         } catch (e) {
-          coverBox.innerHTML = `<div>📖<br><span style="font-size:0.75rem; margin-top:4px; display:block;">${run.title}<br>#${num}</span></div>`;
+          // Mantieni fallback pulito
         }
       }
 
