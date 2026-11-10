@@ -243,7 +243,7 @@
       position: fixed; bottom: 0; left: 0; right: 0; height: calc(64px + var(--sab));
       background: rgba(13, 14, 18, 0.95); backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px);
       border-top: 1px solid var(--card-border);
-      display: flex; justify-content: space-around; align-items: center; z-index: 50;
+      display: flex; justify-around: space-around; align-items: center; z-index: 50;
       padding-bottom: var(--sab);
     }
     .nav-btn { display: flex; flex-direction: column; align-items: center; gap: 4px; color: #64748b; font-size: 0.68rem; font-weight: 600; cursor: pointer; background: none; border: none; }
@@ -251,7 +251,6 @@
     .nav-btn.active { color: var(--accent-gold); }
     .nav-btn.active svg { stroke: var(--accent-gold); }
 
-    /* PROGRESS BAR NATIVA CSS FALLBACK */
     .css-bar-row { margin-bottom: 8px; font-size: 0.78rem; }
     .css-bar-lbl { display: flex; justify-content: space-between; margin-bottom: 3px; color: var(--text-muted); }
     .css-bar-track { width: 100%; height: 8px; background: #262933; border-radius: 4px; overflow: hidden; }
@@ -429,10 +428,8 @@
           <div class="info-row" id="infoVintedBreakdownRow" style="display:none; font-size:0.75rem; color:var(--text-muted);"><span class="info-label">└ Sped/Prot Vinted:</span><span class="info-val" id="infoVintedBreakdownVal">-</span></div>
           <div class="info-row" id="infoEstValRow"><span class="info-label">🏷️ Valore Stimato:</span><span class="info-val" id="infoEstVal" style="color:var(--accent-green);">-</span></div>
         </div>
-        <div id="batcaveLinkContainer" style="margin-top:8px; text-align:center;"></div>
-        
+
         <button class="btn-reset-styles" id="btnMarkArrivedQuick" style="display:none; margin-top:10px; width:100%; background:var(--accent-orange); color:#000; font-weight:800; padding:12px; border-radius:10px; text-align:center;" data-action="mark-arrived-now">🚚 Segna come Arrivato (Diventa Posseduto)</button>
-        
         <button class="btn-reset-styles" style="margin-top:10px; width:100%; background:rgba(255,255,255,0.05); border:1px solid var(--card-border); padding:10px; border-radius:10px; font-weight:700; text-align:center;" data-action="switch-edit-modal">✏️ Modifica Dati Scheda</button>
         <button class="btn-save-modal" data-action="close-modal">Chiudi Scheda</button>
       </div>
@@ -454,11 +451,13 @@
           <label style="font-size:0.72rem; color:var(--text-muted);" for="itemCategorySelect">🏷️ Editore / Categoria:</label>
           <select id="itemCategorySelect" class="edit-select-field">
             <option value="DC Comics">🔵 DC Comics</option>
-            <option value="Marvel Comics">🔴 Marvel</option>
+            <option value="Marvel Comics">🔴 Marvel Comics</option>
             <option value="Panini Marvel Italia">🔴 Panini Marvel Italia</option>
-            <option value="Panini Disney">💜 PK Disney</option>
-            <option value="Planet Manga">🌸 Manga</option>
+            <option value="Panini Disney">💜 Panini Disney</option>
+            <option value="Planet Manga">🌸 Planet Manga</option>
             <option value="Editoriale Corno">📚 Editoriale Corno</option>
+            <option value="Saldapress">💚 SaldaPress</option>
+            <option value="Feltrinelli Comics">📚 Feltrinelli Comics</option>
             <option value="Altro">📚 Altro</option>
           </select>
 
@@ -488,7 +487,7 @@
             <input type="number" id="editVintedFeeInput" class="edit-input-field" value="0.00" step="0.01" min="0">
           </div>
 
-          <label style="font-size:0.72rem; color:var(--text-muted);" for="editEstValInput">🏷️ Valore Stimato (€, opzionale):</label>
+          <label style="font-size:0.72rem; color:var(--text-muted);" for="editEstValInput">🏷️ Valore Stimato / Copertina (€, opzionale):</label>
           <input type="number" id="editEstValInput" class="edit-input-field" placeholder="Es. 15.00" step="0.01" min="0">
 
           <div style="display:flex; align-items:center; gap:8px; margin-top:4px;">
@@ -537,7 +536,7 @@
     </button>
   </nav>
 
-  <!-- LOGICA JAVASCRIPT HOBBYVERSE V8.0 -->
+  <!-- LOGICA JAVASCRIPT HOBBYVERSE V8.0 FINALE -->
   <script>
     function deepClone(obj) {
       if (typeof structuredClone === 'function') return structuredClone(obj);
@@ -578,7 +577,6 @@
       return 'Altro';
     }
 
-    // CONFIGURAZIONE API CON SALVATAGGIO AUTOMATICO IMMEDIATO
     let API_KEYS = {
       comicVine: localStorage.getItem('hv_comicvine_key') || '',
       corsProxy: localStorage.getItem('hv_cors_proxy') || ''
@@ -587,10 +585,8 @@
     function saveApiCredentialsImmediate() {
       const cvVal = document.getElementById('apiComicVineInput').value.trim();
       const proxyVal = document.getElementById('apiCorsProxyInput').value.trim();
-      
       API_KEYS.comicVine = cvVal;
       API_KEYS.corsProxy = proxyVal;
-      
       localStorage.setItem('hv_comicvine_key', cvVal);
       localStorage.setItem('hv_cors_proxy', proxyVal);
 
@@ -598,19 +594,6 @@
       if (badge) badge.style.display = (cvVal || proxyVal) ? 'block' : 'none';
     }
 
-    const CUSTOM_COVERS = {
-      "spidey-corno-139": "img/uomo_ragno_139_corno.png",
-      "spidey-panini-1990-41": "img/uomo_ragno_41_panini.png",
-      "spidey-panini-1990-52": "img/uomo_ragno_52_panini.png",
-      "spidey-panini-1990-53": "img/uomo_ragno_53_panini.png",
-      "abs-batman-2": "img/abs_batman_2_var.png",
-      "abs-batman-18": "img/abs_batman_18_var.png",
-      "abs-green-arrow-1": "img/abs_green_arrow_1_var.png",
-      "abs-martian-1": "img/abs_martian_1_var.png",
-      "pkeda-2": "img/pkeda_2_celoni.png"
-    };
-
-    // INDEXEDDB CACHE MANAGER
     const DB_NAME = 'HobbyverseCoverDB_v8';
     const DB_VERSION = 1;
     let dbInstance = null;
@@ -668,37 +651,40 @@
       });
     }
 
-    // ELENCO COMPLETO DELLE RUN ORIGINALI CON TUTTI I PREZZI
+    // BASE DATI ORIGINALE COMPLETA CON LUCCA & NUOVI ORDINI
     const INITIAL_PHYSICAL_RUNS = [
       { id: "spidey-corno", title: "L'Uomo Ragno", publisher: "Editoriale Corno", category: "Marvel", year: "1975", total: 200, owned: [139], incoming: [], isAbandoned: false, luccaItems: [139], authors: "Stan Lee / John Romita Sr.", prices: { 139: 5.00 }, sources: { 139: "lucca" } },
       { id: "spidey-panini-1990", title: "L'Uomo Ragno", publisher: "Panini Marvel Italia", category: "Marvel", year: "1990", total: 100, owned: [41, 52, 53], incoming: [], isAbandoned: false, luccaItems: [41, 52, 53], authors: "Todd McFarlane", prices: { 41: 3.00, 52: 5.00, 53: 3.00 }, sources: { 41: "lucca", 52: "lucca", 53: "lucca" } },
-      { id: "ult-spidey-2024", title: "Ultimate Spider-Man", publisher: "Panini Marvel Italia", category: "Marvel", year: "2024", total: 24, owned: [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15], incoming: [], isAbandoned: false, luccaItems: [], authors: "Jonathan Hickman", prices: {}, sources: {} },
-      { id: "spidey-blue", title: "Spider-Man: Blue", publisher: "Marvel Comics", category: "Marvel", year: "2002", total: 1, owned: [1], incoming: [], isAbandoned: false, luccaItems: [], authors: "Jeph Loeb / Tim Sale", prices: { 1: 8.24 }, sources: { 1: "vinted" } },
-      { id: "spidey-verse", title: "Spider-Man: Spider-Verse", publisher: "Marvel Comics", category: "Marvel", year: "2014", total: 1, owned: [1], incoming: [], isAbandoned: false, luccaItems: [], authors: "Dan Slott", prices: { 1: 9.90 }, sources: { 1: "vinted" } },
+      { id: "ult-spidey-2024", title: "Ultimate Spider-Man", publisher: "Panini Marvel Italia", category: "Marvel", year: "2024", total: 24, owned: [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15], incoming: [], isAbandoned: false, luccaItems: [], authors: "Jonathan Hickman", prices: {1: 1.25, 2: 1.25, 3: 3.00, 4: 3.00, 5: 3.00, 6: 3.00, 7: 3.00, 8: 3.00, 9: 3.00, 10: 3.00, 11: 3.00, 12: 3.00, 13: 3.00, 14: 4.00, 15: 4.00}, sources: {1: "vinted", 2: "vinted", 3: "fumetteria", 4: "fumetteria", 5: "fumetteria", 6: "fumetteria", 7: "fumetteria", 8: "fumetteria", 9: "fumetteria", 10: "fumetteria", 11: "fumetteria", 12: "fumetteria", 13: "fumetteria", 14: "fumetteria", 15: "fumetteria"}, vintedShipping: {1: 0.85, 2: 0.84}, vintedFees: {1: 0.42, 2: 0.41} },
+      { id: "spidey-blue", title: "Spider-Man: Blue", publisher: "Marvel Comics", category: "Marvel", year: "2002", total: 1, owned: [1], incoming: [], isAbandoned: false, luccaItems: [], authors: "Jeph Loeb / Tim Sale", prices: { 1: 5.00 }, sources: { 1: "vinted" }, vintedShipping: { 1: 2.29 }, vintedFees: { 1: 0.95 }, estValues: { 1: 8.99 } },
+      { id: "spidey-verse", title: "Spider-Man: Spider-Verse", publisher: "Marvel Comics", category: "Marvel", year: "2014", total: 1, owned: [1], incoming: [], isAbandoned: false, luccaItems: [], authors: "Dan Slott", prices: { 1: 9.90 }, sources: { 1: "fumetteria" }, estValues: { 1: 9.90 } },
       { id: "x-men-2000", title: "Gli Incredibili X-Men #2", publisher: "Marvel Comics", category: "Marvel", year: "2000", total: 1, owned: [1], incoming: [], isAbandoned: false, luccaItems: [], authors: "Marvel Comics", prices: { 1: 0.00 }, sources: { 1: "regalo" } },
-      { id: "thor-2002", title: "Il Mitico Thor #34", publisher: "Marvel Comics", category: "Marvel", year: "2002", total: 1, owned: [1], incoming: [], isAbandoned: false, luccaItems: [], authors: "Marvel Comics", prices: { 1: 0.00 }, sources: { 1: "regalo" } },
+      { id: "thor-2002", title: "Il Mitico Thor #34", publisher: "Marvel Comics", category: "Marvel", year: "2002", total: 1, owned: [1], incoming: [], isAbandoned: false, luccaItems: [], authors: "Marvel Comics", prices: { 1: 0.00 }, sources: { 1: "regalo" }, estValues: { 1: 2.25 } },
 
-      { id: "abs-batman", title: "Absolute Batman", publisher: "DC Comics", category: "DC", year: "2024", total: 18, owned: [1,2,3,15,16,17,18], incoming: [], isAbandoned: false, luccaItems: [1,2,3,17,18], variants: [2, 18], authors: "Scott Snyder", prices: {}, sources: {} },
-      { id: "abs-sup", title: "Absolute Superman", publisher: "DC Comics", category: "DC", year: "2024", total: 18, owned: [1], incoming: [], isAbandoned: false, luccaItems: [], authors: "Jason Aaron", prices: {}, sources: {} },
-      { id: "abs-ww", title: "Absolute Wonder Woman", publisher: "DC Comics", category: "DC", year: "2024", total: 17, owned: [1,2,3,4,5,6,7,8], incoming: [], isAbandoned: false, luccaItems: [], authors: "Kelly Thompson", prices: {}, sources: {} },
+      { id: "abs-batman", title: "Absolute Batman", publisher: "DC Comics", category: "DC", year: "2024", total: 18, owned: [1,2,3,15,16,17,18], incoming: [], isAbandoned: false, luccaItems: [1,2,3,17,18], variants: [2, 18], authors: "Scott Snyder", prices: {1: 6.00, 2: 4.00, 3: 4.00, 15: 5.50, 16: 5.50, 17: 4.00, 18: 4.00}, sources: {1: "lucca", 2: "lucca", 3: "lucca", 15: "vinted", 16: "vinted", 17: "lucca", 18: "lucca"}, vintedShipping: {15: 2.29, 16: 2.29}, vintedFees: {15: 0.98, 16: 0.98} },
+      { id: "abs-sup", title: "Absolute Superman", publisher: "DC Comics", category: "DC", year: "2024", total: 18, owned: [1], incoming: [], isAbandoned: false, luccaItems: [], authors: "Jason Aaron", prices: {1: 3.50}, sources: {1: "vinted"}, vintedShipping: {1: 1.69}, vintedFees: {1: 0.88} },
+      { id: "abs-ww", title: "Absolute Wonder Woman", publisher: "DC Comics", category: "DC", year: "2024", total: 17, owned: [1,2,3,4,5,6,7,8], incoming: [], isAbandoned: false, luccaItems: [], authors: "Kelly Thompson", prices: {1: 2.33, 2: 2.33, 3: 2.34, 4: 4.00, 5: 4.00, 6: 1.50, 7: 4.00, 8: 4.00}, sources: {1: "vinted", 2: "vinted", 3: "vinted", 4: "fumetteria", 5: "fumetteria", 6: "vinted", 7: "fumetteria", 8: "fumetteria"}, vintedShipping: {1: 0.76, 2: 0.76, 3: 0.77, 6: 1.69}, vintedFees: {1: 0.35, 2: 0.35, 3: 0.35, 6: 0.78} },
       { id: "batman-grandi-storie", title: "Batman: Le grandi storie", publisher: "DC Comics", category: "DC", year: "2018", total: 1, owned: [1], incoming: [], isAbandoned: false, luccaItems: [], authors: "DC Deluxe", prices: { 1: 15.00 }, sources: { 1: "fumetteria" } },
-      { id: "batman-due-mondi", title: "Batman dei due mondi", publisher: "DC Comics", category: "DC", year: "2021", total: 1, owned: [1], incoming: [], isAbandoned: false, luccaItems: [], authors: "Fraction / Snyder", prices: { 1: 1.00 }, sources: { 1: "vinted" } },
+      { id: "batman-due-mondi", title: "Batman dei due mondi", publisher: "DC Comics", category: "DC", year: "2021", total: 1, owned: [1], incoming: [], isAbandoned: false, luccaItems: [], authors: "Fraction / Snyder", prices: { 1: 1.00 }, sources: { 1: "fumetteria" } },
       { id: "batman-gotham-knights", title: "Batman: Gotham Knights – Città dorata", publisher: "DC Comics", category: "DC", year: "2022", total: 1, owned: [1], incoming: [], isAbandoned: false, luccaItems: [], authors: "Evan Narcisse", prices: { 1: 0.00 }, sources: { 1: "regalo" } },
-      { id: "batman-dkr", title: "Batman: Il ritorno del Cavaliere Oscuro", publisher: "DC Comics", category: "DC", year: "1986", total: 1, owned: [1], incoming: [], isAbandoned: false, luccaItems: [], authors: "Frank Miller", prices: { 1: 7.38 }, sources: { 1: "vinted" } },
-      { id: "batman-maledizione", title: "Batman: La maledizione del Cavaliere Bianco", publisher: "DC Comics", category: "DC", year: "2020", total: 1, owned: [1], incoming: [], isAbandoned: false, luccaItems: [], authors: "Sean Murphy", prices: { 1: 8.24 }, sources: { 1: "vinted" } },
-      { id: "batman-ride", title: "Il Batman che ride", publisher: "DC Comics", category: "DC", year: "2019", total: 1, owned: [1], incoming: [], isAbandoned: false, luccaItems: [], authors: "Scott Snyder / Jock", prices: { 1: 8.24 }, sources: { 1: "vinted" } },
-      { id: "flashpoint", title: "Flashpoint", publisher: "DC Comics", category: "DC", year: "2011", total: 1, owned: [1], incoming: [], isAbandoned: false, luccaItems: [], authors: "Geoff Johns", prices: { 1: 7.36 }, sources: { 1: "vinted" } },
-      { id: "kingdom-come", title: "Kingdom Come", publisher: "DC Comics", category: "DC", year: "1996", total: 1, owned: [1], incoming: [], isAbandoned: false, luccaItems: [], authors: "Mark Waid / Alex Ross", prices: { 1: 7.56 }, sources: { 1: "vinted" } },
-      { id: "supergirl-domani", title: "Supergirl: La donna del domani", publisher: "DC Comics", category: "DC", year: "2022", total: 1, owned: [1], incoming: [], isAbandoned: false, luccaItems: [], authors: "Tom King / Evely", prices: { 1: 8.24 }, sources: { 1: "vinted" } },
-      { id: "superman-red-son", title: "Superman: Red Son", publisher: "DC Comics", category: "DC", year: "2003", total: 1, owned: [1], incoming: [], isAbandoned: false, luccaItems: [], authors: "Mark Millar", prices: { 1: 7.57 }, sources: { 1: "vinted" } },
-      { id: "jsa-classified", title: "JSA Classified", publisher: "DC Comics", category: "DC", year: "2005", total: 7, owned: [2, 4, 5, 6, 7], incoming: [], isAbandoned: false, luccaItems: [], authors: "DC Comics", prices: {}, sources: {} },
-      { id: "v-vendetta", title: "V per Vendetta", publisher: "DC Comics", category: "DC", year: "1988", total: 1, owned: [1], incoming: [], isAbandoned: false, luccaItems: [], authors: "Alan Moore", prices: { 1: 7.56 }, sources: { 1: "vinted" } },
+      { id: "batman-dkr", title: "Batman: Il ritorno del Cavaliere Oscuro", publisher: "DC Comics", category: "DC", year: "1986", total: 1, owned: [1], incoming: [], isAbandoned: false, luccaItems: [], authors: "Frank Miller", prices: { 1: 5.50 }, sources: { 1: "vinted" }, vintedShipping: { 1: 1.25 }, vintedFees: { 1: 0.63 } },
+      { id: "batman-maledizione", title: "Batman: La maledizione del Cavaliere Bianco", publisher: "DC Comics", category: "DC", year: "2020", total: 1, owned: [1], incoming: [], isAbandoned: false, luccaItems: [], authors: "Sean Murphy", prices: { 1: 5.00 }, sources: { 1: "vinted" }, vintedShipping: { 1: 2.29 }, vintedFees: { 1: 0.95 }, estValues: { 1: 9.90 } },
+      { id: "batman-ride", title: "Il Batman che ride", publisher: "DC Comics", category: "DC", year: "2019", total: 1, owned: [1], incoming: [], isAbandoned: false, luccaItems: [], authors: "Scott Snyder / Jock", prices: { 1: 5.00 }, sources: { 1: "vinted" }, vintedShipping: { 1: 2.29 }, vintedFees: { 1: 0.95 }, estValues: { 1: 9.90 } },
+      { id: "flashpoint", title: "Flashpoint", publisher: "DC Comics", category: "DC", year: "2011", total: 1, owned: [1], incoming: [], isAbandoned: false, luccaItems: [], authors: "Geoff Johns", prices: { 1: 5.50 }, sources: { 1: "vinted" }, vintedShipping: { 1: 1.24 }, vintedFees: { 1: 0.62 }, estValues: { 1: 9.90 } },
+      { id: "kingdom-come", title: "Kingdom Come", publisher: "DC Comics", category: "DC", year: "1996", total: 1, owned: [1], incoming: [], isAbandoned: false, luccaItems: [], authors: "Mark Waid / Alex Ross", prices: { 1: 6.00 }, sources: { 1: "vinted" }, vintedShipping: { 1: 1.03 }, vintedFees: { 1: 0.53 }, estValues: { 1: 9.90 } },
+      { id: "supergirl-domani", title: "Supergirl: La donna del domani", publisher: "DC Comics", category: "DC", year: "2022", total: 1, owned: [1], incoming: [], isAbandoned: false, luccaItems: [], authors: "Tom King / Evely", prices: { 1: 5.00 }, sources: { 1: "vinted" }, vintedShipping: { 1: 2.29 }, vintedFees: { 1: 0.95 }, estValues: { 1: 9.90 } },
+      { id: "superman-red-son", title: "Superman: Red Son", publisher: "DC Comics", category: "DC", year: "2003", total: 1, owned: [1], incoming: [], isAbandoned: false, luccaItems: [], authors: "Mark Millar", prices: { 1: 6.00 }, sources: { 1: "vinted" }, vintedShipping: { 1: 1.03 }, vintedFees: { 1: 0.54 }, estValues: { 1: 9.90 } },
+      { id: "jsa-classified", title: "JSA Classified", publisher: "DC Comics", category: "DC", year: "2005", total: 7, owned: [2, 4, 5, 6, 7], incoming: [], isAbandoned: false, luccaItems: [], authors: "DC Comics", prices: {"2": 0.00, "4": 0.00, "5": 0.00, "6": 0.00, "7": 0.00}, sources: {"2": "regalo", "4": "regalo", "5": "regalo", "6": "regalo", "7": "regalo"} },
+      { id: "v-vendetta", title: "V per Vendetta", publisher: "DC Comics", category: "DC", year: "1988", total: 1, owned: [1], incoming: [], isAbandoned: false, luccaItems: [], authors: "Alan Moore", prices: { 1: 6.00 }, sources: { 1: "vinted" }, vintedShipping: { 1: 1.03 }, vintedFees: { 1: 0.53 } },
 
       { id: "pk2", title: "PK2 - Ducklair", publisher: "Panini Disney", category: "PK", year: "2001", total: 19, owned: [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19], incoming: [], isAbandoned: false, luccaItems: [], authors: "Faraci / Artibani", prices: {}, sources: {} },
-      { id: "pkeda", title: "PKEDA (Paperinik Elite)", publisher: "Panini Disney", category: "PK", year: "2024", total: 10, owned: [2, 3], incoming: [], isAbandoned: false, luccaItems: [2, 3], variants: [2], authors: "Disney / Celoni", prices: {}, sources: {} },
-      { id: "paperinik-il-mito", title: "Paperinik - Il Mito", publisher: "Panini Disney", category: "PK", year: "2012", total: 50, owned: [1,2,3,4,5,8,9,10,13,16], incoming: [], isAbandoned: false, luccaItems: [], authors: "Disney Italia", prices: {}, sources: {} },
+      { id: "pkeda", title: "PKEDA (Paperinik Elite)", publisher: "Panini Disney", category: "PK", year: "2024", total: 10, owned: [2, 3], incoming: [], isAbandoned: false, luccaItems: [2, 3], variants: [2], authors: "Disney / Celoni", prices: {2: 10.00, 3: 10.00}, sources: {2: "lucca", 3: "lucca"} },
+      { id: "paperinik-il-mito", title: "Paperinik - Il Mito", publisher: "Panini Disney", category: "PK", year: "2012", total: 50, owned: [1,2,3,4,5,8,9,10,13,16], incoming: [], isAbandoned: false, luccaItems: [5, 9], authors: "Disney Italia", prices: {2: 3.00, 3: 5.00, 4: 5.00, 5: 6.00, 9: 6.00}, sources: {2: "vinted", 3: "vinted", 4: "vinted", 5: "lucca", 9: "lucca"}, vintedShipping: {2: 1.69, 3: 2.29, 4: 5.99}, vintedFees: {2: 0.85, 3: 0.95, 4: 0.95} },
       { id: "tapum-ortolani", title: "Tapum! (Storie di guerra)", publisher: "Feltrinelli Comics", category: "Altro", year: "2024", total: 1, owned: [1], incoming: [], isAbandoned: false, luccaItems: [], authors: "Leo Ortolani", prices: { 1: 0.00 }, sources: { 1: "regalo" } },
-      { id: "death-note", title: "Death Note", publisher: "Planet Manga", category: "Manga", year: "2006", total: 13, owned: [1,2,4,7,12,13], incoming: [], isAbandoned: false, luccaItems: [], authors: "Ohba / Obata", prices: {}, sources: {} }
+      { id: "death-note", title: "Death Note", publisher: "Planet Manga", category: "Manga", year: "2006", total: 13, owned: [1,2,4,7,12,13], incoming: [], isAbandoned: false, luccaItems: [], authors: "Ohba / Obata", prices: {}, sources: {} },
+
+      { id: "slam-dunk-manga", title: "Slam Dunk", publisher: "Planet Manga", category: "Manga", year: "2026", total: 24, owned: [], incoming: [1], isAbandoned: false, luccaItems: [], authors: "Takehiko Inoue", prices: { 1: 3.00 }, sources: { 1: "vinted" }, vintedShipping: { 1: 1.69 }, vintedFees: { 1: 0.85 }, estValues: { 1: 7.00 } },
+      { id: "invincible-omnibus", title: "Invincible Omnibus (Saldapress)", publisher: "Saldapress", category: "Altro", year: "2026", total: 1, owned: [], incoming: [1], isAbandoned: false, luccaItems: [], authors: "Robert Kirkman", prices: { 1: 23.00 }, sources: { 1: "vinted" }, vintedShipping: { 1: 3.09 }, vintedFees: { 1: 1.85 }, estValues: { 1: 40.00 } }
     ];
 
     const INITIAL_DIGITAL_RUNS = [
@@ -719,7 +705,6 @@
       { id: "d_14", title: "Absolute Batman (2024-)", publisher: "DC Comics", year: "2024", category: "reading", isFavorite: false, url: "https://batcave.biz/33051-absolute-batman-2024.html", total: 1, read: [1] }
     ];
 
-    // STATO GLOBALE V8.0
     let currentPhysical = [];
     let currentDigital = [];
     let activeSubTab = 'physical';
@@ -735,7 +720,7 @@
 
     function loadAppState() {
       try {
-        const savedData = localStorage.getItem('hobbyverse_v80_owner_data') || localStorage.getItem('hobbyverse_v75_owner_data');
+        const savedData = localStorage.getItem('hobbyverse_v80_owner_data');
         if (savedData) {
           const parsed = JSON.parse(savedData);
           if (parsed && Array.isArray(parsed.physical) && Array.isArray(parsed.digital)) {
@@ -745,11 +730,6 @@
             INITIAL_PHYSICAL_RUNS.forEach(initRun => {
               if (!currentPhysical.some(r => r.id === initRun.id)) {
                 currentPhysical.push(deepClone(initRun));
-              }
-            });
-            INITIAL_DIGITAL_RUNS.forEach(initRun => {
-              if (!currentDigital.some(r => r.id === initRun.id)) {
-                currentDigital.push(deepClone(initRun));
               }
             });
             return;
@@ -834,9 +814,9 @@
       if (incomingItems.length > 0) {
         banner.style.display = 'block';
         listContainer.innerHTML = incomingItems.map(item => `
-          <div style="display:flex; justify-content:space-between; align-items:center; padding:4px 0; border-bottom:1px solid rgba(255,255,255,0.05);">
+          <div style="display:flex; justify-content:space-between; align-items:center; padding:6px 0; border-bottom:1px solid rgba(255,255,255,0.05);">
             <span>📦 <b>${escapeHTML(item.run.title)} #${item.num}</b></span>
-            <button class="btn-reset-styles" style="background:var(--accent-orange); color:#000; font-size:0.7rem; font-weight:800; padding:3px 8px; border-radius:6px;" data-action="quick-arrived" data-run-id="${cleanId(item.run.id)}" data-num="${item.num}">Ricevuto ✅</button>
+            <button class="btn-reset-styles" style="background:var(--accent-orange); color:#000; font-size:0.7rem; font-weight:800; padding:4px 10px; border-radius:6px;" data-action="quick-arrived" data-run-id="${cleanId(item.run.id)}" data-num="${item.num}">Ricevuto ✅</button>
           </div>
         `).join('');
       } else {
@@ -860,13 +840,7 @@
 
     function shareMissingWhatsApp() {
       let text = "📚 *LA MIA MANCOLISTA FUMETTI* 📚\n\n";
-      
-      const filteredRuns = currentPhysical.filter(r => {
-        if (r.isAbandoned) return false;
-        const matchesPub = checkPublisherMatch(r.publisher, r.title, currentPublisherFilter, r.category);
-        const matchesSearch = (searchQuery === '' || r.title.toLowerCase().includes(searchQuery) || (r.authors && r.authors.toLowerCase().includes(searchQuery)));
-        return matchesPub && matchesSearch;
-      });
+      const filteredRuns = currentPhysical.filter(r => !r.isAbandoned);
 
       filteredRuns.forEach(run => {
         let missing = [];
@@ -903,7 +877,6 @@
       return (cat || mapPublisherToCategory(pub)) === filterKey;
     }
 
-    // STATISTICHE UNIFIED V8.0
     function computeStats() {
       let ownedPhys = 0;
       let totalPhysCapacity = 0;
@@ -925,7 +898,7 @@
         if (r.prices) {
           Object.keys(r.prices).forEach(issueKey => {
             const num = parseInt(issueKey);
-            if (ownedSet.has(num)) {
+            if (ownedSet.has(num) || (r.incoming && r.incoming.includes(num))) {
               const itemPriceCents = parseEuroToCents(r.prices[num]);
               const shipCents = (r.vintedShipping && r.vintedShipping[num]) ? parseEuroToCents(r.vintedShipping[num]) : 0;
               const feeCents = (r.vintedFees && r.vintedFees[num]) ? parseEuroToCents(r.vintedFees[num]) : 0;
@@ -947,7 +920,7 @@
         if (r.estValues) {
           Object.keys(r.estValues).forEach(issueKey => {
             const num = parseInt(issueKey);
-            if (ownedSet.has(num)) {
+            if (ownedSet.has(num) || (r.incoming && r.incoming.includes(num))) {
               totalEstValCents += parseEuroToCents(r.estValues[num]);
             }
           });
@@ -1149,7 +1122,6 @@
       }
     }
 
-    // MODALE E GESTIONE COPERTINE
     async function openItemModal(cleanRunId, num, mode) {
       const run = (mode === 'physical') 
         ? currentPhysical.find(r => cleanId(r.id) === cleanRunId) 
@@ -1440,19 +1412,19 @@
       renderDigitalRuns();
     }
 
-    // ANALYTICS & CHART.JS CON FALLBACK CSS
     function initPieChartAndStats() {
       const stats = computeStats();
       const container = document.getElementById('chartFallbackContainer');
 
-      // Top 5 Serie più Valorose
       const topListContainer = document.getElementById('topValuableRunsList');
       if (topListContainer) {
         let runValues = currentPhysical.map(r => {
           let totEstCents = 0;
           if (r.estValues) {
             Object.keys(r.estValues).forEach(num => {
-              if (r.owned.includes(parseInt(num))) totEstCents += parseEuroToCents(r.estValues[num]);
+              if (r.owned.includes(parseInt(num)) || (r.incoming && r.incoming.includes(parseInt(num)))) {
+                totEstCents += parseEuroToCents(r.estValues[num]);
+              }
             });
           }
           return { title: r.title, valueCents: totEstCents };
@@ -1564,7 +1536,6 @@
       reader.readAsText(file);
     }
 
-    // EVENT DELEGATION CENTRALIZZATA
     document.addEventListener('click', (e) => {
       const target = e.target.closest('[data-action]');
       if (!target) {
@@ -1602,7 +1573,6 @@
       }
     });
 
-    // BINDING INPUT AUTOMATICI
     document.getElementById('globalSearchInput').addEventListener('input', handleGlobalSearchDebounced);
     document.getElementById('importJsonInput').addEventListener('change', importDataJSON);
     document.getElementById('apiComicVineInput').addEventListener('input', saveApiCredentialsImmediate);
@@ -1613,7 +1583,6 @@
       if (e.key === 'Escape' && activeModalState) closeModal();
     });
 
-    // INIZIALIZZAZIONE ALL'AVVIO
     window.addEventListener('load', () => {
       loadAppState();
       initIndexedDB();
@@ -1629,7 +1598,6 @@
       }
     });
 
-    // SERVICE WORKER OFFLINE
     if ('serviceWorker' in navigator) {
       window.addEventListener('load', () => {
         const swCode = `
