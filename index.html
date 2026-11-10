@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-  <title>Hobbyverse v8.0 Restored</title>
+  <title>Hobbyverse v8.0 Restored Full Data</title>
 
   <link rel="manifest" href="manifest.json">
   <meta name="theme-color" content="#0d0e12">
@@ -85,7 +85,7 @@
     }
     .sub-btn.active { background: #fff; color: #000; box-shadow: 0 2px 8px rgba(0,0,0,0.4); }
 
-    /* CHIPS EDITORI */
+    /* CHIPS EDITORI IN ALTO */
     .chips-scroll-container {
       display: flex; gap: 8px; padding: 0 16px 10px 16px; overflow-x: auto; scrollbar-width: none;
       scroll-snap-type: x mandatory; -webkit-overflow-scrolling: touch;
@@ -100,7 +100,7 @@
     }
     .chip-item.active { background: var(--accent-gold); color: #000; border-color: var(--accent-gold); }
 
-    /* BADGE EDITORI */
+    /* BADGES */
     .pub-badge { font-size: 0.65rem; font-weight: 800; padding: 2px 6px; border-radius: 6px; text-transform: uppercase; margin-right: 6px; }
     .pub-badge.dc { background: rgba(59, 130, 246, 0.2); color: #60a5fa; border: 1px solid rgba(59, 130, 246, 0.4); }
     .pub-badge.marvel { background: rgba(239, 68, 68, 0.2); color: #f87171; border: 1px solid rgba(239, 68, 68, 0.4); }
@@ -116,7 +116,7 @@
     .run-card.abandoned { opacity: 0.7; border-style: dashed; }
     .run-header-row { display: flex; justify-content: space-between; align-items: center; width: 100%; background: none; border: none; text-align: left; color: inherit; cursor: pointer; }
     .run-title { font-weight: 800; font-size: 0.95rem; color: #fff; display: flex; align-items: center; gap: 4px; }
-    .run-meta { font-size: 0.73rem; color: var(--text-muted); margin-top: 4px; }
+    .run-meta { font-size: 0.73rem; color: var(--text-muted); margin-top: 2px; }
 
     .toggle-arrow {
       background: rgba(255,255,255,0.06); border: 1px solid var(--card-border);
@@ -145,14 +145,13 @@
     .num-tile.read { background: rgba(59, 130, 246, 0.25); border-color: var(--accent-blue); color: #60a5fa; }
     .num-tile.variant { border: 1.5px solid var(--accent-gold); }
 
-    /* CARDS SPESE / STATS */
+    /* CARDS SPESE */
     .expense-card {
       background: var(--card-bg); border: 1px solid var(--card-border);
       border-radius: 16px; padding: 16px; margin: 0 16px 12px 16px;
     }
     .expense-header-title { font-weight: 800; font-size: 0.95rem; color: #fff; margin-bottom: 8px; }
 
-    /* FIX BOTTONE MENU RAPIDO SECONDARIO */
     .btn-quick-secondary {
       flex: 1;
       background: rgba(255, 255, 255, 0.08) !important;
@@ -210,7 +209,7 @@
       background: var(--accent-gold); color: #000; cursor: pointer; margin-top: 10px; font-size: 0.9rem;
     }
 
-    /* BOTTOM NAV BAR FIX COMPLETO */
+    /* BOTTOM NAV BAR */
     .bottom-nav {
       position: fixed; bottom: 0; left: 0; right: 0;
       height: calc(65px + var(--sab));
@@ -251,13 +250,8 @@
       stroke-linejoin: round;
     }
 
-    .nav-btn.active {
-      color: var(--accent-gold) !important;
-    }
-
-    .nav-btn.active svg {
-      stroke: var(--accent-gold) !important;
-    }
+    .nav-btn.active { color: var(--accent-gold) !important; }
+    .nav-btn.active svg { stroke: var(--accent-gold) !important; }
   </style>
 </head>
 <body>
@@ -265,7 +259,7 @@
   <!-- HEADER -->
   <header class="app-header">
     <div class="app-title">📖 Hobbyverse</div>
-    <div class="version-badge">v8.0 Restored</div>
+    <div class="version-badge">v8.0 Full Restored</div>
   </header>
 
   <!-- SEARCH BAR -->
@@ -303,12 +297,13 @@
       <button class="sub-btn" id="btnSubDigital" onclick="switchSubTab('digital')">📱 Online (<span id="cnt-dig-total">0</span>)</button>
     </div>
 
-    <!-- SELETTORE STATO DIGITALE ("DA LEGGERE" / "FINITI") -->
+    <!-- SUB-TAB STATO DIGITALE ("DA LEGGERE" / "FINITI") -->
     <div id="digitalStatusFilters" class="sub-tab-switcher" style="display:none; margin-top: -4px;">
-      <button class="sub-btn active" id="btnDigReading" onclick="filterDigitalStatus('reading', this)">📖 Da Leggere</button>
-      <button class="sub-btn" id="btnDigCompleted" onclick="filterDigitalStatus('completed', this)">✅ Finiti</button>
+      <button class="sub-btn active" id="btnDigReading" onclick="filterDigitalStatus('reading', this)">📖 Da Leggere (<span id="cnt-dig-reading">0</span>)</button>
+      <button class="sub-btn" id="btnDigCompleted" onclick="filterDigitalStatus('completed', this)">✅ Finiti (<span id="cnt-dig-completed">0</span>)</button>
     </div>
 
+    <!-- LOGHI EDITORE NEI FILTRI IN ALTO -->
     <div class="chips-scroll-container" id="chipsContainer">
       <button class="chip-item active" onclick="filterPublisher('ALL', this)">🌟 Tutti</button>
       <button class="chip-item" onclick="filterPublisher('DC', this)">🔵 DC Comics</button>
@@ -337,7 +332,7 @@
 
       <div style="font-size:0.88rem; color:#fff; margin-top:8px; margin-bottom:4px;"><b>🏬 Fumetteria:</b> <span id="expFumetteriaVal" style="color:var(--accent-green); font-weight:bold;">0,00 €</span></div>
       <div style="font-size:0.88rem; color:#fff; margin-top:8px; margin-bottom:4px;"><b>🎪 Lucca Comics / Fiere:</b> <span id="expLuccaVal" style="color:var(--accent-blue); font-weight:bold;">0,00 €</span></div>
-      <div style="font-size:0.88rem; color:#fff; margin-top:8px;"><b>🎁 Regali:</b> <span id="expRegaliVal" style="color:var(--text-muted);">0,00 €</span></div>
+      <div style="font-size:0.88rem; color:#fff; margin-top:8px;"><b>🎁 Regali / Omaggi:</b> <span id="expRegaliVal" style="color:var(--text-muted);">0,00 €</span></div>
     </div>
   </div>
 
@@ -382,7 +377,7 @@
     </div>
   </div>
 
-  <!-- BOTTOM NAV CORRETTA -->
+  <!-- BOTTOM NAV -->
   <nav class="bottom-nav">
     <button class="nav-btn active" id="navHome" onclick="switchBottomNav('home')">
       <svg viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path><polyline points="9 22 9 12 15 12 15 22"></polyline></svg>
@@ -399,7 +394,6 @@
   </nav>
 
   <script>
-    // FIX AUTOMATICO URL GITHUB RAW & PERCORSI LOCALI
     function fixImageUrl(url) {
       if (!url) return '';
       let cleanUrl = url.trim();
@@ -409,7 +403,6 @@
       return cleanUrl;
     }
 
-    // HELPER PER BADGE PUBLISHER
     function getPublisherBadge(category) {
       const cat = (category || 'Altro').toLowerCase();
       if (cat.includes('dc')) return `<span class="pub-badge dc">DC</span>`;
@@ -419,7 +412,7 @@
       return `<span class="pub-badge altro">ALTRO</span>`;
     }
 
-    // DATASET COMPLETO CARTACEI
+    // DATASET CARTACEI COMPLETO
     let currentPhysical = [
       { id: "spidey-corno", title: "L'Uomo Ragno", publisher: "Editoriale Corno", category: "Marvel", year: "1975", total: 200, owned: [139], incoming: [], isAbandoned: false, luccaItems: [139], prices: { 139: 5.00 }, sources: { 139: "lucca" } },
       { id: "spidey-panini-1990", title: "L'Uomo Ragno", publisher: "Panini Marvel Italia", category: "Marvel", year: "1990", total: 100, owned: [41, 52, 53], incoming: [], isAbandoned: false, luccaItems: [41, 52, 53], prices: { 41: 3.00, 52: 5.00, 53: 3.00 }, sources: { 41: "lucca", 52: "lucca", 53: "lucca" } },
@@ -456,7 +449,7 @@
       { id: "invincible-omnibus", title: "Invincible Omnibus (Saldapress)", publisher: "Saldapress", category: "Altro", year: "2026", total: 1, owned: [], incoming: [1], isAbandoned: false, luccaItems: [], prices: { 1: 23.00 }, sources: { 1: "vinted" }, vintedShipping: { 1: 3.09 }, vintedFees: { 1: 1.85 } }
     ];
 
-    // DATASET ONLINE CON CATEGORIZZAZIONE DA LEGGERE / FINITI
+    // DATASET ONLINE RIPRISTINATO
     let currentDigital = [
       { id: "d_0", title: "Absolute Power (2024-)", publisher: "DC Comics", year: "2024", category: "DC", status: "reading", total: 4, read: [1, 2] },
       { id: "d_1", title: "Miles Morales: Spider-Man (2026-)", publisher: "Marvel Comics", year: "2026", category: "Marvel", status: "reading", total: 6, read: [1] },
@@ -467,7 +460,12 @@
       { id: "d_6", title: "Absolute Catwoman (2026-)", publisher: "DC Comics", year: "2026", category: "DC", status: "reading", total: 3, read: [] },
       { id: "d_7", title: "Fantastic Four (2025-)", publisher: "Marvel Comics", year: "2025", category: "Marvel", status: "completed", total: 10, read: [1,2,3,4,5,6,7,8,9,10] },
       { id: "d_8", title: "Absolute Wonder Woman (2024-)", publisher: "DC Comics", year: "2024", category: "DC", status: "reading", total: 5, read: [1, 2] },
-      { id: "d_9", title: "Absolute Batman (2024-)", publisher: "DC Comics", year: "2024", category: "DC", status: "reading", total: 5, read: [1, 2, 3] }
+      { id: "d_9", title: "The Amazing Spider-Man: Spider-Versity (2026-)", publisher: "Marvel Comics", year: "2026", category: "Marvel", status: "reading", total: 4, read: [1] },
+      { id: "d_10", title: "Wonder Woman (2023-)", publisher: "DC Comics", year: "2023", category: "DC", status: "completed", total: 12, read: [1,2,3,4,5,6,7,8,9,10,11,12] },
+      { id: "d_11", title: "Batman (2025-)", publisher: "DC Comics", year: "2025", category: "DC", status: "reading", total: 8, read: [1,2,3] },
+      { id: "d_12", title: "Absolute Superman (2024-)", publisher: "DC Comics", year: "2024", category: "DC", status: "reading", total: 4, read: [1] },
+      { id: "d_13", title: "Absolute Green Arrow (2026-)", publisher: "DC Comics", year: "2026", category: "DC", status: "reading", total: 3, read: [] },
+      { id: "d_14", title: "Absolute Batman (2024-)", publisher: "DC Comics", year: "2024", category: "DC", status: "reading", total: 5, read: [1, 2, 3] }
     ];
 
     let activeModalState = null;
@@ -590,6 +588,17 @@
     function renderDigital() {
       const container = document.getElementById('digitalRunsContainer');
       container.innerHTML = '';
+
+      let readingCount = 0;
+      let completedCount = 0;
+
+      currentDigital.forEach(run => {
+        if (run.status === 'completed') completedCount++;
+        else readingCount++;
+      });
+
+      document.getElementById('cnt-dig-reading').innerText = readingCount;
+      document.getElementById('cnt-dig-completed').innerText = completedCount;
 
       currentDigital.forEach(run => {
         if (digitalStatusFilter === 'reading' && run.status === 'completed') return;
