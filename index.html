@@ -537,7 +537,7 @@
     </button>
   </nav>
 
-  <!-- LOGICA JAVASCRIPT ARCHITETTURA HOBBYVERSE V8.0 -->
+  <!-- LOGICA JAVASCRIPT HOBBYVERSE V8.0 -->
   <script>
     function deepClone(obj) {
       if (typeof structuredClone === 'function') return structuredClone(obj);
@@ -668,17 +668,55 @@
       });
     }
 
+    // ELENCO COMPLETO DELLE RUN ORIGINALI CON TUTTI I PREZZI
     const INITIAL_PHYSICAL_RUNS = [
       { id: "spidey-corno", title: "L'Uomo Ragno", publisher: "Editoriale Corno", category: "Marvel", year: "1975", total: 200, owned: [139], incoming: [], isAbandoned: false, luccaItems: [139], authors: "Stan Lee / John Romita Sr.", prices: { 139: 5.00 }, sources: { 139: "lucca" } },
       { id: "spidey-panini-1990", title: "L'Uomo Ragno", publisher: "Panini Marvel Italia", category: "Marvel", year: "1990", total: 100, owned: [41, 52, 53], incoming: [], isAbandoned: false, luccaItems: [41, 52, 53], authors: "Todd McFarlane", prices: { 41: 3.00, 52: 5.00, 53: 3.00 }, sources: { 41: "lucca", 52: "lucca", 53: "lucca" } },
-      { id: "ult-spidey-2024", title: "Ultimate Spider-Man", publisher: "Panini Marvel Italia", category: "Marvel", year: "2024", total: 24, owned: [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15], incoming: [16], isAbandoned: false, luccaItems: [], authors: "Jonathan Hickman", prices: {}, sources: {} },
-      { id: "spidey-blue", title: "Spider-Man: Blue", publisher: "Marvel Comics", category: "Marvel", year: "2002", total: 1, owned: [1], incoming: [], isAbandoned: false, luccaItems: [], authors: "Jeph Loeb / Tim Sale", prices: { 1: 8.24 }, sources: { 1: "vinted" }, vintedShipping: { 1: 2.99 }, vintedFees: { 1: 0.70 } },
-      { id: "abs-batman", title: "Absolute Batman", publisher: "DC Comics", category: "DC", year: "2024", total: 18, owned: [1,2,3,15,16,17,18], incoming: [], isAbandoned: false, luccaItems: [1,2,3,17,18], variants: [2, 18], authors: "Scott Snyder", prices: {}, sources: {} }
+      { id: "ult-spidey-2024", title: "Ultimate Spider-Man", publisher: "Panini Marvel Italia", category: "Marvel", year: "2024", total: 24, owned: [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15], incoming: [], isAbandoned: false, luccaItems: [], authors: "Jonathan Hickman", prices: {}, sources: {} },
+      { id: "spidey-blue", title: "Spider-Man: Blue", publisher: "Marvel Comics", category: "Marvel", year: "2002", total: 1, owned: [1], incoming: [], isAbandoned: false, luccaItems: [], authors: "Jeph Loeb / Tim Sale", prices: { 1: 8.24 }, sources: { 1: "vinted" } },
+      { id: "spidey-verse", title: "Spider-Man: Spider-Verse", publisher: "Marvel Comics", category: "Marvel", year: "2014", total: 1, owned: [1], incoming: [], isAbandoned: false, luccaItems: [], authors: "Dan Slott", prices: { 1: 9.90 }, sources: { 1: "vinted" } },
+      { id: "x-men-2000", title: "Gli Incredibili X-Men #2", publisher: "Marvel Comics", category: "Marvel", year: "2000", total: 1, owned: [1], incoming: [], isAbandoned: false, luccaItems: [], authors: "Marvel Comics", prices: { 1: 0.00 }, sources: { 1: "regalo" } },
+      { id: "thor-2002", title: "Il Mitico Thor #34", publisher: "Marvel Comics", category: "Marvel", year: "2002", total: 1, owned: [1], incoming: [], isAbandoned: false, luccaItems: [], authors: "Marvel Comics", prices: { 1: 0.00 }, sources: { 1: "regalo" } },
+
+      { id: "abs-batman", title: "Absolute Batman", publisher: "DC Comics", category: "DC", year: "2024", total: 18, owned: [1,2,3,15,16,17,18], incoming: [], isAbandoned: false, luccaItems: [1,2,3,17,18], variants: [2, 18], authors: "Scott Snyder", prices: {}, sources: {} },
+      { id: "abs-sup", title: "Absolute Superman", publisher: "DC Comics", category: "DC", year: "2024", total: 18, owned: [1], incoming: [], isAbandoned: false, luccaItems: [], authors: "Jason Aaron", prices: {}, sources: {} },
+      { id: "abs-ww", title: "Absolute Wonder Woman", publisher: "DC Comics", category: "DC", year: "2024", total: 17, owned: [1,2,3,4,5,6,7,8], incoming: [], isAbandoned: false, luccaItems: [], authors: "Kelly Thompson", prices: {}, sources: {} },
+      { id: "batman-grandi-storie", title: "Batman: Le grandi storie", publisher: "DC Comics", category: "DC", year: "2018", total: 1, owned: [1], incoming: [], isAbandoned: false, luccaItems: [], authors: "DC Deluxe", prices: { 1: 15.00 }, sources: { 1: "fumetteria" } },
+      { id: "batman-due-mondi", title: "Batman dei due mondi", publisher: "DC Comics", category: "DC", year: "2021", total: 1, owned: [1], incoming: [], isAbandoned: false, luccaItems: [], authors: "Fraction / Snyder", prices: { 1: 1.00 }, sources: { 1: "vinted" } },
+      { id: "batman-gotham-knights", title: "Batman: Gotham Knights – Città dorata", publisher: "DC Comics", category: "DC", year: "2022", total: 1, owned: [1], incoming: [], isAbandoned: false, luccaItems: [], authors: "Evan Narcisse", prices: { 1: 0.00 }, sources: { 1: "regalo" } },
+      { id: "batman-dkr", title: "Batman: Il ritorno del Cavaliere Oscuro", publisher: "DC Comics", category: "DC", year: "1986", total: 1, owned: [1], incoming: [], isAbandoned: false, luccaItems: [], authors: "Frank Miller", prices: { 1: 7.38 }, sources: { 1: "vinted" } },
+      { id: "batman-maledizione", title: "Batman: La maledizione del Cavaliere Bianco", publisher: "DC Comics", category: "DC", year: "2020", total: 1, owned: [1], incoming: [], isAbandoned: false, luccaItems: [], authors: "Sean Murphy", prices: { 1: 8.24 }, sources: { 1: "vinted" } },
+      { id: "batman-ride", title: "Il Batman che ride", publisher: "DC Comics", category: "DC", year: "2019", total: 1, owned: [1], incoming: [], isAbandoned: false, luccaItems: [], authors: "Scott Snyder / Jock", prices: { 1: 8.24 }, sources: { 1: "vinted" } },
+      { id: "flashpoint", title: "Flashpoint", publisher: "DC Comics", category: "DC", year: "2011", total: 1, owned: [1], incoming: [], isAbandoned: false, luccaItems: [], authors: "Geoff Johns", prices: { 1: 7.36 }, sources: { 1: "vinted" } },
+      { id: "kingdom-come", title: "Kingdom Come", publisher: "DC Comics", category: "DC", year: "1996", total: 1, owned: [1], incoming: [], isAbandoned: false, luccaItems: [], authors: "Mark Waid / Alex Ross", prices: { 1: 7.56 }, sources: { 1: "vinted" } },
+      { id: "supergirl-domani", title: "Supergirl: La donna del domani", publisher: "DC Comics", category: "DC", year: "2022", total: 1, owned: [1], incoming: [], isAbandoned: false, luccaItems: [], authors: "Tom King / Evely", prices: { 1: 8.24 }, sources: { 1: "vinted" } },
+      { id: "superman-red-son", title: "Superman: Red Son", publisher: "DC Comics", category: "DC", year: "2003", total: 1, owned: [1], incoming: [], isAbandoned: false, luccaItems: [], authors: "Mark Millar", prices: { 1: 7.57 }, sources: { 1: "vinted" } },
+      { id: "jsa-classified", title: "JSA Classified", publisher: "DC Comics", category: "DC", year: "2005", total: 7, owned: [2, 4, 5, 6, 7], incoming: [], isAbandoned: false, luccaItems: [], authors: "DC Comics", prices: {}, sources: {} },
+      { id: "v-vendetta", title: "V per Vendetta", publisher: "DC Comics", category: "DC", year: "1988", total: 1, owned: [1], incoming: [], isAbandoned: false, luccaItems: [], authors: "Alan Moore", prices: { 1: 7.56 }, sources: { 1: "vinted" } },
+
+      { id: "pk2", title: "PK2 - Ducklair", publisher: "Panini Disney", category: "PK", year: "2001", total: 19, owned: [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19], incoming: [], isAbandoned: false, luccaItems: [], authors: "Faraci / Artibani", prices: {}, sources: {} },
+      { id: "pkeda", title: "PKEDA (Paperinik Elite)", publisher: "Panini Disney", category: "PK", year: "2024", total: 10, owned: [2, 3], incoming: [], isAbandoned: false, luccaItems: [2, 3], variants: [2], authors: "Disney / Celoni", prices: {}, sources: {} },
+      { id: "paperinik-il-mito", title: "Paperinik - Il Mito", publisher: "Panini Disney", category: "PK", year: "2012", total: 50, owned: [1,2,3,4,5,8,9,10,13,16], incoming: [], isAbandoned: false, luccaItems: [], authors: "Disney Italia", prices: {}, sources: {} },
+      { id: "tapum-ortolani", title: "Tapum! (Storie di guerra)", publisher: "Feltrinelli Comics", category: "Altro", year: "2024", total: 1, owned: [1], incoming: [], isAbandoned: false, luccaItems: [], authors: "Leo Ortolani", prices: { 1: 0.00 }, sources: { 1: "regalo" } },
+      { id: "death-note", title: "Death Note", publisher: "Planet Manga", category: "Manga", year: "2006", total: 13, owned: [1,2,4,7,12,13], incoming: [], isAbandoned: false, luccaItems: [], authors: "Ohba / Obata", prices: {}, sources: {} }
     ];
 
     const INITIAL_DIGITAL_RUNS = [
       { id: "d_0", title: "Absolute Power (2024-)", publisher: "DC Comics", year: "2024", category: "reading", isFavorite: false, url: "https://batcave.biz/32800-absolute-power-2024.html", total: 1, read: [1] },
-      { id: "d_1", title: "Miles Morales: Spider-Man (2026-)", publisher: "Marvel Comics", year: "2026", category: "reading", isFavorite: false, url: "https://batcave.biz/38437-miles-morales-spider-man-2026.html", total: 1, read: [1] }
+      { id: "d_1", title: "Miles Morales: Spider-Man (2026-)", publisher: "Marvel Comics", year: "2026", category: "reading", isFavorite: false, url: "https://batcave.biz/38437-miles-morales-spider-man-2026.html", total: 1, read: [1] },
+      { id: "d_2", title: "Poison Ivy (2022-)", publisher: "DC Comics", year: "2022", category: "reading", isFavorite: false, url: "https://batcave.biz/4228-poison-ivy.html", total: 1, read: [1] },
+      { id: "d_3", title: "Black Cat (2025-)", publisher: "Marvel Comics", year: "2025", category: "reading", isFavorite: false, url: "https://batcave.biz/33717-black-cat-2025.html", total: 1, read: [1] },
+      { id: "d_4", title: "Zatanna (2026-)", publisher: "DC Comics", year: "2026", category: "reading", isFavorite: false, url: "https://batcave.biz/34225-zatanna-2026.html", total: 1, read: [1] },
+      { id: "d_5", title: "The Amazing Spider-Man (2025-)", publisher: "Marvel Comics", year: "2025", category: "reading", isFavorite: false, url: "https://batcave.biz/33450-the-amazing-spider-man-2025.html", total: 1, read: [1] },
+      { id: "d_6", title: "Absolute Catwoman (2026-)", publisher: "DC Comics", year: "2026", category: "reading", isFavorite: false, url: "https://batcave.biz/37029-absolute-catwoman-2026.html", total: 1, read: [1] },
+      { id: "d_7", title: "Fantastic Four (2025-)", publisher: "Marvel Comics", year: "2025", category: "reading", isFavorite: false, url: "https://batcave.biz/33639-fantastic-four-2025.html", total: 1, read: [1] },
+      { id: "d_8", title: "Absolute Wonder Woman (2024-)", publisher: "DC Comics", year: "2024", category: "reading", isFavorite: false, url: "https://batcave.biz/33091-absolute-wonder-woman-2024.html", total: 1, read: [1] },
+      { id: "d_9", title: "The Amazing Spider-Man: Spider-Versity (2026-)", publisher: "Marvel Comics", year: "2026", category: "reading", isFavorite: false, url: "https://batcave.biz/34196-the-amazing-spider-man-spider-versity-2026.html", total: 1, read: [1] },
+      { id: "d_10", title: "Wonder Woman (2023-)", publisher: "DC Comics", year: "2023", category: "reading", isFavorite: false, url: "https://batcave.biz/6944-wonder-woman-2023.html", total: 1, read: [1] },
+      { id: "d_11", title: "Batman (2025-)", publisher: "DC Comics", year: "2025", category: "reading", isFavorite: false, url: "https://batcave.biz/33758-batman-2025.html", total: 1, read: [1] },
+      { id: "d_12", title: "Absolute Superman (2024-)", publisher: "DC Comics", year: "2024", category: "reading", isFavorite: false, url: "https://batcave.biz/33086-absolute-superman-2024.html", total: 1, read: [1] },
+      { id: "d_13", title: "Absolute Green Arrow (2026-)", publisher: "DC Comics", year: "2026", category: "reading", isFavorite: false, url: "https://batcave.biz/35117-absolute-green-arrow-2026.html", total: 1, read: [1] },
+      { id: "d_14", title: "Absolute Batman (2024-)", publisher: "DC Comics", year: "2024", category: "reading", isFavorite: false, url: "https://batcave.biz/33051-absolute-batman-2024.html", total: 1, read: [1] }
     ];
 
     // STATO GLOBALE V8.0
@@ -707,6 +745,11 @@
             INITIAL_PHYSICAL_RUNS.forEach(initRun => {
               if (!currentPhysical.some(r => r.id === initRun.id)) {
                 currentPhysical.push(deepClone(initRun));
+              }
+            });
+            INITIAL_DIGITAL_RUNS.forEach(initRun => {
+              if (!currentDigital.some(r => r.id === initRun.id)) {
+                currentDigital.push(deepClone(initRun));
               }
             });
             return;
@@ -860,7 +903,7 @@
       return (cat || mapPublisherToCategory(pub)) === filterKey;
     }
 
-    // STATISTICHE UNIFICATE V8.0
+    // STATISTICHE UNIFIED V8.0
     function computeStats() {
       let ownedPhys = 0;
       let totalPhysCapacity = 0;
@@ -1579,7 +1622,6 @@
       renderPhysicalRuns();
       renderDigitalRuns();
 
-      // Ripristino valori input profilati
       document.getElementById('apiComicVineInput').value = API_KEYS.comicVine;
       document.getElementById('apiCorsProxyInput').value = API_KEYS.corsProxy;
       if (API_KEYS.comicVine || API_KEYS.corsProxy) {
