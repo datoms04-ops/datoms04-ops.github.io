@@ -3,13 +3,10 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-  <title>Hobbyverse v8.0 Full Fixed</title>
+  <title>Hobbyverse v8.0 Restored</title>
 
   <link rel="manifest" href="manifest.json">
   <meta name="theme-color" content="#0d0e12">
-
-  <!-- Chart.js 4.4.7 -->
-  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.7/dist/chart.umd.min.js" integrity="sha384-jB0G5xM2+9PblJ9s6iG0F1J35lX5jXq6N7D7L+a3C0aG9J9l8A==" crossorigin="anonymous"></script>
 
   <style>
     :root {
@@ -103,6 +100,14 @@
     }
     .chip-item.active { background: var(--accent-gold); color: #000; border-color: var(--accent-gold); }
 
+    /* BADGE EDITORI */
+    .pub-badge { font-size: 0.65rem; font-weight: 800; padding: 2px 6px; border-radius: 6px; text-transform: uppercase; margin-right: 6px; }
+    .pub-badge.dc { background: rgba(59, 130, 246, 0.2); color: #60a5fa; border: 1px solid rgba(59, 130, 246, 0.4); }
+    .pub-badge.marvel { background: rgba(239, 68, 68, 0.2); color: #f87171; border: 1px solid rgba(239, 68, 68, 0.4); }
+    .pub-badge.pk { background: rgba(168, 85, 247, 0.2); color: #c084fc; border: 1px solid rgba(168, 85, 247, 0.4); }
+    .pub-badge.manga { background: rgba(236, 72, 153, 0.2); color: #f472b6; border: 1px solid rgba(236, 72, 153, 0.4); }
+    .pub-badge.altro { background: rgba(148, 163, 184, 0.2); color: #cbd5e1; border: 1px solid rgba(148, 163, 184, 0.4); }
+
     /* CARDS RUN */
     .run-card {
       background: var(--card-bg); border: 1px solid var(--card-border);
@@ -110,8 +115,8 @@
     }
     .run-card.abandoned { opacity: 0.7; border-style: dashed; }
     .run-header-row { display: flex; justify-content: space-between; align-items: center; width: 100%; background: none; border: none; text-align: left; color: inherit; cursor: pointer; }
-    .run-title { font-weight: 800; font-size: 0.95rem; color: #fff; display: flex; align-items: center; gap: 8px; }
-    .run-meta { font-size: 0.73rem; color: var(--text-muted); margin-top: 2px; }
+    .run-title { font-weight: 800; font-size: 0.95rem; color: #fff; display: flex; align-items: center; gap: 4px; }
+    .run-meta { font-size: 0.73rem; color: var(--text-muted); margin-top: 4px; }
 
     .toggle-arrow {
       background: rgba(255,255,255,0.06); border: 1px solid var(--card-border);
@@ -137,7 +142,8 @@
     .num-tile:active { transform: scale(0.92); }
     .num-tile.owned { background: rgba(34, 197, 94, 0.2); border-color: var(--accent-green); color: #4ade80; }
     .num-tile.incoming { background: rgba(249, 115, 22, 0.25); border-color: var(--accent-orange); color: #fb923c; }
-    .num-tile.read { background: rgba(59, 130, 246, 0.2); border-color: var(--accent-blue); color: #60a5fa; }
+    .num-tile.read { background: rgba(59, 130, 246, 0.25); border-color: var(--accent-blue); color: #60a5fa; }
+    .num-tile.variant { border: 1.5px solid var(--accent-gold); }
 
     /* CARDS SPESE / STATS */
     .expense-card {
@@ -145,6 +151,23 @@
       border-radius: 16px; padding: 16px; margin: 0 16px 12px 16px;
     }
     .expense-header-title { font-weight: 800; font-size: 0.95rem; color: #fff; margin-bottom: 8px; }
+
+    /* FIX BOTTONE MENU RAPIDO SECONDARIO */
+    .btn-quick-secondary {
+      flex: 1;
+      background: rgba(255, 255, 255, 0.08) !important;
+      border: 1px solid var(--card-border) !important;
+      color: #ffffff !important;
+      padding: 12px;
+      border-radius: 12px;
+      font-weight: 700;
+      cursor: pointer;
+      font-size: 0.85rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+    }
 
     /* FAB ADD BUTTON */
     .fab-add {
@@ -187,18 +210,54 @@
       background: var(--accent-gold); color: #000; cursor: pointer; margin-top: 10px; font-size: 0.9rem;
     }
 
-    /* BOTTOM NAV BAR */
+    /* BOTTOM NAV BAR FIX COMPLETO */
     .bottom-nav {
-      position: fixed; bottom: 0; left: 0; right: 0; height: calc(60px + var(--sab));
-      background: rgba(13, 14, 18, 0.95); backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px);
+      position: fixed; bottom: 0; left: 0; right: 0;
+      height: calc(65px + var(--sab));
+      background: rgba(13, 14, 18, 0.98);
+      backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px);
       border-top: 1px solid var(--card-border);
-      display: flex; justify-around: space-around; align-items: center; z-index: 50;
+      display: flex !important;
+      flex-direction: row !important;
+      justify-content: space-around !important;
+      align-items: center !important;
+      z-index: 50;
       padding-bottom: var(--sab);
     }
-    .nav-btn { display: flex; flex-direction: column; align-items: center; gap: 4px; color: #64748b; font-size: 0.68rem; font-weight: 600; cursor: pointer; background: none; border: none; }
-    .nav-btn svg { width: 22px; height: 22px; fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
-    .nav-btn.active { color: var(--accent-gold); }
-    .nav-btn.active svg { stroke: var(--accent-gold); }
+
+    .nav-btn {
+      display: flex !important;
+      flex-direction: column !important;
+      align-items: center !important;
+      justify-content: center !important;
+      flex: 1;
+      gap: 4px;
+      color: #94a3b8;
+      font-size: 0.72rem;
+      font-weight: 700;
+      cursor: pointer;
+      background: none;
+      border: none;
+      text-decoration: none;
+    }
+
+    .nav-btn svg {
+      width: 22px;
+      height: 22px;
+      fill: none;
+      stroke: currentColor;
+      stroke-width: 2;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+    }
+
+    .nav-btn.active {
+      color: var(--accent-gold) !important;
+    }
+
+    .nav-btn.active svg {
+      stroke: var(--accent-gold) !important;
+    }
   </style>
 </head>
 <body>
@@ -206,33 +265,33 @@
   <!-- HEADER -->
   <header class="app-header">
     <div class="app-title">📖 Hobbyverse</div>
-    <div class="version-badge">v8.0 Full Fixed</div>
+    <div class="version-badge">v8.0 Restored</div>
   </header>
 
   <!-- SEARCH BAR -->
   <div class="search-bar-container">
-    <input type="text" id="globalSearchInput" class="search-input" placeholder="🔍 Cerca serie o autore..." aria-label="Cerca">
+    <input type="text" id="globalSearchInput" class="search-input" placeholder="🔍 Cerca serie, editore o autore..." aria-label="Cerca">
   </div>
 
   <!-- HERO STATS BAR -->
   <div class="hero-stats-bar">
     <span>Posseduti: <b id="st-val1">0</b></span>
     <button class="kpi-pill-btn" id="btn-hunt-mode" onclick="toggleHuntingMode()">🎯 Mancanti: <b id="st-val3">0</b></button>
-    <span>Spesa: <b style="color:var(--accent-gold);" id="st-val4">0,00 €</b></span>
+    <span>Spesa Totale: <b style="color:var(--accent-gold);" id="st-val4">0,00 €</b></span>
   </div>
 
   <!-- HOME DASHBOARD -->
-  <main id="viewHome" style="display:block; padding:16px;">
+  <main id="viewHome" style="display:block; padding-top:16px;">
     <div id="incomingBannerContainer" style="display:none; margin-bottom:12px;" class="expense-card">
       <div class="expense-header-title" style="color:var(--accent-orange);">🚚 Pacchi In Arrivo (<span id="incomingCountVal">0</span>)</div>
       <div id="incomingListItems" style="font-size:0.8rem; color:var(--text-muted); margin-top:6px;"></div>
     </div>
 
-    <div class="expense-card" style="margin:0;">
+    <div class="expense-card">
       <div class="expense-header-title">⚡ Menu Rapido</div>
       <div style="display:flex; gap:8px; margin-top:8px;">
-        <button onclick="switchBottomNav('inventory')" style="flex:1; background:var(--accent-gold); color:#000; padding:12px; border-radius:12px; font-weight:800; border:none; cursor:pointer;">📦 Inventario</button>
-        <button onclick="openAddModal()" style="flex:1; background:rgba(255,255,255,0.05); border:1px solid var(--card-border); color:#fff; padding:12px; border-radius:12px; font-weight:700; cursor:pointer;">➕ Nuovo Volume</button>
+        <button onclick="switchBottomNav('inventory')" style="flex:1; background:var(--accent-gold); color:#000; padding:12px; border-radius:12px; font-weight:800; border:none; cursor:pointer; font-size:0.85rem;">📦 Inventario</button>
+        <button onclick="openAddModal()" class="btn-quick-secondary">➕ Nuovo Volume</button>
       </div>
     </div>
   </main>
@@ -242,6 +301,12 @@
     <div class="sub-tab-switcher">
       <button class="sub-btn active" id="btnSubPhysical" onclick="switchSubTab('physical')">📖 Cartacei (<span id="cnt-phys-total">0</span>)</button>
       <button class="sub-btn" id="btnSubDigital" onclick="switchSubTab('digital')">📱 Online (<span id="cnt-dig-total">0</span>)</button>
+    </div>
+
+    <!-- SELETTORE STATO DIGITALE ("DA LEGGERE" / "FINITI") -->
+    <div id="digitalStatusFilters" class="sub-tab-switcher" style="display:none; margin-top: -4px;">
+      <button class="sub-btn active" id="btnDigReading" onclick="filterDigitalStatus('reading', this)">📖 Da Leggere</button>
+      <button class="sub-btn" id="btnDigCompleted" onclick="filterDigitalStatus('completed', this)">✅ Finiti</button>
     </div>
 
     <div class="chips-scroll-container" id="chipsContainer">
@@ -261,22 +326,25 @@
     </div>
   </div>
 
-  <!-- ANALYTICS SPESE -->
+  <!-- ANALYTICS SPESE RESTORED -->
   <div id="viewExpenses" style="display:none; padding-top:10px;">
     <div class="expense-card">
-      <div class="expense-header-title">🛍️ Canali d'Acquisto & Spese Vinted</div>
-      <div style="font-size:0.85rem; color:var(--text-muted); margin-bottom:4px;"><b>Vinted (Oggetti):</b> <span id="expVintedVal">0,00 €</span></div>
-      <div style="font-size:0.75rem; color:var(--accent-orange); padding-left:10px;">├ Spedizioni: <b id="expVintedShipVal">0,00 €</b></div>
-      <div style="font-size:0.75rem; color:var(--accent-purple); padding-left:10px;">└ Protezione: <b id="expVintedFeeVal">0,00 €</b></div>
-      <div style="font-size:0.85rem; color:var(--text-muted); margin-top:6px;"><b>Fumetteria:</b> <span id="expFumetteriaVal">0,00 €</span></div>
-      <div style="font-size:0.85rem; color:var(--text-muted); margin-top:4px;"><b>Lucca C&G / Fiera:</b> <span id="expLuccaVal">0,00 €</span></div>
+      <div class="expense-header-title">🛍️ Canali d'Acquisto & Spese Dettagliate</div>
+      
+      <div style="font-size:0.88rem; color:#fff; margin-top:10px; margin-bottom:4px;"><b>📦 Vinted (Oggetti):</b> <span id="expVintedVal" style="color:var(--accent-gold); font-weight:bold;">0,00 €</span></div>
+      <div style="font-size:0.78rem; color:var(--accent-orange); padding-left:12px; margin-bottom:2px;">├ Spedizioni Vinted: <b id="expVintedShipVal">0,00 €</b></div>
+      <div style="font-size:0.78rem; color:var(--accent-purple); padding-left:12px; margin-bottom:8px;">└ Protezioni Vinted: <b id="expVintedFeeVal">0,00 €</b></div>
+
+      <div style="font-size:0.88rem; color:#fff; margin-top:8px; margin-bottom:4px;"><b>🏬 Fumetteria:</b> <span id="expFumetteriaVal" style="color:var(--accent-green); font-weight:bold;">0,00 €</span></div>
+      <div style="font-size:0.88rem; color:#fff; margin-top:8px; margin-bottom:4px;"><b>🎪 Lucca Comics / Fiere:</b> <span id="expLuccaVal" style="color:var(--accent-blue); font-weight:bold;">0,00 €</span></div>
+      <div style="font-size:0.88rem; color:#fff; margin-top:8px;"><b>🎁 Regali:</b> <span id="expRegaliVal" style="color:var(--text-muted);">0,00 €</span></div>
     </div>
   </div>
 
   <!-- FAB ADD BUTTON -->
   <button class="fab-add" onclick="openAddModal()" aria-label="Aggiungi">➕</button>
 
-  <!-- MODALE -->
+  <!-- MODALE DETTAGLIO / NUOVO VOLUME -->
   <div class="modal-overlay" id="itemModal">
     <div class="bottom-sheet">
       <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:14px;">
@@ -295,8 +363,8 @@
         <label style="font-size:0.72rem; color:var(--text-muted);">🔢 Numero Volume:</label>
         <input type="number" id="editIssueNumInput" class="edit-input-field" value="1">
 
-        <label style="font-size:0.72rem; color:var(--text-muted);">🔗 URL Copertina / Variant (GitHub Raw / Web):</label>
-        <input type="text" id="editCoverUrlInput" class="edit-input-field" placeholder="https://raw.githubusercontent.com/username/repo/main/img/cover.jpg">
+        <label style="font-size:0.72rem; color:var(--text-muted);">🔗 Percorso Immagine / Variant (es: img/abs_martian_1_var.png o URL Raw):</label>
+        <input type="text" id="editCoverUrlInput" class="edit-input-field" placeholder="img/abs_martian_1_var.png">
 
         <label style="font-size:0.72rem; color:var(--text-muted);">📍 Canale Acquisto:</label>
         <select id="sourceTypeSelect" class="edit-select-field">
@@ -314,25 +382,25 @@
     </div>
   </div>
 
-  <!-- BOTTOM NAV -->
+  <!-- BOTTOM NAV CORRETTA -->
   <nav class="bottom-nav">
     <button class="nav-btn active" id="navHome" onclick="switchBottomNav('home')">
-      <svg viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path></svg>
+      <svg viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path><polyline points="9 22 9 12 15 12 15 22"></polyline></svg>
       <span>Home</span>
     </button>
     <button class="nav-btn" id="navInventory" onclick="switchBottomNav('inventory')">
-      <svg viewBox="0 0 24 24"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 21 16z"></path></svg>
+      <svg viewBox="0 0 24 24"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"></path><polyline points="3.27 6.96 12 12.01 20.73 6.96"></polyline><line x1="12" y1="22.08" x2="12" y2="12"></line></svg>
       <span>Inventario</span>
     </button>
     <button class="nav-btn" id="navExpenses" onclick="switchBottomNav('expenses')">
-      <svg viewBox="0 0 24 24"><line x1="18" y1="20" x2="18" y2="10"></line><line x1="12" y1="20" x2="12" y2="4"></line></svg>
+      <svg viewBox="0 0 24 24"><line x1="18" y1="20" x2="18" y2="10"></line><line x1="12" y1="20" x2="12" y2="4"></line><line x1="6" y1="20" x2="6" y2="14"></line></svg>
       <span>Spese</span>
     </button>
   </nav>
 
   <script>
-    // FIX AUTOMATICO URL GITHUB RAW
-    function fixGitHubImageUrl(url) {
+    // FIX AUTOMATICO URL GITHUB RAW & PERCORSI LOCALI
+    function fixImageUrl(url) {
       if (!url) return '';
       let cleanUrl = url.trim();
       if (cleanUrl.includes('github.com') && cleanUrl.includes('/blob/')) {
@@ -341,7 +409,17 @@
       return cleanUrl;
     }
 
-    // DATASET COMPLETO AL 100% (29 CARTACEI + 15 DIGITALI)
+    // HELPER PER BADGE PUBLISHER
+    function getPublisherBadge(category) {
+      const cat = (category || 'Altro').toLowerCase();
+      if (cat.includes('dc')) return `<span class="pub-badge dc">DC</span>`;
+      if (cat.includes('marvel')) return `<span class="pub-badge marvel">MARVEL</span>`;
+      if (cat.includes('pk')) return `<span class="pub-badge pk">PK</span>`;
+      if (cat.includes('manga')) return `<span class="pub-badge manga">MANGA</span>`;
+      return `<span class="pub-badge altro">ALTRO</span>`;
+    }
+
+    // DATASET COMPLETO CARTACEI
     let currentPhysical = [
       { id: "spidey-corno", title: "L'Uomo Ragno", publisher: "Editoriale Corno", category: "Marvel", year: "1975", total: 200, owned: [139], incoming: [], isAbandoned: false, luccaItems: [139], prices: { 139: 5.00 }, sources: { 139: "lucca" } },
       { id: "spidey-panini-1990", title: "L'Uomo Ragno", publisher: "Panini Marvel Italia", category: "Marvel", year: "1990", total: 100, owned: [41, 52, 53], incoming: [], isAbandoned: false, luccaItems: [41, 52, 53], prices: { 41: 3.00, 52: 5.00, 53: 3.00 }, sources: { 41: "lucca", 52: "lucca", 53: "lucca" } },
@@ -354,6 +432,7 @@
       { id: "abs-batman", title: "Absolute Batman", publisher: "DC Comics", category: "DC", year: "2024", total: 18, owned: [1,2,3,15,16,17,18], incoming: [], isAbandoned: false, luccaItems: [1,2,3,17,18], variants: [2, 18], prices: {1: 6.00, 2: 4.00, 3: 4.00, 15: 5.50, 16: 5.50, 17: 4.00, 18: 4.00}, sources: {1: "lucca", 2: "lucca", 3: "lucca", 15: "vinted", 16: "vinted", 17: "lucca", 18: "lucca"}, vintedShipping: {15: 2.29, 16: 2.29}, vintedFees: {15: 0.98, 16: 0.98} },
       { id: "abs-sup", title: "Absolute Superman", publisher: "DC Comics", category: "DC", year: "2024", total: 18, owned: [1], incoming: [], isAbandoned: false, luccaItems: [], prices: {1: 3.50}, sources: {1: "vinted"}, vintedShipping: {1: 1.69}, vintedFees: {1: 0.88} },
       { id: "abs-ww", title: "Absolute Wonder Woman", publisher: "DC Comics", category: "DC", year: "2024", total: 17, owned: [1,2,3,4,5,6,7,8], incoming: [], isAbandoned: false, luccaItems: [], prices: {1: 2.33, 2: 2.33, 3: 2.34, 4: 4.00, 5: 4.00, 6: 1.50, 7: 4.00, 8: 4.00}, sources: {1: "vinted", 2: "vinted", 3: "vinted", 4: "fumetteria", 5: "fumetteria", 6: "vinted", 7: "fumetteria", 8: "fumetteria"}, vintedShipping: {1: 0.76, 2: 0.76, 3: 0.77, 6: 1.69}, vintedFees: {1: 0.35, 2: 0.35, 3: 0.35, 6: 0.78} },
+      { id: "abs-martian", title: "Absolute Martian Manhunter", publisher: "DC Comics", category: "DC", year: "2024", total: 12, owned: [1], incoming: [], isAbandoned: false, variants: [1], covers: { 1: "img/abs_martian_1_var.png" }, prices: {1: 4.50}, sources: {1: "fumetteria"} },
       { id: "batman-grandi-storie", title: "Batman: Le grandi storie", publisher: "DC Comics", category: "DC", year: "2018", total: 1, owned: [1], incoming: [], isAbandoned: false, luccaItems: [], prices: { 1: 15.00 }, sources: { 1: "fumetteria" } },
       { id: "batman-due-mondi", title: "Batman dei due mondi", publisher: "DC Comics", category: "DC", year: "2021", total: 1, owned: [1], incoming: [], isAbandoned: false, luccaItems: [], prices: { 1: 1.00 }, sources: { 1: "fumetteria" } },
       { id: "batman-gotham-knights", title: "Batman: Gotham Knights – Città dorata", publisher: "DC Comics", category: "DC", year: "2022", total: 1, owned: [1], incoming: [], isAbandoned: false, luccaItems: [], prices: { 1: 0.00 }, sources: { 1: "regalo" } },
@@ -377,27 +456,24 @@
       { id: "invincible-omnibus", title: "Invincible Omnibus (Saldapress)", publisher: "Saldapress", category: "Altro", year: "2026", total: 1, owned: [], incoming: [1], isAbandoned: false, luccaItems: [], prices: { 1: 23.00 }, sources: { 1: "vinted" }, vintedShipping: { 1: 3.09 }, vintedFees: { 1: 1.85 } }
     ];
 
+    // DATASET ONLINE CON CATEGORIZZAZIONE DA LEGGERE / FINITI
     let currentDigital = [
-      { id: "d_0", title: "Absolute Power (2024-)", publisher: "DC Comics", year: "2024", category: "reading", total: 1, read: [1] },
-      { id: "d_1", title: "Miles Morales: Spider-Man (2026-)", publisher: "Marvel Comics", year: "2026", category: "reading", total: 1, read: [1] },
-      { id: "d_2", title: "Poison Ivy (2022-)", publisher: "DC Comics", year: "2022", category: "reading", total: 1, read: [1] },
-      { id: "d_3", title: "Black Cat (2025-)", publisher: "Marvel Comics", year: "2025", category: "reading", total: 1, read: [1] },
-      { id: "d_4", title: "Zatanna (2026-)", publisher: "DC Comics", year: "2026", category: "reading", total: 1, read: [1] },
-      { id: "d_5", title: "The Amazing Spider-Man (2025-)", publisher: "Marvel Comics", year: "2025", category: "reading", total: 1, read: [1] },
-      { id: "d_6", title: "Absolute Catwoman (2026-)", publisher: "DC Comics", year: "2026", category: "reading", total: 1, read: [1] },
-      { id: "d_7", title: "Fantastic Four (2025-)", publisher: "Marvel Comics", year: "2025", category: "reading", total: 1, read: [1] },
-      { id: "d_8", title: "Absolute Wonder Woman (2024-)", publisher: "DC Comics", year: "2024", category: "reading", total: 1, read: [1] },
-      { id: "d_9", title: "The Amazing Spider-Man: Spider-Versity (2026-)", publisher: "Marvel Comics", year: "2026", category: "reading", total: 1, read: [1] },
-      { id: "d_10", title: "Wonder Woman (2023-)", publisher: "DC Comics", year: "2023", category: "reading", total: 1, read: [1] },
-      { id: "d_11", title: "Batman (2025-)", publisher: "DC Comics", year: "2025", category: "reading", total: 1, read: [1] },
-      { id: "d_12", title: "Absolute Superman (2024-)", publisher: "DC Comics", year: "2024", category: "reading", total: 1, read: [1] },
-      { id: "d_13", title: "Absolute Green Arrow (2026-)", publisher: "DC Comics", year: "2026", category: "reading", total: 1, read: [1] },
-      { id: "d_14", title: "Absolute Batman (2024-)", publisher: "DC Comics", year: "2024", category: "reading", total: 1, read: [1] }
+      { id: "d_0", title: "Absolute Power (2024-)", publisher: "DC Comics", year: "2024", category: "DC", status: "reading", total: 4, read: [1, 2] },
+      { id: "d_1", title: "Miles Morales: Spider-Man (2026-)", publisher: "Marvel Comics", year: "2026", category: "Marvel", status: "reading", total: 6, read: [1] },
+      { id: "d_2", title: "Poison Ivy (2022-)", publisher: "DC Comics", year: "2022", category: "DC", status: "completed", total: 24, read: [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24] },
+      { id: "d_3", title: "Black Cat (2025-)", publisher: "Marvel Comics", year: "2025", category: "Marvel", status: "reading", total: 5, read: [1, 2, 3] },
+      { id: "d_4", title: "Zatanna (2026-)", publisher: "DC Comics", year: "2026", category: "DC", status: "reading", total: 4, read: [1] },
+      { id: "d_5", title: "The Amazing Spider-Man (2025-)", publisher: "Marvel Comics", year: "2025", category: "Marvel", status: "reading", total: 12, read: [1, 2, 3, 4] },
+      { id: "d_6", title: "Absolute Catwoman (2026-)", publisher: "DC Comics", year: "2026", category: "DC", status: "reading", total: 3, read: [] },
+      { id: "d_7", title: "Fantastic Four (2025-)", publisher: "Marvel Comics", year: "2025", category: "Marvel", status: "completed", total: 10, read: [1,2,3,4,5,6,7,8,9,10] },
+      { id: "d_8", title: "Absolute Wonder Woman (2024-)", publisher: "DC Comics", year: "2024", category: "DC", status: "reading", total: 5, read: [1, 2] },
+      { id: "d_9", title: "Absolute Batman (2024-)", publisher: "DC Comics", year: "2024", category: "DC", status: "reading", total: 5, read: [1, 2, 3] }
     ];
 
     let activeModalState = null;
     let openAccordions = new Set();
     let currentPubFilter = 'ALL';
+    let digitalStatusFilter = 'reading';
     let isHuntingMode = false;
     let searchQuery = '';
     let activeSubTab = 'physical';
@@ -416,8 +492,16 @@
       activeSubTab = sub;
       document.getElementById('subViewPhysical').style.display = (sub === 'physical') ? 'block' : 'none';
       document.getElementById('subViewDigital').style.display = (sub === 'digital') ? 'block' : 'none';
+      document.getElementById('digitalStatusFilters').style.display = (sub === 'digital') ? 'flex' : 'none';
       document.getElementById('btnSubPhysical').classList.toggle('active', sub === 'physical');
       document.getElementById('btnSubDigital').classList.toggle('active', sub === 'digital');
+    }
+
+    function filterDigitalStatus(status, btn) {
+      digitalStatusFilter = status;
+      document.getElementById('btnDigReading').classList.toggle('active', status === 'reading');
+      document.getElementById('btnDigCompleted').classList.toggle('active', status === 'completed');
+      renderDigital();
     }
 
     function toggleHuntingMode() {
@@ -472,7 +556,7 @@
 
       currentPhysical.forEach(run => {
         if (currentPubFilter !== 'ALL' && run.category !== currentPubFilter) return;
-        if (searchQuery && !run.title.toLowerCase().includes(searchQuery)) return;
+        if (searchQuery && !run.title.toLowerCase().includes(searchQuery) && !run.publisher.toLowerCase().includes(searchQuery)) return;
         if (isHuntingMode && run.owned.length >= run.total) return;
 
         const ownedCount = run.owned.length;
@@ -484,7 +568,7 @@
         card.innerHTML = `
           <button class="run-header-row" onclick="toggleAccordion('${run.id}')">
             <div>
-              <div class="run-title">${run.title} ${run.isAbandoned ? '🛑' : ''}</div>
+              <div class="run-title">${getPublisherBadge(run.category)} ${run.title} ${run.isAbandoned ? '🛑' : ''}</div>
               <div class="run-meta">${run.publisher} (${run.year})</div>
             </div>
             <div class="toggle-arrow ${isOpen ? 'open' : ''}">▼</div>
@@ -508,6 +592,11 @@
       container.innerHTML = '';
 
       currentDigital.forEach(run => {
+        if (digitalStatusFilter === 'reading' && run.status === 'completed') return;
+        if (digitalStatusFilter === 'completed' && run.status !== 'completed') return;
+        if (currentPubFilter !== 'ALL' && run.category !== currentPubFilter) return;
+        if (searchQuery && !run.title.toLowerCase().includes(searchQuery)) return;
+
         const readCount = run.read.length;
         const pct = Math.round((readCount / run.total) * 100);
         const isOpen = openAccordions.has(run.id);
@@ -517,14 +606,14 @@
         card.innerHTML = `
           <button class="run-header-row" onclick="toggleAccordion('${run.id}')">
             <div>
-              <div class="run-title">${run.title}</div>
-              <div class="run-meta">${run.publisher} (${run.year})</div>
+              <div class="run-title">${getPublisherBadge(run.category)} ${run.title}</div>
+              <div class="run-meta">${run.publisher} (${run.year}) • <span style="color:var(--accent-blue);">${run.status === 'completed' ? 'Finito' : 'In Lettura'}</span></div>
             </div>
             <div class="toggle-arrow ${isOpen ? 'open' : ''}">▼</div>
           </button>
           <div class="run-body ${isOpen ? 'open' : ''}">
             <div style="display:flex; justify-content:space-between; font-size:0.75rem; color:#cbd5e1; margin-bottom:4px; margin-top:8px;">
-              <span>Letto <b>${readCount}</b> su <b>${run.total}</b></span><span>${pct}%</span>
+              <span>Letti <b>${readCount}</b> su <b>${run.total}</b></span><span>${pct}%</span>
             </div>
             <div class="progress-bar-bg"><div class="progress-bar-fill digital" style="width: ${pct}%;"></div></div>
             <div class="numbers-grid">
@@ -541,7 +630,9 @@
       for (let i = 1; i <= run.total; i++) {
         const isOwned = run.owned.includes(i);
         const isIncoming = run.incoming && run.incoming.includes(i);
+        const isVariant = run.variants && run.variants.includes(i);
         let cls = isOwned ? 'owned' : (isIncoming ? 'incoming' : '');
+        if (isVariant) cls += ' variant';
         html += `<button class="num-tile ${cls}" onclick="openModal('${run.id}', ${i})">${i}</button>`;
       }
       return html;
@@ -568,6 +659,7 @@
       document.querySelectorAll('#chipsContainer .chip-item').forEach(c => c.classList.remove('active'));
       btn.classList.add('active');
       renderPhysical();
+      renderDigital();
     }
 
     function openModal(runId, num, mode = 'physical') {
@@ -585,14 +677,14 @@
       const coverBox = document.getElementById('m-cover');
       const placeholder = document.getElementById('m-cover-placeholder');
       
-      const validUrl = fixGitHubImageUrl(savedUrl);
+      const validUrl = fixImageUrl(savedUrl);
       if (validUrl) {
         coverBox.style.backgroundImage = `url("${validUrl}")`;
         placeholder.style.display = 'none';
       } else {
         coverBox.style.backgroundImage = 'none';
         placeholder.style.display = 'block';
-        placeholder.innerHTML = `📖<br><span style="font-size:0.7rem; margin-top:4px;">${run.title}<br>#${num}</span>`;
+        placeholder.innerHTML = `📖<br><span style="font-size:0.75rem; margin-top:4px;">${run.title}<br>#${num}</span>`;
       }
 
       document.getElementById('itemModal').classList.add('open');
@@ -626,7 +718,7 @@
       const num = parseInt(document.getElementById('editIssueNumInput').value) || 1;
       const price = parseFloat(document.getElementById('editPriceInput').value) || 0;
       const rawUrl = document.getElementById('editCoverUrlInput').value.trim();
-      const finalCoverUrl = fixGitHubImageUrl(rawUrl);
+      const finalCoverUrl = fixImageUrl(rawUrl);
 
       if (activeModalState.isNew) {
         let run = currentPhysical.find(r => r.title.toLowerCase() === title.toLowerCase());
@@ -677,7 +769,7 @@
     }
 
     function updateExpenseStats() {
-      let vintedTot = 0, vintedShip = 0, vintedFee = 0, fumTot = 0, luccaTot = 0;
+      let vintedTot = 0, vintedShip = 0, vintedFee = 0, fumTot = 0, luccaTot = 0, regaliTot = 0;
 
       currentPhysical.forEach(r => {
         if (r.prices) {
@@ -692,6 +784,7 @@
               if (src === 'vinted') { vintedTot += p; vintedShip += s; vintedFee += f; }
               else if (src === 'fumetteria') { fumTot += p; }
               else if (src === 'lucca') { luccaTot += p; }
+              else if (src === 'regalo') { regaliTot += p; }
             }
           });
         }
@@ -702,6 +795,7 @@
       document.getElementById('expVintedFeeVal').innerText = vintedFee.toFixed(2).replace('.', ',') + ' €';
       document.getElementById('expFumetteriaVal').innerText = fumTot.toFixed(2).replace('.', ',') + ' €';
       document.getElementById('expLuccaVal').innerText = luccaTot.toFixed(2).replace('.', ',') + ' €';
+      document.getElementById('expRegaliVal').innerText = regaliTot.toFixed(2).replace('.', ',') + ' €';
     }
 
     document.getElementById('globalSearchInput').addEventListener('input', (e) => {
